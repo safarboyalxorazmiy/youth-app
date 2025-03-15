@@ -111,7 +111,7 @@ export default function TabLayout() {
 
         {/* 🌟 LOGO (CargoAdd) */}
         <Tabs.Screen
-          name="cargoAdd"
+          name="cargoAddNavigator"
           options={{
             headerShown: false,
             title: "",
