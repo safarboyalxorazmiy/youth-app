@@ -1,8 +1,28 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import ArrowRightIcon from "@/assets/images/navbar/ArrowRightIcon.svg";
 import TruckDeliverySpeedIcon from "@/assets/images/navbar/TruckDeliverySpeedIcon.svg";
+import { useEffect } from "react";
 
 export default function Home() {
+  // Handle visiting logic when visited is true
+  useEffect(() => {
+    handleVisiting();
+  }, []);
+
+  // Handle visiting logic
+  const handleVisiting = async () => {
+    const response = await fetch('https://ipinfo.io/json');
+    const data = await response.json();
+
+    fetch('http://167.86.107.247:8080/interest/visit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ip: data.ip, city: data.city, region: data.region }),
+    });    
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#EFEFEF" }}>
       <ScrollView>
