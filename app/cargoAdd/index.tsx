@@ -3,6 +3,7 @@ import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
 import { useRef, useState } from "react";
 import { StatusBar } from "react-native";
 import { router } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type LocationDetails = {
   id: number;
@@ -25,6 +26,12 @@ export default function CargoAdd() {
   const [locationAReccumendationVisible, setLocationAReccumendationVisible] = useState<boolean>(false);
   const [locationBReccumendationVisible, setLocationBReccumendationVisible] = useState<boolean>(false);
 
+  const [destinationARegion , setDestinationARegion] = useState<string>("");
+  const [destinationADistinct , setDestinationADistinct] = useState<string>("");
+
+  const [destinationBRegion , setDestinationBRegion] = useState<string>("");
+  const [destinationBDistinct , setDestinationBDistinct] = useState<string>("");
+
   const locationBInputRef = useRef<TextInput>(null);
 
   const scrollRef = useRef<ScrollView>(null);
@@ -39,20 +46,36 @@ export default function CargoAdd() {
     scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
   };
 
-  // const handleCreateData = async () => {
-  //   await fetch('http://167.86.107.247:8080/cargo/create', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ 
-  //       type: typeInputValue, 
-  //       locationA: locationAInputValue, 
-  //       locationB: locationBInputValue, 
-  //       detail: detailInputValue 
-  //     }),
-  //   })
-  // }
+  const handleCreateData = async () => {
+    try {
+      const response = await fetch('http://167.86.107.247:8080/cargo/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          destinationARegion,
+          destinationADistinct,
+          destinationBRegion,
+          destinationBDistinct,
+          transportType: typeInputValue, 
+          comment: detailInputValue,
+          phone: "+998901234567"
+        })
+      });
+
+      console.log(response);
+      console.log(response.status);
+
+      if (response.status === 200) {
+        await AsyncStorage.setItem("newItemCreated", "true");
+      }
+      
+      router.push("/");
+    } catch (error) {
+      console.error('Error creating data:', error);
+    }
+  }
 
   const searchAndSetLocationA = async () => {  
     await fetch('http://167.86.107.247:8080/location/search?query=' + locationAInputValue, {
@@ -99,9 +122,17 @@ export default function CargoAdd() {
       <ScrollView ref={scrollRef}>
         <View style={{ paddingTop: 26, paddingBottom: 56 }}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
-            <Pressable onPress={() => router.push("/cargoAdd")}>
-              <ArrowLeftIcon />
-            </Pressable>
+            <View style={{ borderRadius: 50, overflow: 'hidden' }}>
+              <Pressable
+                android_ripple={{ color: "#808080" }}
+                style={{ padding: 10 }}
+                onPress={() => {
+                  router.push("/");
+                }}
+              >
+                <ArrowLeftIcon />
+              </Pressable>
+            </View>
 
             <Text style={{fontSize: 22, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
 
@@ -150,6 +181,8 @@ export default function CargoAdd() {
                       onPress={() => {
                         setLocationAInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
                         setLocationAReccumendationVisible(false);
+                        setDestinationARegion(item.locationRegion == null ? "" : item.locationRegion);
+                        setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                       }} 
                       style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
                       <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
@@ -206,6 +239,8 @@ export default function CargoAdd() {
                       onPress={() => {
                         setLocationBInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
                         setLocationBReccumendationVisible(false);
+                        setDestinationBRegion(item.locationRegion == null ? "" : item.locationRegion);
+                        setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                       }} 
                       style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
                       <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
@@ -278,8 +313,7 @@ export default function CargoAdd() {
 
           <View style={{paddingHorizontal: 38, marginTop: 40}}>
             <View style={{width: "100%", alignItems: "center", justifyContent: "center"}}>
-              <Pressable onPress={() => {
-              }} style={{width: "100%", height: 65, backgroundColor: "#000000", borderRadius: 12, alignItems: "center", justifyContent: "center"}}>
+              <Pressable onPress={handleCreateData} style={{width: "100%", height: 65, backgroundColor: "#000000", borderRadius: 12, alignItems: "center", justifyContent: "center"}}>
                 <Text style={{color: "#FFF", fontSize: 18, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>TAYYOR</Text>
               </Pressable>
             </View>
