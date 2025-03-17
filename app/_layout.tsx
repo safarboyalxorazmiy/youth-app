@@ -15,6 +15,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     "SfProDisplayRegular": require('../assets/fonts/SF-Pro-Display-Regular.ttf'),
+    "SfProDisplayMedium": require('../assets/fonts/SF-Pro-Display-Medium.ttf'),
     "SfProDisplayBold": require('../assets/fonts/SF-Pro-Display-Bold.ttf'),
   });
 
@@ -31,7 +32,12 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(drawer)"
+        options={{
+          headerShown: false
+        }}
+      />
         <Stack.Screen name="cargoAdd" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
