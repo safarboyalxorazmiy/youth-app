@@ -45,7 +45,7 @@ export default function TabLayout() {
             justifyContent: "center",
 
             borderTopColor: "#D1D1D1",
-            borderTopWidth: 1,
+            borderTopWidth: 0.5,
           },      
           headerStyle: {
             borderWidth: 0,

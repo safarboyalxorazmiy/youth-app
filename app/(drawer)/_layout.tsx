@@ -1,5 +1,5 @@
 import { Drawer } from "expo-router/drawer";
-import { View, Text, Pressable, ScrollView, Image } from "react-native";
+import { View, Text, Pressable, Image } from "react-native";
 import CargoIcon from "@/assets/images/cargo-icon.svg";
 import LanguageIcon from "@/assets/images/language-icon.svg";
 import QuestionIcon from "@/assets/images/question-icon.svg";
@@ -55,8 +55,7 @@ export default function DrawerLayout() {
           width: 300,
           backgroundColor: "#232325",
           borderTopRightRadius: 0,
-          borderBottomRightRadius: 0,
-          marginTop: 25,
+          borderBottomRightRadius: 0
         }
       }}
       drawerContent={() => <Me />}

@@ -10,12 +10,6 @@ import SidebarMenu from "@/assets/images/sidebar-menu-icon.svg";
 import SearchIcon from "@/assets/images/search-icon.svg";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer"; // Import DrawerNavigationProp
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
-
-const STYLES = ['default', 'dark-content', 'light-content'] as const;
-const TRANSITIONS = ['fade', 'slide', 'none'] as const;
-
-import { TextInput } from "react-native-gesture-handler";
 
 export default function Home() {
   const [toast, setToast] = useState<{ message: string; type?: 'success' | 'error' | 'info' } | null>(null);
@@ -61,7 +55,7 @@ export default function Home() {
       />
 
       <ScrollView>
-        <View style={{backgroundColor: "#232325", marginTop: 25, height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between"}}>
+        <View style={{backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between"}}>
           <View style={{height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center"}}>
             <Pressable style={{width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}} android_ripple={{color: "#4F4F4F"}} onPress={() => navigation.openDrawer()}>
               <SidebarMenu />
@@ -93,7 +87,7 @@ export default function Home() {
         <View style={{paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF"}}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%"}}>
             <View style={{alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8}}>
-              <Text style={{fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayRegular", fontWeight: 400}}>Yangi</Text>
+              <Text style={{fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: 700}}>Yangi</Text>
             </View>
 
             <Text>20 daqiqa oldin</Text>
@@ -126,7 +120,7 @@ export default function Home() {
         <View style={{marginTop: 14, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF"}}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%"}}>
             <View style={{alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8}}>
-              <Text style={{fontSize: 16, color: "#FFF", fontWeight: 400, fontFamily: "SfProDisplayRegular",}}>Yangi</Text>
+              <Text style={{fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: 700}}>Yangi</Text>
             </View>
 
             <Text>20 daqiqa oldin</Text>
@@ -159,7 +153,7 @@ export default function Home() {
         <View style={{marginTop: 14, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF"}}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%"}}>
             <View style={{alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8}}>
-              <Text style={{fontSize: 16, color: "#FFF", fontWeight: 400, fontFamily: "SfProDisplayRegular",}}>Yangi</Text>
+              <Text style={{fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: 700}}>Yangi</Text>
             </View>
 
             <Text>20 daqiqa oldin</Text>
@@ -192,7 +186,7 @@ export default function Home() {
         <View style={{marginTop: 14, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF"}}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%"}}>
             <View style={{alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8}}>
-              <Text style={{fontSize: 16, color: "#FFF", fontWeight: 400, fontFamily: "SfProDisplayRegular",}}>Yangi</Text>
+              <Text style={{fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: 700}}>Yangi</Text>
             </View>
 
             <Text>20 daqiqa oldin</Text>
@@ -225,7 +219,7 @@ export default function Home() {
         <View style={{marginTop: 14, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF"}}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%"}}>
             <View style={{alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8}}>
-              <Text style={{fontSize: 16, color: "#FFF", fontWeight: 400, fontFamily: "SfProDisplayRegular",}}>Yangi</Text>
+              <Text style={{fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: 700}}>Yangi</Text>
             </View>
 
             <Text>20 daqiqa oldin</Text>

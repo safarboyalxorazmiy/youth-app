@@ -2,8 +2,8 @@ import { View, Text, TextInput, ScrollView, Pressable, FlatList } from "react-na
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
 import { useRef, useState } from "react";
 import { StatusBar } from "react-native";
-import { router } from "expo-router";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from "expo-router";
 
 type LocationDetails = {
   id: number;
@@ -11,7 +11,7 @@ type LocationDetails = {
   locationDistinct: string;
 };
 
-export default function CargoAdd() {
+export default function CargoAdd() {  
   const [focusedInput, setFocusedInput] = useState<String>("");
   const [typeInputValue, setTypeInputValue] = useState<String>("");
 
@@ -35,6 +35,8 @@ export default function CargoAdd() {
   const locationBInputRef = useRef<TextInput>(null);
 
   const scrollRef = useRef<ScrollView>(null);
+
+  const router = useRouter();
 
   const scrollToEnd = () => {
     setTimeout(() => {
@@ -117,7 +119,13 @@ export default function CargoAdd() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#FFF"}}>
-      <View style={{height: 30, width: "100%"}}></View>
+      <StatusBar
+        animated={true}
+        backgroundColor="#232325"
+        barStyle={'default'}
+        showHideTransition={"slide"}
+        hidden={false}
+      />
       
       <ScrollView ref={scrollRef}>
         <View style={{ paddingTop: 26, paddingBottom: 56 }}>
