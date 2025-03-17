@@ -56,7 +56,7 @@ export default function DrawerLayout() {
           backgroundColor: "#232325",
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
-          marginTop: 22
+          marginTop: 25,
         }
       }}
       drawerContent={() => <Me />}

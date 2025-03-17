@@ -79,6 +79,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
+            headerShown: false,
             tabBarButton: () => (
               <Pressable
                 style={{
