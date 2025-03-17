@@ -1,14 +1,31 @@
-import { View, Text, TextInput, ScrollView, Pressable } from "react-native";
+import { View, Text, TextInput, ScrollView, Pressable, FlatList } from "react-native";
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
 import { useRef, useState } from "react";
 import { StatusBar } from "react-native";
+import { router } from "expo-router";
+
+type LocationDetails = {
+  id: number;
+  locationRegion: string;
+  locationDistinct: string;
+};
 
 export default function CargoAdd() {
   const [focusedInput, setFocusedInput] = useState<String>("");
   const [typeInputValue, setTypeInputValue] = useState<String>("");
-  const [locationAInputValue, setLocationAInputValue] = useState<String>("");
-  const [locationBInputValue, setLocationBInputValue] = useState<String>("");
+
+  const [locationAInputValue, setLocationAInputValue] = useState<string>("");
+  const [locationBInputValue, setLocationBInputValue] = useState<string>("");
+
+  const [locationAReccommendData, setLocationAReccommendData] = useState<LocationDetails[]>([]);
+  const [locationBReccommendData, setLocationBReccommendData] = useState<LocationDetails[]>([]);
+
   const [detailInputValue, setDetailInputValue] = useState<String>("");
+
+  const [locationAReccumendationVisible, setLocationAReccumendationVisible] = useState<boolean>(false);
+  const [locationBReccumendationVisible, setLocationBReccumendationVisible] = useState<boolean>(false);
+
+  const locationBInputRef = useRef<TextInput>(null);
 
   const scrollRef = useRef<ScrollView>(null);
 
@@ -22,6 +39,59 @@ export default function CargoAdd() {
     scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
   };
 
+  // const handleCreateData = async () => {
+  //   await fetch('http://167.86.107.247:8080/cargo/create', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ 
+  //       type: typeInputValue, 
+  //       locationA: locationAInputValue, 
+  //       locationB: locationBInputValue, 
+  //       detail: detailInputValue 
+  //     }),
+  //   })
+  // }
+
+  const searchAndSetLocationA = async () => {  
+    await fetch('http://167.86.107.247:8080/location/search?query=' + locationAInputValue, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => 
+      {
+        console.log(response)
+        return response.json()
+
+      })
+    .then(data => {
+      console.log(data.length == 0);
+      setLocationAReccommendData(data);
+    });
+  }
+
+  const searchAndSetLocationB = async () => {  
+    await fetch('http://167.86.107.247:8080/location/search?query=' + locationBInputValue, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => 
+      {
+        console.log(response)
+        return response.json()
+
+      })
+    .then(data => {
+      console.log(data.length == 0);
+      setLocationBReccommendData(data);
+    });
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: "#FFF"}}>
       <View style={{height: 30, width: "100%"}}></View>
@@ -29,7 +99,9 @@ export default function CargoAdd() {
       <ScrollView ref={scrollRef}>
         <View style={{ paddingTop: 26, paddingBottom: 56 }}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
-            <ArrowLeftIcon />
+            <Pressable onPress={() => router.push("/cargoAdd")}>
+              <ArrowLeftIcon />
+            </Pressable>
 
             <Text style={{fontSize: 22, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
 
@@ -49,10 +121,15 @@ export default function CargoAdd() {
               <Text style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
               <TextInput 
                 onPress={() => {
+                  setLocationAReccumendationVisible(true);
                   scrollToStart();
                 }}
                 style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"}} 
-                onChange={(e) => setLocationAInputValue(e.nativeEvent.text)} 
+                onChange={async (e) => {
+                  setLocationAInputValue(e.nativeEvent.text)
+                  await searchAndSetLocationA();
+                }} 
+                value={locationAInputValue}
                 onFocus={() => setFocusedInput("LocationAInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
@@ -60,6 +137,32 @@ export default function CargoAdd() {
             </View>
           </View> 
 
+          {
+            locationAReccumendationVisible ? (
+              <View>
+                <FlatList
+                  data={locationAReccommendData}
+                  keyExtractor={(item) => item.id.toString()}
+                  
+                  renderItem={({ item }) => (
+                    <Pressable 
+                      android_ripple={{ color: "#EFEFEF" }} 
+                      onPress={() => {
+                        setLocationAInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                        setLocationAReccumendationVisible(false);
+                      }} 
+                      style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
+                      <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                      {item.locationDistinct != null && <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                    </Pressable>
+                  )}
+                  nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
+                  style={{ maxHeight: 200,  marginTop: 5, marginHorizontal: 38, backgroundColor: "#FBFBFB", borderColor: "#EFEFEF", borderWidth: 1, borderRadius: 8 }} // ✅ Restrict height to avoid layout issues
+                />
+              </View>
+            ) : (<></>)
+          }
+          
           <View style={{paddingHorizontal: 38, marginTop: 22, width: "100%"}}>
             <View style={{width: "100%", borderColor: focusedInput == "LocationBInput" || locationBInputValue != "" ? "#000000" : "#ADADAD", borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "LocationBInput" || locationBInputValue != "" ? 1.5 : 1, height: 55, position: "relative", alignItems: "center", justifyContent: "center"}}>
               {
@@ -72,14 +175,49 @@ export default function CargoAdd() {
 
               <Text style={focusedInput != "LocationBInput" && locationBInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>ga</Text>
               <TextInput 
+                onPress={() => {
+                  setLocationBReccumendationVisible(true);
+                }}
+                ref={locationBInputRef}
                 style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"}} 
-                onChange={(e) => setLocationBInputValue(e.nativeEvent.text)} 
+                onChange={async (e) => {
+                  setLocationBInputValue(e.nativeEvent.text)
+                  await searchAndSetLocationB();
+                }} 
+                value={locationBInputValue}
                 onFocus={() => setFocusedInput("LocationBInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
               <Text style={{color: "#4F4F4F", fontSize: 18, fontFamily: "SfProDisplayRegular"}}></Text>
             </View>
           </View> 
+
+          
+          {
+            locationBReccumendationVisible ? (
+              <View>
+                <FlatList
+                  data={locationBReccommendData}
+                  keyExtractor={(item) => item.id.toString()}
+                  
+                  renderItem={({ item }) => (
+                    <Pressable 
+                      android_ripple={{ color: "#EFEFEF" }} 
+                      onPress={() => {
+                        setLocationBInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                        setLocationBReccumendationVisible(false);
+                      }} 
+                      style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
+                      <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                      {item.locationDistinct != null && <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                    </Pressable>
+                  )}
+                  nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
+                  style={{ maxHeight: 200,  marginTop: 5, marginHorizontal: 38, backgroundColor: "#FBFBFB", borderColor: "#EFEFEF", borderWidth: 1, borderRadius: 8 }} // ✅ Restrict height to avoid layout issues
+                />
+              </View>
+            ) : (<></>)
+          }
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
             <View style={{width: "100%", borderColor: focusedInput == "TypeInput" || typeInputValue != "" ? "#000000" : "#ADADAD", borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "TypeInput" || typeInputValue != "" ? 1.5 : 1, height: 55, position: "relative", alignItems: "center", justifyContent: "center"}}>
@@ -140,7 +278,8 @@ export default function CargoAdd() {
 
           <View style={{paddingHorizontal: 38, marginTop: 40}}>
             <View style={{width: "100%", alignItems: "center", justifyContent: "center"}}>
-              <Pressable onPress={() => {}} style={{width: "100%", height: 65, backgroundColor: "#000000", borderRadius: 12, alignItems: "center", justifyContent: "center"}}>
+              <Pressable onPress={() => {
+              }} style={{width: "100%", height: 65, backgroundColor: "#000000", borderRadius: 12, alignItems: "center", justifyContent: "center"}}>
                 <Text style={{color: "#FFF", fontSize: 18, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>TAYYOR</Text>
               </Pressable>
             </View>
