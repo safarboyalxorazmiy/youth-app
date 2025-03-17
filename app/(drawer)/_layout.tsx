@@ -4,8 +4,10 @@ import CargoIcon from "@/assets/images/cargo-icon.svg";
 import LanguageIcon from "@/assets/images/language-icon.svg";
 import QuestionIcon from "@/assets/images/question-icon.svg";
 import LogoutIcon from "@/assets/images/logout-icon.svg";
+import { router, useRouter } from "expo-router";
 
 function Me() {
+  const router = useRouter();
 
   return (
     <View
@@ -19,7 +21,9 @@ function Me() {
         </View>
 
         <View style={{marginTop: 10}}>
-          <Pressable android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
+          <Pressable onPress={() => {
+            router.push("/myCargo");
+          }} android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
             <CargoIcon />
             <Text style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 20}}>Yuklarim</Text>
           </Pressable>
