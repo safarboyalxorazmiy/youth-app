@@ -1,9 +1,14 @@
 import { View, Text, Pressable, ScrollView } from "react-native";
 import ArrowRightIcon from "@/assets/images/navbar/ArrowRightIcon.svg";
 import TruckDeliverySpeedIcon from "@/assets/images/navbar/TruckDeliverySpeedIcon.svg";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import AnimatedToast from '@/components/AnimatedToast';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home() {
+  const [toast, setToast] = useState<{ message: string; type?: 'success' | 'error' | 'info' } | null>(null);
+
   // Handle visiting logic when visited is true
   useEffect(() => {
     handleVisiting();
@@ -22,6 +27,16 @@ export default function Home() {
       body: JSON.stringify({ ip: data.ip, city: data.city, region: data.region }),
     });    
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (await AsyncStorage.getItem("newItemCreated") == "true") {
+        setToast({ message: "Yangi ma'lumot qo'shildi", type: "success" }); 
+        AsyncStorage.removeItem("newItemCreated");
+      }
+    }
+    fetchData();
+  }, [useIsFocused]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: "#EFEFEF" }}>
@@ -191,6 +206,8 @@ export default function Home() {
           </Pressable>
         </View>
       </ScrollView>
+
+      {toast && <AnimatedToast message={toast.message} onClose={() => setToast(null)} />}
     </View>
   );
 }
