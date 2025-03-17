@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from "react-native";
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -31,14 +32,20 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <GestureHandlerRootView
+        style={{
+          flex: 1
+        }}
+      >
+
       <Stack>
+      <Stack.Screen name="cargoAdd" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen
           name="(drawer)"
           options={{
             headerShown: false
           }}
         />
-        <Stack.Screen name="cargoAdd" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       
@@ -49,6 +56,7 @@ export default function RootLayout() {
         showHideTransition={"slide"}
         hidden={false}
       />
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }
