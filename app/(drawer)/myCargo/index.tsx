@@ -112,7 +112,7 @@ export default function MyCargo() {
       setData(data.concat(result.content));
       setPage(page + 1);
       
-      if (result.empty) {
+      if (result.last) {
         setDataFullyLoaded(true);
       }
     } catch (error) {
