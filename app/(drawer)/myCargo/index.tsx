@@ -13,6 +13,7 @@ import CargoAddIcon from "@/assets/images/navbar/CargoAddIcon.svg";
 import { useEffect, useState } from "react";
 import { Dimensions, Appearance } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
+import moment from "moment";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -77,6 +78,22 @@ export default function MyCargo() {
   //     console.error("Error fetching cargo data:", error);
   //   }
   // };
+
+  function getTimeAgo(createdDate: string): string {
+    const createdTime = moment(createdDate);
+    const now = moment();
+    const diffMinutes = now.diff(createdTime, "minutes");
+    const diffHours = now.diff(createdTime, "hours");
+    const diffDays = now.diff(createdTime, "days");
+  
+    if (diffMinutes < 60) {
+      return `${diffMinutes} daqiqa oldin`;
+    } else if (diffHours < 24) {
+      return `${diffHours} soat oldin`;
+    } else {
+      return `${diffDays} kun oldin`;
+    }
+  }  
 
   useEffect(() => {
     loadCargoData();
@@ -153,7 +170,7 @@ export default function MyCargo() {
         <View style={{ alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8 }}>
           <Text style={{ fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
         </View>
-        <Text>20 daqiqa oldin</Text>
+        <Text>{getTimeAgo(item.createdDate)}</Text>
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
