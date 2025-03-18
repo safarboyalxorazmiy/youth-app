@@ -8,6 +8,33 @@ import SearchIcon from "@/assets/images/search-icon.svg";
 import ArrowRightIcon from "@/assets/images/navbar/ArrowRightIcon.svg";
 import TruckDeliverySpeedIcon from "@/assets/images/navbar/TruckDeliverySpeedIcon.svg";
 import AnimatedToast from "@/components/AnimatedToast";
+import { Dimensions, Appearance } from 'react-native';
+import { Skeleton } from 'moti/skeleton';
+
+const screenWidth = Dimensions.get("window").width;
+
+const SkeletonLoader = () => {
+  return (
+    <View style={{
+      display: "flex", 
+      justifyContent: "center", 
+      alignItems: "center", 
+      gap: 12,
+      marginTop: 14,
+    }}>
+      <View style={{ marginTop: 4 }}>
+        <Skeleton
+          colorMode="light"
+          colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={75}
+        />
+      </View>
+    </View>
+  );
+};
+
+
 
 type CargoDTO = {
   id: number;
@@ -19,15 +46,18 @@ type CargoDTO = {
   destinationBRegion: string;
   transportType: string;
 };
-
 export default function Home() {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   const [data, setData] = useState<CargoDTO[]>([]);
   const [toast, setToast] = useState<{ message: string; type?: "success" | "error" | "info" } | null>(null);
 
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(11);
+  const [dataFullyLoaded, setDataFullyLoaded] = useState(false);
+
   useEffect(() => {
     handleVisiting();
-    handleCargoData();
+    loadCargoData();
   }, []);
 
   useEffect(() => {
@@ -55,15 +85,22 @@ export default function Home() {
     }
   };
 
-  const handleCargoData = async () => {
+  const loadCargoData = async () => {
+    if (dataFullyLoaded) return;
+
     try {
-      const response = await fetch("http://167.86.107.247:8080/cargo/get?page=0&size=10&sort=string", {
+      const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${page}&size=${size}&sort=string`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
 
       const result = await response.json();
-      setData(result.content);
+      setData(data.concat(result.content));
+      setPage(page + 1);
+      
+      if (result.empty) {
+        setDataFullyLoaded(true);
+      }
     } catch (error) {
       console.error("Error fetching cargo data:", error);
     }
@@ -99,8 +136,8 @@ export default function Home() {
     </View>
   );
 
-  const renderItem = ({ item }: { item: CargoDTO }) => (
-    <View style={{ marginTop: 14, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF" }}>
+  const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
+    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF" }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
         <View style={{ alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8 }}>
           <Text style={{ fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
@@ -109,14 +146,14 @@ export default function Home() {
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
-        <View style={{ width: 105, alignItems: "center" }}>
-          <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationARegion}</Text>
+        <View style={{ width: 125, alignItems: "flex-start" }}>
+          <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
           {item.destinationADistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
         </View>
 
         <ArrowRightIcon />
 
-        <View style={{ width: 105, alignItems: "center" }}>
+        <View style={{ width: 125, alignItems: "center" }}>
           <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
           {item.destinationBDistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
         </View>
@@ -142,6 +179,11 @@ export default function Home() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
+        onEndReached={loadCargoData}
+        onEndReachedThreshold={1}
+        ListFooterComponent={
+          dataFullyLoaded ? <></> : <SkeletonLoader />
+        }
       />
 
       {toast && <AnimatedToast message={toast.message} onClose={() => setToast(null)} />}
