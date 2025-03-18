@@ -1,0 +1,279 @@
+import { View, Text, TextInput, ScrollView, Pressable, FlatList, Dimensions } from "react-native";
+
+import { useRef, useState } from "react";
+import { StatusBar } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from "expo-router";
+
+import ArrowLeftLightIcon from "@/assets/images/arrow-left-light.svg";
+import ArrowRightBottom from "@/assets/images/arrow-right-bottom.svg";
+import RefreshIcon from "@/assets/images/refresh-icon.svg";
+
+export default function CargoSearch() {
+  const [focusedInput, setFocusedInput] = useState<String>("");
+  const [locationAInputValue, setLocationAInputValue] = useState<string>("");
+  const [locationBInputValue, setLocationBInputValue] = useState<string>("");
+
+  type LocationDetails = {
+    id: number;
+    locationRegion: string;
+    locationDistinct: string;
+  };
+
+  const [locationAReccommendData, setLocationAReccommendData] = useState<LocationDetails[]>([]);
+  const [locationBReccommendData, setLocationBReccommendData] = useState<LocationDetails[]>([]);
+
+  const [locationAReccumendationVisible, setLocationAReccumendationVisible] = useState<boolean>(false);
+  const [locationBReccumendationVisible, setLocationBReccumendationVisible] = useState<boolean>(false);
+
+  const [destinationARegion , setDestinationARegion] = useState<string>("");
+  const [destinationADistinct , setDestinationADistinct] = useState<string>("");
+
+  const [destinationBRegion , setDestinationBRegion] = useState<string>("");
+  const [destinationBDistinct , setDestinationBDistinct] = useState<string>("");
+
+  const locationBInputRef = useRef<TextInput>(null);
+  const scrollRef = useRef<ScrollView>(null);
+  const router = useRouter();
+
+  const searchAndSetLocationA = async () => {  
+    await fetch('http://167.86.107.247:8080/location/search?query=' + locationAInputValue, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => 
+      {
+        console.log(response)
+        return response.json()
+
+      })
+    .then(data => {
+      console.log(data.length == 0);
+      setLocationAReccommendData(data);
+    });
+  }
+
+  const searchAndSetLocationB = async () => {  
+    await fetch('http://167.86.107.247:8080/location/search?query=' + locationBInputValue, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => 
+      {
+        console.log(response)
+        return response.json()
+
+      })
+    .then(data => {
+      console.log(data.length == 0);
+      setLocationBReccommendData(data);
+    });
+  }
+
+  const scrollToStart = () => {
+    scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+  };
+
+  return (
+    <ScrollView style={{backgroundColor: "#232325"}}>
+      <StatusBar />
+
+      <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 25, paddingHorizontal: 25, width: "100%"}}>
+          <View style={{ borderRadius: 50, overflow: 'hidden' }}>
+            <Pressable
+              android_ripple={{ color: "#808080" }}
+              style={{ padding: 10 }}
+              onPress={() => {
+                router.push("/");
+              }}
+            >
+              <ArrowLeftLightIcon />
+            </Pressable>
+          </View>
+
+          <Text style={{fontSize: 22, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qo’shish</Text>
+
+          <View></View>
+      </View>
+
+      <View style={{paddingHorizontal: 38, marginTop: 50, width: "100%"}}>
+        <View style={{
+          width: "100%", 
+          backgroundColor: focusedInput == "LocationAInput" || locationAInputValue != "" ? "#232325" : "#5A5A5A", 
+          borderColor: focusedInput == "LocationAInput" || locationAInputValue != "" ? "#FFF" : "#454141", 
+          borderRadius: 10, 
+          paddingHorizontal: 18, 
+          borderWidth: focusedInput == "LocationAInput" || 
+          locationAInputValue != "" ? 1.5 : 1, 
+          height: 55, 
+          position: "relative", 
+          alignItems: "center", 
+          justifyContent: "center"
+        }}>
+          {
+            focusedInput == "LocationAInput" || locationAInputValue != "" ? (
+              <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
+                <Text style={{color: "white"}}>dan</Text>
+              </View>
+            ) : (<></>)
+          }
+
+          <Text style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
+          <TextInput 
+            onPress={() => {
+              setLocationAReccumendationVisible(true);
+              scrollToStart();
+            }}
+            style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
+            onChange={async (e) => {
+              setLocationAInputValue(e.nativeEvent.text)
+              await searchAndSetLocationA();
+            }} 
+            value={locationAInputValue}
+            onFocus={() => setFocusedInput("LocationAInput")} 
+            cursorColor={"#FFF"}
+            onBlur={() => setFocusedInput("")} />
+          <Text style={{color: "#4F4F4F", fontSize: 18, fontFamily: "SfProDisplayRegular"}}></Text>
+        </View>
+      </View> 
+
+      {
+        locationAReccumendationVisible ? (
+          <View>
+            <FlatList
+              data={locationAReccommendData}
+              keyExtractor={(item) => item.id.toString()}
+              
+              renderItem={({ item }) => (
+                <Pressable 
+                  android_ripple={{ color: "#EFEFEF" }} 
+                  onPress={() => {
+                    setLocationAInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                    setLocationAReccumendationVisible(false);
+                    setDestinationARegion(item.locationRegion == null ? "" : item.locationRegion);
+                    setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
+                  }} 
+                  style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                  {item.locationDistinct != null && <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                </Pressable>
+              )}
+              nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
+              style={{ maxHeight: 200,  marginTop: 5, marginHorizontal: 38, backgroundColor: "#FBFBFB", borderColor: "#EFEFEF", borderWidth: 1, borderRadius: 8 }} // ✅ Restrict height to avoid layout issues
+            />
+          </View>
+        ) : (<></>)
+      }
+      
+      <ArrowRightBottom style={{
+        marginRight: "auto",
+        marginLeft: "auto",
+        marginTop: 15,
+        marginBottom: 15
+      }} />
+
+      <View style={{paddingHorizontal: 38, marginTop: 22, width: "100%"}}>
+        <View style={{width: "100%", borderColor: focusedInput == "LocationBInput" || locationBInputValue != "" ? "#FFF" : "#ADADAD", borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "LocationBInput" || locationBInputValue != "" ? 1.5 : 1, height: 55, position: "relative", alignItems: "center", justifyContent: "center"}}>
+          {
+            focusedInput == "LocationBInput" || locationBInputValue != "" ? (
+              <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
+                <Text style={{color: "#FFF"}}>ga</Text>
+              </View>
+            ) : (<></>)
+          }
+
+          <Text style={
+            focusedInput != "LocationBInput" && locationBInputValue == "" ? {
+              position: "absolute", 
+              top: "25%", 
+              color: "#FFF", 
+              left: 18, 
+              height: "100%", 
+              fontSize: 18, 
+              fontWeight: 400, 
+              fontFamily: "SfProDisplayRegular"
+            } : {
+              display: "none"
+            }}>ga</Text>
+            
+          <TextInput 
+            onPress={() => {
+              setLocationBReccumendationVisible(true);
+            }}
+            ref={locationBInputRef}
+            style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
+            onChange={async (e) => {
+              setLocationBInputValue(e.nativeEvent.text)
+              await searchAndSetLocationB();
+            }} 
+            value={locationBInputValue}
+            onFocus={() => setFocusedInput("LocationBInput")} 
+            cursorColor={"#FFF"}
+            onBlur={() => setFocusedInput("")} />
+          <Text style={{color: "#4F4F4F", fontSize: 18, fontFamily: "SfProDisplayRegular"}}></Text>
+        </View>
+      </View> 
+      
+      {
+        locationBReccumendationVisible ? (
+          <View>
+            <FlatList
+              data={locationBReccommendData}
+              keyExtractor={(item) => item.id.toString()}
+              
+              renderItem={({ item }) => (
+                <Pressable 
+                  android_ripple={{ color: "#EFEFEF" }} 
+                  onPress={() => {
+                    setLocationBInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                    setLocationBReccumendationVisible(false);
+                    setDestinationBRegion(item.locationRegion == null ? "" : item.locationRegion);
+                    setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
+                  }} 
+                  style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                  {item.locationDistinct != null && <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                </Pressable>
+              )}
+              nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
+              style={{ maxHeight: 200,  marginTop: 5, marginHorizontal: 38, backgroundColor: "#FBFBFB", borderColor: "#EFEFEF", borderWidth: 1, borderRadius: 8 }} // ✅ Restrict height to avoid layout issues
+            />
+          </View>
+        ) : (<></>)
+      }
+
+      <Pressable 
+
+        onPress={() => {
+          AsyncStorage.setItem("destination", JSON.stringify({
+            destinationARegion: destinationARegion,
+            destinationADistinct: destinationADistinct,
+            destinationBRegion: destinationARegion,
+            destinationBDistinct: destinationBDistinct
+          }));
+          router.push("/");
+        }}  
+        style={{
+          marginTop: 45,
+          backgroundColor: "#2CA82A",
+          width: Dimensions.get("window").width - 76,
+          marginLeft: "auto",
+          marginRight: "auto",
+          height: 65,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          columnGap: 15,
+          borderRadius: 14
+        }}>
+        <Text style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 22}}>KO’RISH</Text>
+        <RefreshIcon />
+      </Pressable>
+
+    </ScrollView>
+  );
+}

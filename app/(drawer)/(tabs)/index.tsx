@@ -12,6 +12,7 @@ import { Dimensions, Appearance } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
 import moment from "moment";
 import { useRouter } from "expo-router";
+import ArrowRightIconSm from "@/assets/images/arrow-right-sm.svg";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -48,6 +49,13 @@ type CargoDTO = {
   destinationBRegion: string;
   transportType: string;
 };
+
+type Destination = {
+  destinationARegion: string;
+  destinationADistinct: string;
+  destinationBRegion: string;
+  destinationBDistinct: string;
+}
 export default function Home() {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
   const [data, setData] = useState<CargoDTO[]>([]);
@@ -57,6 +65,9 @@ export default function Home() {
   const [size, setSize] = useState(11);
   const [dataFullyLoaded, setDataFullyLoaded] = useState(false);
 
+  const [currentDestination, setCurrentDestination] = useState<Destination | null>(null);
+
+  const router = useRouter();
   const isFocused = useIsFocused();
   
   useEffect(() => {
@@ -81,6 +92,39 @@ export default function Home() {
         } catch (error) {
           console.error("Error fetching cargo data:", error);
         }
+      }
+
+      try {
+        const destinationString = await AsyncStorage.getItem("destination");
+        if (destinationString != null) {
+          let destination = JSON.parse(destinationString);
+
+          setCurrentDestination(destination);
+          setPage(0);
+          setData([]);
+
+          const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-location`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              destinationARegion: destination.destinationARegion,
+              destinationADistinct: destination.destinationADistinct,
+              destinationBRegion: destination.destinationBRegion,
+              destinationBDistinct: destination.destinationBDistinct,
+              page: 0,
+              size: 11
+            })
+          });
+
+          const result = await response.json();
+          setData(result.content);
+
+          if (result.last) {
+            setDataFullyLoaded(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error handling destination:", error);
       }
     }
     fetchData();
@@ -123,32 +167,56 @@ export default function Home() {
   };
 
   const renderHeader = () => (
-    <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
-      <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
+    <View>
+      <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
+          <Pressable
+            style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}
+            android_ripple={{ color: "#4F4F4F" }}
+            onPress={() => navigation.openDrawer()}
+          >
+            <SidebarMenu />
+          </Pressable>
+        </View>
+
         <Pressable
-          style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}
-          android_ripple={{ color: "#4F4F4F" }}
-          onPress={() => navigation.openDrawer()}
+          style={{
+            backgroundColor: "#D9D9D9",
+            width: "70%",
+            height: 40,
+            borderRadius: 8,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingHorizontal: 14,
+          }}
+          onPress={() => {
+            router.push("/cargoSearch")
+          }}
         >
-          <SidebarMenu />
+          <Text style={{ color: "#000000", fontSize: 18, fontFamily: "SfProDisplayRegular", fontWeight: "400", width: "70%", textAlign: "center" }}>Yuk qidirish</Text>
+          <SearchIcon />
         </Pressable>
       </View>
 
-      <Pressable
-        style={{
-          backgroundColor: "#D9D9D9",
-          width: "70%",
-          height: 40,
-          borderRadius: 8,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: 14,
-        }}
-      >
-        <Text style={{ color: "#000000", fontSize: 18, fontFamily: "SfProDisplayRegular", fontWeight: "400", width: "70%", textAlign: "center" }}>Yuk qidirish</Text>
-        <SearchIcon />
-      </Pressable>
+      {
+        currentDestination != null && (
+          <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
+            <View>
+              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 18}}>{currentDestination.destinationARegion} </Text>
+              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular"}}>{currentDestination.destinationADistinct}</Text>
+            </View>
+
+            <ArrowRightIconSm />
+
+            <View>
+              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 18}}>{currentDestination.destinationBRegion}</Text>
+              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular"}}>{currentDestination.destinationBDistinct}</Text>
+            </View>
+          </View>
+        )
+      }
+
     </View>
   );
 
