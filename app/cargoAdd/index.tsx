@@ -62,7 +62,7 @@ export default function CargoAdd() {
           destinationBDistinct,
           transportType: typeInputValue, 
           comment: detailInputValue,
-          phone: "+998901234567"
+          phone: "+998917972385"
         })
       });
 

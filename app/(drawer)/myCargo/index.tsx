@@ -86,7 +86,7 @@ export default function MyCargo() {
     if (dataFullyLoaded) return;
 
     try {
-      const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-phone?phone=+998917972385?page=0&size=10&sort=string`, {
+      const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-phone?phone=%2B998917972385&page=${page}&size=${size}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -133,6 +133,20 @@ export default function MyCargo() {
     </View>
   );
 
+  const deleteCargoById = async (id: number) => {
+    try {
+      console.log("CargoID::", id)
+      await fetch(`http://167.86.107.247:8080/cargo/delete?id=${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      setData(data.filter((cargo) => cargo.id !== id));
+    } catch (error) {
+      console.error("Error deleting cargo:", error);
+    }
+  };
+
   const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
     <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF" }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
@@ -143,14 +157,14 @@ export default function MyCargo() {
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
-        <View style={{ width: 125, alignItems: "flex-start" }}>
+        <View style={{ width: 135, alignItems: "flex-start" }}>
           <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
           {item.destinationADistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
         </View>
 
-        <ArrowRightIcon />
+        <ArrowRightIcon style={{ marginLeft: -20 }} />
 
-        <View style={{ width: 125, alignItems: "center" }}>
+        <View style={{ width: 135, alignItems: "flex-start" }}>
           <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
           {item.destinationBDistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
         </View>
@@ -161,7 +175,7 @@ export default function MyCargo() {
         <Text style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
       </View>
 
-      <Pressable style={{ 
+      <View style={{ 
           alignItems: "center",
           justifyContent: "center", 
           marginTop: 13, 
@@ -170,12 +184,22 @@ export default function MyCargo() {
           borderWidth: 0.6, 
           borderColor: "#B00020",
           borderRadius: 11, 
-          flexDirection: "row", 
-          columnGap: 15 
+          overflow: "hidden"
         }}>
+        <Pressable
+          onPress={async () => {
+            if (!item) {
+              return;
+            } 
+
+            await deleteCargoById(item.id)
+          }}
+          android_ripple={{ color: "#B00020" }}
+          style={{ flex: 1, flexDirection: "row", columnGap: 15, width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}>
           <DeleteIcon />
           <Text style={{ fontSize: 18, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#B00020" }}>OLIB TASHLASH</Text>
         </Pressable>
+      </View>
     </View>
   );
 

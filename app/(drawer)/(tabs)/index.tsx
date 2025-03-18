@@ -146,14 +146,14 @@ export default function Home() {
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
-        <View style={{ width: 125, alignItems: "flex-start" }}>
+        <View style={{ width: 135, alignItems: "flex-start" }}>
           <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
           {item.destinationADistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
         </View>
 
-        <ArrowRightIcon />
+        <ArrowRightIcon style={{ marginLeft: -20 }} />
 
-        <View style={{ width: 125, alignItems: "center" }}>
+        <View style={{ width: 135, alignItems: "flex-start" }}>
           <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
           {item.destinationBDistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
         </View>
