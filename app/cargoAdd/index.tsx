@@ -32,6 +32,8 @@ export default function CargoAdd() {
   const [destinationBRegion , setDestinationBRegion] = useState<string>("");
   const [destinationBDistinct , setDestinationBDistinct] = useState<string>("");
 
+  const [transactionStarted, setTransactionStarted] = useState<boolean>(false);
+
   const locationBInputRef = useRef<TextInput>(null);
 
   const scrollRef = useRef<ScrollView>(null);
@@ -49,6 +51,9 @@ export default function CargoAdd() {
   };
 
   const handleCreateData = async () => {
+    if (transactionStarted) return;
+
+    setTransactionStarted(true);
     try {
       const response = await fetch('http://167.86.107.247:8080/cargo/create', {
         method: 'POST',
@@ -72,7 +77,9 @@ export default function CargoAdd() {
       if (response.status === 200) {
         await AsyncStorage.setItem("newItemCreated", "true");
       }
-      
+
+      setTransactionStarted(false);
+
       router.push("/");
     } catch (error) {
       console.error('Error creating data:', error);
