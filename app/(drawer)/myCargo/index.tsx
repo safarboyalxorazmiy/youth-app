@@ -4,7 +4,7 @@ import ArrowRightIcon from "@/assets/images/navbar/ArrowRightIcon.svg";
 import DeleteIcon from "@/assets/images/delete-icon.svg";
 import SidebarMenu from "@/assets/images/sidebar-menu-icon.svg";
 import SearchIcon from "@/assets/images/search-icon.svg";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { useRouter, usePathname } from "expo-router";
 import HomeIcon from "@/assets/images/navbar/HomeIcon.svg";
@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Dimensions, Appearance } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -79,6 +80,8 @@ export default function MyCargo() {
   //   }
   // };
 
+  const isFocused = useIsFocused();
+  
   function getTimeAgo(createdDate: string): string {
     const createdTime = moment(createdDate);
     const now = moment();
@@ -97,7 +100,7 @@ export default function MyCargo() {
 
   useEffect(() => {
     loadCargoData();
-  }, []);
+  }, [isFocused]);
 
   const loadCargoData = async () => {
     if (dataFullyLoaded) return;
@@ -151,6 +154,7 @@ export default function MyCargo() {
   );
 
   const deleteCargoById = async (id: number) => {
+    await AsyncStorage.setItem("itemRemoved", "true");
     try {
       console.log("CargoID::", id)
       await fetch(`http://167.86.107.247:8080/cargo/delete?id=${id}`, {

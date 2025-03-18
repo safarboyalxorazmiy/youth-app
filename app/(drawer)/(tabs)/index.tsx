@@ -77,9 +77,29 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
+      if ((await AsyncStorage.getItem("itemRemoved")) === "true") {
+        await AsyncStorage.removeItem("destination");
+        setCurrentDestination(null);
+        setPage(0);
+        setData([]);
+
+        loadCargoData();
+        return;
+      }
+
       if ((await AsyncStorage.getItem("newItemCreated")) === "true") {
         setToast({ message: "Yangi ma'lumot qo'shildi", type: "success" });
         AsyncStorage.removeItem("newItemCreated");
+
+        if (await AsyncStorage.getItem("destination") != null) {
+          await AsyncStorage.removeItem("destination");
+          setCurrentDestination(null);
+          setPage(0);
+          setData([]);
+
+          loadCargoData();
+          return;
+        }
 
         try {
           const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${0}&size=${1}&sort=string`, {
