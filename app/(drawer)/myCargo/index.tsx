@@ -99,6 +99,9 @@ export default function MyCargo() {
   }  
 
   useEffect(() => {
+    setDataFullyLoaded(false);
+    setData([]);
+    setPage(0);
     loadCargoData();
   }, [isFocused]);
 
@@ -155,6 +158,7 @@ export default function MyCargo() {
 
   const deleteCargoById = async (id: number) => {
     await AsyncStorage.setItem("itemRemoved", "true");
+    
     try {
       console.log("CargoID::", id)
       await fetch(`http://167.86.107.247:8080/cargo/delete?id=${id}`, {

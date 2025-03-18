@@ -78,12 +78,15 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       if ((await AsyncStorage.getItem("itemRemoved")) === "true") {
+        console.log("itemRemoved", "true")
+        await AsyncStorage.removeItem("itemRemoved");
         await AsyncStorage.removeItem("destination");
         setCurrentDestination(null);
         setPage(0);
         setData([]);
+        setDataFullyLoaded(false);
 
-        loadCargoData();
+        await loadCargoData();
         return;
       }
 
@@ -96,8 +99,9 @@ export default function Home() {
           setCurrentDestination(null);
           setPage(0);
           setData([]);
+          setDataFullyLoaded(false);
 
-          loadCargoData();
+          await loadCargoData();
           return;
         }
 
