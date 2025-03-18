@@ -181,9 +181,17 @@ export default function Home() {
         <Text style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
       </View>
 
-      <Pressable style={{ alignItems: "center", justifyContent: "center", marginTop: 13, height: 60, backgroundColor: "#000000", borderRadius: 11 }}>
-        <Text style={{ fontSize: 16, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
-      </Pressable>
+      <View style={{height: 60, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
+        <Pressable 
+          android_ripple={{ color: "#1E1E1E"}}
+          onPress={async () => {
+            await AsyncStorage.setItem("cargoData", JSON.stringify(item));
+            navigation.navigate("cargoDetail");
+          }} 
+          style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
+          <Text style={{ fontSize: 16, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
+        </Pressable>
+      </View>
     </View>
   );
 
