@@ -5,6 +5,7 @@ import { DrawerNavigationProp } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SidebarMenu from "@/assets/images/sidebar-menu-icon.svg";
 import SearchIcon from "@/assets/images/search-icon.svg";
+import CrossIcon from "@/assets/images/cross-icon.svg";
 import ArrowRightIcon from "@/assets/images/navbar/ArrowRightIcon.svg";
 import TruckDeliverySpeedIcon from "@/assets/images/navbar/TruckDeliverySpeedIcon.svg";
 import AnimatedToast from "@/components/AnimatedToast";
@@ -211,24 +212,37 @@ export default function Home() {
           </Pressable>
         </View>
 
-        <Pressable
-          style={{
-            backgroundColor: "#D9D9D9",
-            width: "70%",
-            height: 40,
-            borderRadius: 8,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 14,
-          }}
-          onPress={() => {
-            router.push("/cargoSearch")
-          }}
-        >
-          <Text style={{ color: "#000000", fontSize: 18, fontFamily: "SfProDisplayRegular", fontWeight: "400", width: "70%", textAlign: "center" }}>Yuk qidirish</Text>
-          <SearchIcon />
-        </Pressable>
+        <View style={{
+          width: "70%",
+          height: 40,
+          borderRadius: 8,
+          overflow: "hidden"
+        }}>
+          <Pressable
+            android_ripple={{ color: "#808080" }}
+            style={{
+              backgroundColor: "#0c0c0d",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 14,
+              width: "100%",
+              height: "100%"
+            }}
+            onPress={() => {
+              router.push("/cargoSearch")
+            }}
+          >
+            <Text style={{ fontSize: 18, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : "Qidiruv"}</Text>
+            {
+              currentDestination != null ? (
+                <CrossIcon />
+              ): (
+                <SearchIcon />
+              )
+          }
+          </Pressable>
+        </View>
       </View>
 
       {

@@ -138,21 +138,33 @@ export default function MyCargo() {
         </Pressable>
       </View>
 
-      <Pressable
+      <View 
         style={{
-          backgroundColor: "#D9D9D9",
           width: "70%",
           height: 40,
           borderRadius: 8,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: 14,
-        }}
-      >
-        <Text style={{ color: "#000000", fontSize: 18, fontFamily: "SfProDisplayRegular", fontWeight: "400", width: "70%", textAlign: "center" }}>Yuk qidirish</Text>
-        <SearchIcon />
-      </Pressable>
+          overflow: "hidden"
+        }}>
+          <Pressable
+            android_ripple={{ color: "#808080" }}
+            style={{
+              backgroundColor: "#0c0c0d",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 14,
+              width: "100%",
+              height: "100%"
+            }}
+            onPress={() => {
+              router.push("/cargoSearch")
+            }}
+          >
+            <Text style={{ fontSize: 18, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
+            <SearchIcon />
+            
+          </Pressable>
+        </View>
     </View>
   );
 
