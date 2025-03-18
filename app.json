@@ -22,6 +22,7 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
       "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
