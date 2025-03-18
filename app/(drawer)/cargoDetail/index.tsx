@@ -92,12 +92,12 @@ export default function CargoDetail() {
       <Text style={{fontSize: 28, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 8, marginLeft: 126}}>{cargoData?.destinationBRegion || ""}</Text>
       <Text style={{fontSize: 24, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 25, marginLeft: 126}}>{cargoData?.destinationBDistinct || ""}</Text>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 24, marginLeft: 7, columnGap: 10, paddingHorizontal: 46, marginBottom: 30}}>
+      <View style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", marginTop: 24, columnGap: 10, paddingHorizontal: 22, marginBottom: 30}}>
         <TruckDeliverySpeedIcon />
         <Text style={{fontSize: 20, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>Transport turi: ISUZU</Text>
       </View>
 
-      <View style={{paddingHorizontal: 46, marginBottom: 100}}>
+      <View style={{paddingHorizontal: 22, marginBottom: 100}}>
         <Text style={{fontSize: 20, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold", marginBottom: 11}}>Izoh:</Text>
 
         <View style={{height: 206, borderWidth: 1, borderRadius: 8, borderColor: "#232325", width: "100%", padding: 20}}>
@@ -125,7 +125,7 @@ export default function CargoDetail() {
           </Pressable>
         </View>
 
-        <View style={{height: 78, borderRadius: 11, width: "100%", marginTop: 15, overflow: "hidden"}}>
+        <View style={{height: 65, borderRadius: 11, width: "100%", marginTop: 15, overflow: "hidden"}}>
           <Pressable
             onPress={() => {
               Linking.openURL(`https://t.me/+998917972385`);
