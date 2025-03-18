@@ -6,7 +6,7 @@ import TruckDeliverySpeedIcon from "@/assets/images/truck-delivery-speed-icon-gr
 import CallIcon from "@/assets/images/call-icon.svg";
 import TelegramIcon from "@/assets/images/telegram-icon.svg";
 import { useNavigation, useRouter } from "expo-router";
-import SidebarMenu from "@/assets/images/sidebar-menu-icon.svg";
+import ArrowLeftIconLight from "@/assets/images/arrow-left-light.svg";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import SearchIcon from "@/assets/images/search-icon.svg";
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
@@ -50,9 +50,9 @@ export default function CargoDetail() {
           <Pressable
             style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}
             android_ripple={{ color: "#4F4F4F" }}
-            onPress={() => navigation.openDrawer()}
+            onPress={() => router.push("/")}
           >
-            <SidebarMenu />
+            <ArrowLeftIconLight />
           </Pressable>
         </View>
 
