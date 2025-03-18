@@ -146,6 +146,14 @@ export default function Home() {
           if (result.last) {
             setDataFullyLoaded(true);
           }
+        } else {
+          if (currentDestination != null) {
+            setCurrentDestination(null);
+            setPage(0);
+            setData([]);
+            setDataFullyLoaded(false);
+            await loadCargoData();
+          }
         }
       } catch (error) {
         console.error("Error handling destination:", error);

@@ -8,6 +8,7 @@ import { useRouter } from "expo-router";
 import ArrowLeftLightIcon from "@/assets/images/arrow-left-light.svg";
 import ArrowRightBottom from "@/assets/images/arrow-right-bottom.svg";
 import RefreshIcon from "@/assets/images/refresh-icon.svg";
+import LocationDeleteIcon from "@/assets/images/location-delete-icon.svg";
 
 export default function CargoSearch() {
   const [focusedInput, setFocusedInput] = useState<String>("");
@@ -97,7 +98,14 @@ export default function CargoSearch() {
 
           <Text style={{fontSize: 22, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qo’shish</Text>
 
-          <View></View>
+          <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
+            <Pressable onPress={() => {
+              AsyncStorage.removeItem("destination");
+              router.push("/");
+            }} android_ripple={{ color: "#808080" }} style={{backgroundColor: "#0c0c0d", width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}}>
+              <LocationDeleteIcon />
+            </Pressable>
+          </View>
       </View>
 
       <View style={{paddingHorizontal: 38, marginTop: 50, width: "100%"}}>

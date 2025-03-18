@@ -13,7 +13,7 @@ type LocationDetails = {
 
 export default function CargoAdd() {  
   const [focusedInput, setFocusedInput] = useState<String>("");
-  const [typeInputValue, setTypeInputValue] = useState<String>("");
+  const [typeInputValue, setTypeInputValue] = useState<string>("");
 
   const [locationAInputValue, setLocationAInputValue] = useState<string>("");
   const [locationBInputValue, setLocationBInputValue] = useState<string>("");
@@ -21,7 +21,7 @@ export default function CargoAdd() {
   const [locationAReccommendData, setLocationAReccommendData] = useState<LocationDetails[]>([]);
   const [locationBReccommendData, setLocationBReccommendData] = useState<LocationDetails[]>([]);
 
-  const [detailInputValue, setDetailInputValue] = useState<String>("");
+  const [detailInputValue, setDetailInputValue] = useState<string>("");
 
   const [locationAReccumendationVisible, setLocationAReccumendationVisible] = useState<boolean>(false);
   const [locationBReccumendationVisible, setLocationBReccumendationVisible] = useState<boolean>(false);
@@ -283,6 +283,7 @@ export default function CargoAdd() {
               <TextInput 
                 style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"}} 
                 onChange={(e) => setTypeInputValue(e.nativeEvent.text)} 
+                value={typeInputValue}
                 onFocus={() => setFocusedInput("TypeInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
@@ -310,6 +311,7 @@ export default function CargoAdd() {
                   setFocusedInput("DetailInput");
                   scrollToEnd();
                 }}
+                value={detailInputValue}
                 multiline
                 style={{width: "100%", marginTop: 10, fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular", }} 
                 onChange={(e) => setDetailInputValue(e.nativeEvent.text)} 
