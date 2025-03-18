@@ -36,6 +36,8 @@ export default function CargoAdd() {
 
   const locationBInputRef = useRef<TextInput>(null);
 
+  const detailInputRef = useRef<TextInput>(null);
+
   const scrollRef = useRef<ScrollView>(null);
 
   const router = useRouter();
@@ -294,9 +296,14 @@ export default function CargoAdd() {
           </View>
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
-            <View style={{width: "100%", borderColor: focusedInput == "DetailInput" || detailInputValue != "" ? "#000000" : "#ADADAD", borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "DetailInput" || detailInputValue != "" ? 1.5 : 1, height: 104, position: "relative", 
-              justifyContent: "flex-start",   
-            }}>
+            <Pressable 
+              onPress={() => {
+                detailInputRef.current?.blur();
+                detailInputRef.current?.focus();
+              }}
+              style={{width: "100%", borderColor: focusedInput == "DetailInput" || detailInputValue != "" ? "#000000" : "#ADADAD", borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "DetailInput" || detailInputValue != "" ? 1.5 : 1, height: 104, position: "relative", 
+                justifyContent: "flex-start",   
+              }}>
               {
                 focusedInput == "DetailInput" || detailInputValue != "" ? (
                   <View style={{position: "absolute", top: "-10%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
@@ -307,6 +314,7 @@ export default function CargoAdd() {
 
               <Text style={focusedInput != "DetailInput" && detailInputValue == "" ? {position: "absolute", top: "20%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Tavsif</Text>
               <TextInput 
+                ref={detailInputRef}
                 onPress={() => {
                   setFocusedInput("DetailInput");
                   scrollToEnd();
@@ -318,7 +326,7 @@ export default function CargoAdd() {
                 onFocus={() => setFocusedInput("DetailInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
-            </View>
+            </Pressable>
 
             <Text style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 17, fontFamily: "SfProDisplayRegular"}}>misol uchun: 4 tonna sement</Text>
           </View>
