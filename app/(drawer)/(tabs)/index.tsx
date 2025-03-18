@@ -11,6 +11,7 @@ import AnimatedToast from "@/components/AnimatedToast";
 import { Dimensions, Appearance } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
 import moment from "moment";
+import { useRouter } from "expo-router";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -56,6 +57,8 @@ export default function Home() {
   const [size, setSize] = useState(11);
   const [dataFullyLoaded, setDataFullyLoaded] = useState(false);
 
+  const isFocused = useIsFocused();
+  
   useEffect(() => {
     handleVisiting();
     loadCargoData();
@@ -66,10 +69,22 @@ export default function Home() {
       if ((await AsyncStorage.getItem("newItemCreated")) === "true") {
         setToast({ message: "Yangi ma'lumot qo'shildi", type: "success" });
         AsyncStorage.removeItem("newItemCreated");
+
+        try {
+          const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${0}&size=${1}&sort=string`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const result = await response.json();
+          setData([result.content[0], ...data]);          
+        } catch (error) {
+          console.error("Error fetching cargo data:", error);
+        }
       }
     }
     fetchData();
-  }, [useIsFocused]);
+  }, [isFocused]);
 
   const handleVisiting = async () => {
     try {
@@ -99,7 +114,7 @@ export default function Home() {
       setData(data.concat(result.content));
       setPage(page + 1);
       
-      if (result.empty) {
+      if (result.last) {
         setDataFullyLoaded(true);
       }
     } catch (error) {

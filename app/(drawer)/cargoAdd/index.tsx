@@ -307,6 +307,7 @@ export default function CargoAdd() {
               <Text style={focusedInput != "DetailInput" && detailInputValue == "" ? {position: "absolute", top: "20%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Tavsif</Text>
               <TextInput 
                 onPress={() => {
+                  setFocusedInput("DetailInput");
                   scrollToEnd();
                 }}
                 multiline
