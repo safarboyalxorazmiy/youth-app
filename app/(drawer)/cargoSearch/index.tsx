@@ -185,7 +185,16 @@ export default function CargoSearch() {
       }} />
 
       <View style={{paddingHorizontal: 38, marginTop: 22, width: "100%"}}>
-        <View style={{width: "100%", borderColor: focusedInput == "LocationBInput" || locationBInputValue != "" ? "#FFF" : "#ADADAD", borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "LocationBInput" || locationBInputValue != "" ? 1.5 : 1, height: 55, position: "relative", alignItems: "center", justifyContent: "center"}}>
+        <View style={{
+          width: "100%", 
+          backgroundColor: focusedInput == "LocationBInput" || locationAInputValue != "" ? "#232325" : "#5A5A5A", 
+          borderColor: focusedInput == "LocationBInput" || locationAInputValue != "" ? "#FFF" : "#454141", 
+          borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "LocationBInput" || locationBInputValue != "" ? 1.5 : 1, 
+          height: 55, 
+          position: "relative", 
+          alignItems: "center", 
+          justifyContent: "center"
+        }}>            
           {
             focusedInput == "LocationBInput" || locationBInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
@@ -254,9 +263,22 @@ export default function CargoSearch() {
         ) : (<></>)
       }
 
+    <View style={{
+      height: 65,
+      width: Dimensions.get("window").width - 76,
+      marginTop: 45,
+      marginLeft: "auto",
+      marginRight: "auto",
+      borderRadius: 14,
+      overflow: "hidden"
+    }}>
       <Pressable 
-
+        android_ripple={{color: "#1E1E1E"}} 
         onPress={() => {
+          if (locationAInputValue == "" || locationBInputValue == "") {
+            router.push("/");
+            return;
+          }
           AsyncStorage.setItem("destination", JSON.stringify({
             destinationARegion: destinationARegion,
             destinationADistinct: destinationADistinct,
@@ -266,21 +288,18 @@ export default function CargoSearch() {
           router.push("/");
         }}  
         style={{
-          marginTop: 45,
+          width: "100%",
+          height: "100%",
           backgroundColor: "#2CA82A",
-          width: Dimensions.get("window").width - 76,
-          marginLeft: "auto",
-          marginRight: "auto",
-          height: 65,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
           columnGap: 15,
-          borderRadius: 14
         }}>
         <Text style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 22}}>KO’RISH</Text>
         <RefreshIcon />
       </Pressable>
+      </View>
 
     </ScrollView>
   );
