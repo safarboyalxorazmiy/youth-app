@@ -26,12 +26,40 @@ const SkeletonLoader = () => {
       gap: 12,
       marginTop: 14,
     }}>
-      <View style={{ marginTop: 4 }}>
+      <View style={{ marginTop: 4, rowGap: 20 }}>
         <Skeleton
           colorMode="light"
-          colors={["#FFF", "#ECEDEE", "#FFF"]}
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
           width={screenWidth}
-          height={75}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
         />
       </View>
     </View>

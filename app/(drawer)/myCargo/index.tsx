@@ -27,12 +27,33 @@ const SkeletonLoader = () => {
       gap: 12,
       marginTop: 14,
     }}>
-      <View style={{ marginTop: 4 }}>
+      <View style={{ marginTop: 4, rowGap: 20 }}>
         <Skeleton
           colorMode="light"
-          colors={["#FFF", "#ECEDEE", "#FFF"]}
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
           width={screenWidth}
-          height={75}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
+        />
+
+        <Skeleton
+          colorMode="light"
+          // colors={["#FFF", "#ECEDEE", "#FFF"]}
+          width={screenWidth}
+          height={205}
         />
       </View>
     </View>
@@ -127,43 +148,7 @@ export default function MyCargo() {
   };
 
   const renderHeader = () => (
-    <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
-      <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
-        <Pressable
-          style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}
-          android_ripple={{ color: "#4F4F4F" }}
-          onPress={() => navigation.openDrawer()}
-        >
-          <SidebarMenu />
-        </Pressable>
-      </View>
-
-      <View style={{
-        width: "70%",
-        height: 40,
-        borderRadius: 8,
-        overflow: "hidden"
-      }}>
-        <Pressable
-          android_ripple={{ color: "#808080" }}
-          style={{
-            backgroundColor: "#0c0c0d",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 14,
-            width: "100%",
-            height: "100%"
-          }}
-          onPress={() => {
-            router.push("/cargoSearch")
-          }}
-        >
-          <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
-          <SearchIcon />
-        </Pressable>
-      </View>
-    </View>
+    <></>
   );
 
   const deleteCargoById = async (id: number) => {
@@ -193,7 +178,7 @@ export default function MyCargo() {
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
+          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold"}}  >{item.destinationARegion}</Text>
           {item.destinationADistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
         </View>
 
@@ -270,21 +255,56 @@ export default function MyCargo() {
 
   return (
     <View style={{flex: 1, backgroundColor: "#EFEFEF" }}>  
-      <ScrollView>
-        <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
-        
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={renderItem}
-          ListHeaderComponent={renderHeader}
-          onEndReached={loadCargoData}
-          onEndReachedThreshold={1}
-          ListFooterComponent={
-            dataFullyLoaded ? <></> : <SkeletonLoader />
-          }
-        />
-      </ScrollView>
+      <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
+      <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
+          <Pressable
+            style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}
+            android_ripple={{ color: "#4F4F4F" }}
+            onPress={() => navigation.openDrawer()}
+          >
+            <SidebarMenu />
+          </Pressable>
+        </View>
+
+        <View style={{
+          width: "70%",
+          height: 40,
+          borderRadius: 8,
+          overflow: "hidden"
+        }}>
+          <Pressable
+            android_ripple={{ color: "#808080" }}
+            style={{
+              backgroundColor: "#0c0c0d",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingHorizontal: 14,
+              width: "100%",
+              height: "100%"
+            }}
+            onPress={() => {
+              router.push("/cargoSearch")
+            }}
+          >
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
+            <SearchIcon />
+          </Pressable>
+        </View>
+      </View>
+    
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader}
+        onEndReached={loadCargoData}
+        onEndReachedThreshold={1}
+        ListFooterComponent={
+          dataFullyLoaded ? <></> : <SkeletonLoader />
+        }
+      />
 
       <View
         style={{
@@ -325,7 +345,6 @@ export default function MyCargo() {
           <CargoAddIcon />
         </Pressable>
       </View>
-
     </View>
   )  
 }
