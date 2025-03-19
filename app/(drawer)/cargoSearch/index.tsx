@@ -96,7 +96,7 @@ export default function CargoSearch() {
             </Pressable>
           </View>
 
-          <Text style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qidiruvi</Text>
+          <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qidiruvi</Text>
 
           <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
             <Pressable onPress={() => {
@@ -125,12 +125,12 @@ export default function CargoSearch() {
           {
             focusedInput == "LocationAInput" || locationAInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
-                <Text style={{color: "white", fontSize: 12}}>dan</Text>
+                <Text allowFontScaling={false} style={{color: "white", fontSize: 12}}>dan</Text>
               </View>
             ) : (<></>)
           }
 
-          <Text style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
+          <Text allowFontScaling={false} style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
           <TextInput 
             onPress={() => {
               setLocationAReccumendationVisible(true);
@@ -145,7 +145,7 @@ export default function CargoSearch() {
             onFocus={() => setFocusedInput("LocationAInput")} 
             cursorColor={"#FFF"}
             onBlur={() => setFocusedInput("")} />
-          <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
+          <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
         </View>
       </View> 
 
@@ -166,8 +166,8 @@ export default function CargoSearch() {
                     setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                   }} 
                   style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                  <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                  {item.locationDistinct != null && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                  <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                  {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
                 </Pressable>
               )}
               nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -198,12 +198,12 @@ export default function CargoSearch() {
           {
             focusedInput == "LocationBInput" || locationBInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
-                <Text style={{color: "#FFF", fontSize: 12}}>ga</Text>
+                <Text allowFontScaling={false} style={{color: "#FFF", fontSize: 12}}>ga</Text>
               </View>
             ) : (<></>)
           }
 
-          <Text style={
+          <Text allowFontScaling={false} style={
             focusedInput != "LocationBInput" && locationBInputValue == "" ? {
               position: "absolute", 
               top: "25%", 
@@ -231,7 +231,7 @@ export default function CargoSearch() {
             onFocus={() => setFocusedInput("LocationBInput")} 
             cursorColor={"#FFF"}
             onBlur={() => setFocusedInput("")} />
-          <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
+          <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
         </View>
       </View> 
       
@@ -252,8 +252,8 @@ export default function CargoSearch() {
                     setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                   }} 
                   style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                  <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                  {item.locationDistinct != null && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                  <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                  {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
                 </Pressable>
               )}
               nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -296,7 +296,7 @@ export default function CargoSearch() {
           justifyContent: "center",
           columnGap: 15,
         }}>
-        <Text style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16}}>KO’RISH</Text>
+        <Text allowFontScaling={false} style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16}}>KO’RISH</Text>
         <RefreshIcon />
       </Pressable>
       </View>

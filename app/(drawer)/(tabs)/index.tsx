@@ -201,6 +201,89 @@ export default function Home() {
 
   const renderHeader = () => (
     <View>
+      {
+        currentDestination != null && (
+          <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
+            <View>
+              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationARegion} </Text>
+              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationADistinct}</Text>
+            </View>
+
+            <ArrowRightIconSm />
+
+            <View>
+              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBRegion}</Text>
+              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBDistinct}</Text>
+            </View>
+          </View>
+        )
+      }
+
+    </View>
+  );
+
+  function getTimeAgo(createdDate: string): string {
+    const createdTime = moment(createdDate);
+    const now = moment();
+    const diffMinutes = now.diff(createdTime, "minutes");
+    const diffHours = now.diff(createdTime, "hours");
+    const diffDays = now.diff(createdTime, "days");
+
+    if (diffMinutes < 60) {
+      return `${diffMinutes} daqiqa oldin`;
+    } else if (diffHours < 24) {
+      return `${diffHours} soat oldin`;
+    } else {
+      return `${diffDays} kun oldin`;
+    }
+  } 
+
+  const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
+    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
+        <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
+          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
+        </View>
+        <Text allowFontScaling={false} style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
+      </View>
+
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
+        <View style={{ width: 135, alignItems: "flex-start" }}>
+          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
+          {item.destinationADistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
+        </View>
+
+        <ArrowRightIcon style={{ marginLeft: -20 }} />
+
+        <View style={{ width: 135, alignItems: "flex-start" }}>
+          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
+          {item.destinationBDistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
+        </View>
+      </View>
+
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
+        <TruckDeliverySpeedIcon />
+        <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+      </View>
+
+      <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
+        <Pressable 
+          android_ripple={{ color: "#1E1E1E"}}
+          onPress={async () => {
+            await AsyncStorage.setItem("cargoData", JSON.stringify(item));
+            navigation.navigate("cargoDetail");
+          }} 
+          style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
+          <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#EFEFEF" }}>
+      <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
+
       <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
           <Pressable
@@ -233,7 +316,7 @@ export default function Home() {
               router.push("/cargoSearch")
             }}
           >
-            <Text style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : "Qidiruv"}</Text>
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : "Qidiruv"}</Text>
             {
               currentDestination != null ? (
                 <CrossIcon />
@@ -244,89 +327,6 @@ export default function Home() {
           </Pressable>
         </View>
       </View>
-
-      {
-        currentDestination != null && (
-          <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
-            <View>
-              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 16}}>{currentDestination.destinationARegion} </Text>
-              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular"}}>{currentDestination.destinationADistinct}</Text>
-            </View>
-
-            <ArrowRightIconSm />
-
-            <View>
-              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 16}}>{currentDestination.destinationBRegion}</Text>
-              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular"}}>{currentDestination.destinationBDistinct}</Text>
-            </View>
-          </View>
-        )
-      }
-
-    </View>
-  );
-
-  function getTimeAgo(createdDate: string): string {
-    const createdTime = moment(createdDate);
-    const now = moment();
-    const diffMinutes = now.diff(createdTime, "minutes");
-    const diffHours = now.diff(createdTime, "hours");
-    const diffDays = now.diff(createdTime, "days");
-
-    if (diffMinutes < 60) {
-      return `${diffMinutes} daqiqa oldin`;
-    } else if (diffHours < 24) {
-      return `${diffHours} soat oldin`;
-    } else {
-      return `${diffDays} kun oldin`;
-    }
-  } 
-
-  const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
-    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
-        <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
-          <Text style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
-        </View>
-        <Text style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
-      </View>
-
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
-        <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
-          {item.destinationADistinct && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
-        </View>
-
-        <ArrowRightIcon style={{ marginLeft: -20 }} />
-
-        <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
-          {item.destinationBDistinct && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
-        </View>
-      </View>
-
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
-        <TruckDeliverySpeedIcon />
-        <Text style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
-      </View>
-
-      <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
-        <Pressable 
-          android_ripple={{ color: "#1E1E1E"}}
-          onPress={async () => {
-            await AsyncStorage.setItem("cargoData", JSON.stringify(item));
-            navigation.navigate("cargoDetail");
-          }} 
-          style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
-          <Text style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
-
-  return (
-    <View style={{ flex: 1, backgroundColor: "#EFEFEF" }}>
-      <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
 
       <FlatList
         data={data}

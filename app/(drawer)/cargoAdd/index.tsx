@@ -151,7 +151,7 @@ export default function CargoAdd() {
               </Pressable>
             </View>
 
-            <Text style={{fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
+            <Text allowFontScaling={false} style={{fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
 
             <View></View>
           </View>
@@ -171,12 +171,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "LocationAInput" || locationAInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text style={{color: "#000000", fontSize: 12}}>dan</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>dan</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
+              <Text allowFontScaling={false} style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
               <TextInput 
                 onPress={() => {
                   setLocationAReccumendationVisible(true);
@@ -191,7 +191,7 @@ export default function CargoAdd() {
                 onFocus={() => setFocusedInput("LocationAInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
-              <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
+              <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
             </View>
           </View> 
 
@@ -212,8 +212,8 @@ export default function CargoAdd() {
                         setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                       }} 
                       style={{ paddingVertical: 15, paddingHorizontal: 20, height: 50, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                      <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                      {item.locationDistinct != null && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                      <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                      {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
                     </Pressable>
                   )}
                   nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -228,12 +228,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "LocationBInput" || locationBInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text style={{color: "#000000", fontSize: 12}}>ga</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>ga</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text style={focusedInput != "LocationBInput" && locationBInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>ga</Text>
+              <Text allowFontScaling={false} style={focusedInput != "LocationBInput" && locationBInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>ga</Text>
               <TextInput 
                 onPress={() => {
                   setLocationBReccumendationVisible(true);
@@ -248,7 +248,7 @@ export default function CargoAdd() {
                 onFocus={() => setFocusedInput("LocationBInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
-              <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
+              <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
             </View>
           </View> 
 
@@ -270,8 +270,8 @@ export default function CargoAdd() {
                         setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                       }} 
                       style={{ paddingVertical: 15, paddingHorizontal: 20, height: 50, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                      <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                      {item.locationDistinct != null && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                      <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                      {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
                     </Pressable>
                   )}
                   nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -292,12 +292,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "TypeInput" || typeInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text style={{color: "#000000", fontSize: 12}}>Yuk moshinasi turi *</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>Yuk moshinasi turi *</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text style={focusedInput != "TypeInput" && typeInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Yuk moshinasi turi *</Text>
+              <Text allowFontScaling={false} style={focusedInput != "TypeInput" && typeInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Yuk moshinasi turi *</Text>
               <TextInput 
                 style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"}} 
                 onChange={(e) => setTypeInputValue(e.nativeEvent.text)} 
@@ -305,10 +305,10 @@ export default function CargoAdd() {
                 onFocus={() => setFocusedInput("TypeInput")} 
                 cursorColor={"#000000"}
                 onBlur={() => setFocusedInput("")} />
-              <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
+              <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
             </View>
 
-            <Text style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>misol uchun: ISUZU</Text>
+            <Text allowFontScaling={false} style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>misol uchun: ISUZU</Text>
           </View>
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
@@ -323,12 +323,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "DetailInput" || detailInputValue != "" ? (
                   <View style={{position: "absolute", top: "-10%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text style={{color: "#000000", fontSize: 12}}>Tavsif</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>Tavsif</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text style={focusedInput != "DetailInput" && detailInputValue == "" ? {position: "absolute", top: "20%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Tavsif</Text>
+              <Text allowFontScaling={false} style={focusedInput != "DetailInput" && detailInputValue == "" ? {position: "absolute", top: "20%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Tavsif</Text>
               <TextInput 
                 ref={detailInputRef}
                 onPress={() => {
@@ -344,19 +344,19 @@ export default function CargoAdd() {
                 onBlur={() => setFocusedInput("")} />
             </Pressable>
 
-            <Text style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>misol uchun: 4 tonna sement</Text>
+            <Text allowFontScaling={false} style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>misol uchun: 4 tonna sement</Text>
           </View>
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
             <View style={{width: "100%", borderColor: "#ADADAD", backgroundColor: "#D9D9D9", borderRadius: 10, paddingHorizontal: 12, borderWidth: 1, height: 45, position: "relative", alignItems: "center", justifyContent: "center"}}>
-              <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular", position: "absolute", left: 18}}>+998 91 797 23 85</Text>
+              <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular", position: "absolute", left: 18}}>+998 91 797 23 85</Text>
             </View>
           </View>
 
           <View style={{paddingHorizontal: 38, marginTop: 40}}>
             <View style={{width: "100%", alignItems: "center", justifyContent: "center"}}>
               <Pressable onPress={handleCreateData} style={{width: "100%", height: 50, backgroundColor: "#000000", borderRadius: 12, alignItems: "center", justifyContent: "center"}}>
-                <Text style={{color: "#FFF", fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>TAYYOR</Text>
+                <Text allowFontScaling={false} style={{color: "#FFF", fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>TAYYOR</Text>
               </Pressable>
             </View>
           </View>
