@@ -138,33 +138,31 @@ export default function MyCargo() {
         </Pressable>
       </View>
 
-      <View 
-        style={{
-          width: "70%",
-          height: 40,
-          borderRadius: 8,
-          overflow: "hidden"
-        }}>
-          <Pressable
-            android_ripple={{ color: "#808080" }}
-            style={{
-              backgroundColor: "#0c0c0d",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              paddingHorizontal: 14,
-              width: "100%",
-              height: "100%"
-            }}
-            onPress={() => {
-              router.push("/cargoSearch")
-            }}
-          >
-            <Text style={{ fontSize: 18, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
-            <SearchIcon />
-            
-          </Pressable>
-        </View>
+      <View style={{
+        width: "70%",
+        height: 40,
+        borderRadius: 8,
+        overflow: "hidden"
+      }}>
+        <Pressable
+          android_ripple={{ color: "#808080" }}
+          style={{
+            backgroundColor: "#0c0c0d",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingHorizontal: 14,
+            width: "100%",
+            height: "100%"
+          }}
+          onPress={() => {
+            router.push("/cargoSearch")
+          }}
+        >
+          <Text style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
+          <SearchIcon />
+        </Pressable>
+      </View>
     </View>
   );
 
@@ -185,38 +183,38 @@ export default function MyCargo() {
   };
 
   const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
-    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF" }}>
+    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
-        <View style={{ alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8 }}>
-          <Text style={{ fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
+        <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
+          <Text style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
         </View>
-        <Text>{getTimeAgo(item.createdDate)}</Text>
+        <Text style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
       </View>
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
-          {item.destinationADistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
+          <Text style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
+          {item.destinationADistinct && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
         </View>
 
         <ArrowRightIcon style={{ marginLeft: -20 }} />
 
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
-          {item.destinationBDistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
+          <Text style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
+          {item.destinationBDistinct && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
         </View>
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, columnGap: 10 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
         <TruckDeliverySpeedIcon />
-        <Text style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+        <Text style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
       </View>
 
       <View style={{ 
           alignItems: "center",
           justifyContent: "center", 
           marginTop: 13, 
-          height: 60, 
+          height: 45, 
           backgroundColor: "#FFEBEB", 
           borderWidth: 0.6, 
           borderColor: "#B00020",
@@ -234,10 +232,40 @@ export default function MyCargo() {
           android_ripple={{ color: "#B00020" }}
           style={{ flex: 1, flexDirection: "row", columnGap: 15, width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}>
           <DeleteIcon />
-          <Text style={{ fontSize: 18, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#B00020" }}>OLIB TASHLASH</Text>
+          <Text style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#B00020" }}>OLIB TASHLASH</Text>
         </Pressable>
       </View>
     </View>
+
+    // <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF" }}>
+    //   <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
+    //     <View style={{ alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8 }}>
+    //       <Text style={{ fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
+    //     </View>
+    //     <Text>{getTimeAgo(item.createdDate)}</Text>
+    //   </View>
+
+    //   <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+    //     <View style={{ width: 135, alignItems: "flex-start" }}>
+    //       <Text style={{ fontSize: 16, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
+    //       {item.destinationADistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
+    //     </View>
+
+    //     <ArrowRightIcon style={{ marginLeft: -20 }} />
+
+    //     <View style={{ width: 135, alignItems: "flex-start" }}>
+    //       <Text style={{ fontSize: 16, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
+    //       {item.destinationBDistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
+    //     </View>
+    //   </View>
+
+    //   <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, columnGap: 10 }}>
+    //     <TruckDeliverySpeedIcon />
+    //     <Text style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+    //   </View>
+
+      
+    // </View>
   );
 
   return (
@@ -261,7 +289,7 @@ export default function MyCargo() {
       <View
         style={{
           flexDirection: "row",
-          height: 80,
+          height: 60,
           backgroundColor: "white",
           borderTopColor: "#D1D1D1",
           borderTopWidth: 0.5,
@@ -275,7 +303,7 @@ export default function MyCargo() {
             justifyContent: "center",
             alignItems: "flex-start",
             width: "50%", // Adjust width
-            paddingLeft: 65,
+            paddingLeft: 70,
             height: 60,
           }}
           onPress={() => (pathname === "/" ? {} : router.push("/"))}

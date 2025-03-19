@@ -233,7 +233,7 @@ export default function Home() {
               router.push("/cargoSearch")
             }}
           >
-            <Text style={{ fontSize: 18, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : "Qidiruv"}</Text>
+            <Text style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : "Qidiruv"}</Text>
             {
               currentDestination != null ? (
                 <CrossIcon />
@@ -249,14 +249,14 @@ export default function Home() {
         currentDestination != null && (
           <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
             <View>
-              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 18}}>{currentDestination.destinationARegion} </Text>
+              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 16}}>{currentDestination.destinationARegion} </Text>
               <Text style={{color: "#000", fontFamily: "SfProDisplayRegular"}}>{currentDestination.destinationADistinct}</Text>
             </View>
 
             <ArrowRightIconSm />
 
             <View>
-              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 18}}>{currentDestination.destinationBRegion}</Text>
+              <Text style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 16}}>{currentDestination.destinationBRegion}</Text>
               <Text style={{color: "#000", fontFamily: "SfProDisplayRegular"}}>{currentDestination.destinationBDistinct}</Text>
             </View>
           </View>
@@ -283,34 +283,34 @@ export default function Home() {
   } 
 
   const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
-    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 17, paddingBottom: 26, backgroundColor: "#FFF" }}>
+    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
-        <View style={{ alignItems: "center", justifyContent: "center", width: 86, height: 39, backgroundColor: "#2CA82A", borderRadius: 8 }}>
-          <Text style={{ fontSize: 16, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
+        <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
+          <Text style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
         </View>
-        <Text>{getTimeAgo(item.createdDate)}</Text>
+        <Text style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
       </View>
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 20 }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
-          {item.destinationADistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
+          <Text style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
+          {item.destinationADistinct && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
         </View>
 
         <ArrowRightIcon style={{ marginLeft: -20 }} />
 
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text style={{ fontSize: 25, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
-          {item.destinationBDistinct && <Text style={{ fontSize: 18, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
+          <Text style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
+          {item.destinationBDistinct && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
         </View>
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, columnGap: 10 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
         <TruckDeliverySpeedIcon />
-        <Text style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+        <Text style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
       </View>
 
-      <View style={{height: 60, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
+      <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
         <Pressable 
           android_ripple={{ color: "#1E1E1E"}}
           onPress={async () => {
@@ -318,7 +318,7 @@ export default function Home() {
             navigation.navigate("cargoDetail");
           }} 
           style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
-          <Text style={{ fontSize: 16, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
+          <Text style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
         </Pressable>
       </View>
     </View>

@@ -80,7 +80,7 @@ export default function CargoSearch() {
   };
 
   return (
-    <ScrollView style={{backgroundColor: "#232325"}}>
+    <ScrollView style={{backgroundColor: "#232325"}} keyboardShouldPersistTaps="always">
       <StatusBar />
 
       <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 25, paddingHorizontal: 25, width: "100%"}}>
@@ -96,7 +96,7 @@ export default function CargoSearch() {
             </Pressable>
           </View>
 
-          <Text style={{fontSize: 22, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qo’shish</Text>
+          <Text style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qidiruvi</Text>
 
           <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
             <Pressable onPress={() => {
@@ -117,7 +117,7 @@ export default function CargoSearch() {
           paddingHorizontal: 18, 
           borderWidth: focusedInput == "LocationAInput" || 
           locationAInputValue != "" ? 1.5 : 1, 
-          height: 55, 
+          height: 45, 
           position: "relative", 
           alignItems: "center", 
           justifyContent: "center"
@@ -125,18 +125,18 @@ export default function CargoSearch() {
           {
             focusedInput == "LocationAInput" || locationAInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
-                <Text style={{color: "white"}}>dan</Text>
+                <Text style={{color: "white", fontSize: 12}}>dan</Text>
               </View>
             ) : (<></>)
           }
 
-          <Text style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
+          <Text style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
           <TextInput 
             onPress={() => {
               setLocationAReccumendationVisible(true);
               scrollToStart();
             }}
-            style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
+            style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
             onChange={async (e) => {
               setLocationAInputValue(e.nativeEvent.text)
               await searchAndSetLocationA();
@@ -145,7 +145,7 @@ export default function CargoSearch() {
             onFocus={() => setFocusedInput("LocationAInput")} 
             cursorColor={"#FFF"}
             onBlur={() => setFocusedInput("")} />
-          <Text style={{color: "#4F4F4F", fontSize: 18, fontFamily: "SfProDisplayRegular"}}></Text>
+          <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
         </View>
       </View> 
 
@@ -155,7 +155,7 @@ export default function CargoSearch() {
             <FlatList
               data={locationAReccommendData}
               keyExtractor={(item) => item.id.toString()}
-              
+              keyboardShouldPersistTaps="handled"
               renderItem={({ item }) => (
                 <Pressable 
                   android_ripple={{ color: "#EFEFEF" }} 
@@ -166,8 +166,8 @@ export default function CargoSearch() {
                     setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                   }} 
                   style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                  {item.locationDistinct != null && <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                  <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                  {item.locationDistinct != null && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
                 </Pressable>
               )}
               nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -190,7 +190,7 @@ export default function CargoSearch() {
           backgroundColor: focusedInput == "LocationBInput" || locationAInputValue != "" ? "#232325" : "#5A5A5A", 
           borderColor: focusedInput == "LocationBInput" || locationAInputValue != "" ? "#FFF" : "#454141", 
           borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "LocationBInput" || locationBInputValue != "" ? 1.5 : 1, 
-          height: 55, 
+          height: 45, 
           position: "relative", 
           alignItems: "center", 
           justifyContent: "center"
@@ -198,7 +198,7 @@ export default function CargoSearch() {
           {
             focusedInput == "LocationBInput" || locationBInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
-                <Text style={{color: "#FFF"}}>ga</Text>
+                <Text style={{color: "#FFF", fontSize: 12}}>ga</Text>
               </View>
             ) : (<></>)
           }
@@ -210,7 +210,7 @@ export default function CargoSearch() {
               color: "#FFF", 
               left: 18, 
               height: "100%", 
-              fontSize: 18, 
+              fontSize: 14, 
               fontWeight: 400, 
               fontFamily: "SfProDisplayRegular"
             } : {
@@ -222,7 +222,7 @@ export default function CargoSearch() {
               setLocationBReccumendationVisible(true);
             }}
             ref={locationBInputRef}
-            style={{width: "100%", height: "100%", marginTop: "10%", fontSize: 18, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
+            style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
             onChange={async (e) => {
               setLocationBInputValue(e.nativeEvent.text)
               await searchAndSetLocationB();
@@ -231,7 +231,7 @@ export default function CargoSearch() {
             onFocus={() => setFocusedInput("LocationBInput")} 
             cursorColor={"#FFF"}
             onBlur={() => setFocusedInput("")} />
-          <Text style={{color: "#4F4F4F", fontSize: 18, fontFamily: "SfProDisplayRegular"}}></Text>
+          <Text style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
         </View>
       </View> 
       
@@ -241,7 +241,7 @@ export default function CargoSearch() {
             <FlatList
               data={locationBReccommendData}
               keyExtractor={(item) => item.id.toString()}
-              
+              keyboardShouldPersistTaps="handled"
               renderItem={({ item }) => (
                 <Pressable 
                   android_ripple={{ color: "#EFEFEF" }} 
@@ -252,8 +252,8 @@ export default function CargoSearch() {
                     setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                   }} 
                   style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                  {item.locationDistinct != null && <Text style={{ fontSize: 16, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                  <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
+                  {item.locationDistinct != null && <Text style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
                 </Pressable>
               )}
               nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -264,7 +264,7 @@ export default function CargoSearch() {
       }
 
     <View style={{
-      height: 65,
+      height: 55,
       width: Dimensions.get("window").width - 76,
       marginTop: 45,
       marginLeft: "auto",
@@ -296,7 +296,7 @@ export default function CargoSearch() {
           justifyContent: "center",
           columnGap: 15,
         }}>
-        <Text style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 22}}>KO’RISH</Text>
+        <Text style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16}}>KO’RISH</Text>
         <RefreshIcon />
       </Pressable>
       </View>

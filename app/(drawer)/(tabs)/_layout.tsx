@@ -33,9 +33,9 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,
           tabBarStyle: {
-            height: 80, // Adjust height as needed
-            paddingTop: 10, // Ensure icons/text align properly
-            paddingBottom: 10, // Ensure icons/text align properly
+            height: 60, // Adjust height as needed
+            paddingTop: 0, // Ensure icons/text align properly
+            paddingBottom: 0, // Ensure icons/text align properly
             // paddingLeft: 65,
             // paddingRight: 39,
             backgroundColor: "white",

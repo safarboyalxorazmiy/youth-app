@@ -77,34 +77,43 @@ export default function CargoDetail() {
               router.push("/cargoSearch")
             }}
           >
-            <Text style={{ fontSize: 18, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
+            <Text style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
             <SearchIcon />
-            
           </Pressable>
         </View>
       </View>
 
-      <Text style={{fontSize: 28, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 40, marginLeft: 60}}>{cargoData?.destinationARegion || ""}</Text>
-      <Text style={{fontSize: 24, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 8, marginLeft: 60}}>{cargoData?.destinationADistinct || ""}</Text>
+      <View style={{flexDirection: "row", alignItems: "center", marginLeft: 22, columnGap: 22}}>
+        <LocationIcon />
 
-      <LocationIcon style={{marginLeft: 83}} />
-
-      <Text style={{fontSize: 28, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 8, marginLeft: 126}}>{cargoData?.destinationBRegion || ""}</Text>
-      <Text style={{fontSize: 24, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 25, marginLeft: 126}}>{cargoData?.destinationBDistinct || ""}</Text>
-
+        <View style={{flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start"}}>
+          <View>
+            <Text style={{fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 40}}>{cargoData?.destinationARegion || ""}</Text>
+            <Text style={{fontSize: 12, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 8}}>{cargoData?.destinationADistinct || ""}</Text>
+          </View>
+          <View>
+            <Text style={{fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 8, }}>{cargoData?.destinationBRegion || ""}</Text>
+            <Text style={{fontSize: 12, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 25}}>{cargoData?.destinationBDistinct || ""}</Text>
+          </View>
+        </View>
+      </View>
+  
       <View style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", marginTop: 24, columnGap: 10, paddingHorizontal: 22, marginBottom: 30}}>
         <TruckDeliverySpeedIcon />
-        <Text style={{fontSize: 20, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>Transport turi: ISUZU</Text>
+        <View style={{flexDirection: "row", alignItems: "center", columnGap: 1}}>
+          <Text style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>Transport turi: </Text> 
+          <Text style={{fontSize: 14, color: "#000", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>ISUZU</Text>
+        </View>
       </View>
 
       <View style={{paddingHorizontal: 22, marginBottom: 100}}>
-        <Text style={{fontSize: 20, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold", marginBottom: 11}}>Izoh:</Text>
+        <Text style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold", marginBottom: 11}}>Izoh:</Text>
 
-        <View style={{height: 206, borderWidth: 1, borderRadius: 8, borderColor: "#232325", width: "100%", padding: 20}}>
-          <Text style={{fontSize: 20, fontFamily: "SfProDisplayRegular", fontWeight: "400"}}>{cargoData?.comment || ""}</Text>
+        <View style={{height: 106, borderWidth: 1, borderRadius: 8, borderColor: "#232325", width: "100%", padding: 20}}>
+          <Text style={{fontSize: 14, fontFamily: "SfProDisplayRegular", fontWeight: "400"}}>{cargoData?.comment || ""}</Text>
         </View>
 
-        <View style={{height: 65, borderRadius: 11, width: "100%", marginTop: 32, overflow: "hidden"}}>
+        <View style={{height: 45, borderRadius: 11, width: "100%", marginTop: 32, overflow: "hidden"}}>
           <Pressable 
             onPress={() => {
               Linking.openURL(`tel:+998917972385`);
@@ -118,14 +127,14 @@ export default function CargoDetail() {
               flexDirection: "row",
               alignItems: "center", 
               justifyContent: "center", 
-              columnGap: 30
+              columnGap: 15
             }}>
             <CallIcon />
-            <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 22, color: "#FFF"}}>+998 91 797 23 85</Text>
+            <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>+998 91 797 23 85</Text>
           </Pressable>
         </View>
 
-        <View style={{height: 65, borderRadius: 11, width: "100%", marginTop: 15, overflow: "hidden"}}>
+        <View style={{height: 45, borderRadius: 11, width: "100%", marginTop: 15, overflow: "hidden"}}>
           <Pressable
             onPress={() => {
               Linking.openURL(`https://t.me/+998917972385`);
@@ -142,7 +151,7 @@ export default function CargoDetail() {
               columnGap: 15
             }}>
             <TelegramIcon />
-            <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 22,  color: "#FFF"}}>Telegram</Text>
+            <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14,  color: "#FFF"}}>Telegram</Text>
           </Pressable>
         </View>
         
