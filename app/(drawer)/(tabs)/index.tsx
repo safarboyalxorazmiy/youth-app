@@ -296,7 +296,7 @@ export default function Home() {
 
       <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
         <Pressable 
-          android_ripple={{ color: "#1E1E1E"}}
+          android_ripple={{ color: "#808080" }}
           onPress={async () => {
             await AsyncStorage.setItem("cargoData", JSON.stringify(item));
             navigation.navigate("cargoDetail");

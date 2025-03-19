@@ -15,7 +15,7 @@ import { useRouteInfo } from "expo-router/build/hooks";
 import { StatusBar } from "react-native";
 import HomeIcon from "@/assets/images/navbar/HomeIcon.svg";
 import HomeIconActive from "@/assets/images/navbar/HomeIconActive.svg";
-import CargoAddIcon from "@/assets/images/navbar/CargoAddIcon.svg";
+import PlusIcon from "@/assets/images/plus-icon.svg";
 
 export default function TabLayout() {
   const navigation = useNavigation();
@@ -120,19 +120,41 @@ export default function TabLayout() {
               display: "none"
             },
             tabBarButton: () => (
-              <Pressable
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  // backgroundColor:"red",
-                  paddingRight: 39,
-                  width: "100%",
-                  height: 60,
-                }}
-                onPress={() => router.push("/cargoAdd")}
-              >
-                <CargoAddIcon />
-              </Pressable>
+              <View style={{
+                width: "100%",
+                height: 60,
+                justifyContent: "center",
+                alignItems: "center",
+                paddingRight: 39,
+              }}>
+                <View style={{
+                  borderRadius: 20,
+                  overflow: "hidden",
+                  height: 37,
+                  width: 133,
+                }}>
+                  <Pressable
+                    android_ripple={{ color: "#808080" }}
+                    style={{
+                      // backgroundColor:"red",
+                      // display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      rowGap: 4,
+                      backgroundColor: "#000000",
+                      columnGap: 13,
+                      width: "100%",
+                      height: "100%",
+                      // borderRadius: 20
+                    }}
+                    onPress={() => router.push("/cargoAdd")}
+                  >
+                    <Text style={{ fontSize: 12, fontFamily: "SfProDisplayBold", fontWeight: 500, color: "#FFF"}}>Yuk qo'shish</Text>
+                    <PlusIcon />
+                  </Pressable>
+                </View>
+              </View>
             )
           }}
         />
