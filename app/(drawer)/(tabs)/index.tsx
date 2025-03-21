@@ -100,11 +100,14 @@ export default function Home() {
   const isFocused = useIsFocused();
   
   useEffect(() => {
-    handleVisiting();
-    loadCargoData();
+    
+    // handleVisiting();
+    // loadCargoData();
   }, []);
 
   useEffect(() => {
+    router.push("/login");
+    
     async function fetchData() {
       if ((await AsyncStorage.getItem("itemRemoved")) === "true") {
         console.log("itemRemoved", "true")

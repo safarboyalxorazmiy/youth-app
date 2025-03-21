@@ -39,6 +39,8 @@ export default function RootLayout() {
       >
 
       <Stack>
+        <Stack.Screen name="login" options={{ headerShown: false, presentation: 'modal', animation: 'fade_from_bottom' }} />
+        <Stack.Screen name="verify" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_right' }} />
         <Stack.Screen name="myCargo" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="cargoAdd" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen
