@@ -28,7 +28,7 @@ export default function TabLayout() {
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <Tabs
-        // initialRouteName="index"
+        initialRouteName="index"
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,

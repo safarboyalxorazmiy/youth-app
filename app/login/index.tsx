@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, TextInput, View, Vibration  } from "react-native";
 import * as Haptics from "expo-haptics";
 
-
 export default function Login() {  
   const [focusedInput, setFocusedInput] = useState<String>("PhoneNumberInput");
   const [phoneNumberInputValue, setPhoneNumberInputValue] = useState<string>("");

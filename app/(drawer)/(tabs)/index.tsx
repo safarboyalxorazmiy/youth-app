@@ -14,6 +14,10 @@ import { Skeleton } from 'moti/skeleton';
 import moment from "moment";
 import { useRouter } from "expo-router";
 import ArrowRightIconSm from "@/assets/images/arrow-right-sm.svg";
+import * as Device from 'expo-device';
+import * as Application from 'expo-application';
+import { Redirect } from 'expo-router';
+import { useRouteInfo } from "expo-router/build/hooks";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -98,17 +102,62 @@ export default function Home() {
 
   const router = useRouter();
   const isFocused = useIsFocused();
-  
+  const [hasToken, setHasToken] = useState(false);
+  const [checkedToken, setCheckedToken] = useState(false);
+  const routeInfo = useRouteInfo();
+
   useEffect(() => {
     
     // handleVisiting();
     // loadCargoData();
+
+    const checkToken = async () => {
+      // await AsyncStorage.removeItem("token");
+
+      const token = await AsyncStorage.getItem('token');
+      console.log("token", !!token);
+      setHasToken(!!token);
+      setCheckedToken(true); 
+
+      if (!!token) {
+        console.log("routeInfo.pathname", routeInfo.pathname);
+        if ((await AsyncStorage.getItem("fromRoute")) === "Verify") {
+          routeInfo.pathname === "/"
+          ? {}
+          : router.push("/")
+
+          await AsyncStorage.removeItem("fromRoute");
+        }
+      }
+    };
+
+    checkToken();
   }, []);
 
   useEffect(() => {
-    router.push("/login");
-    
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      console.log("token", !!token);
+      setHasToken(!!token);
+      setCheckedToken(true); 
+
+      if (!!token) {
+        console.log("routeInfo.pathname", routeInfo.pathname);
+        if ((await AsyncStorage.getItem("fromRoute")) === "Verify") {
+          routeInfo.pathname === "/"
+          ? {}
+          : router.push("/")
+
+          await AsyncStorage.removeItem("fromRoute");
+        }
+      }
+    };
+
+    checkToken();
+
     async function fetchData() {
+      // AsyncStorage.removeItem("token");
+
       if ((await AsyncStorage.getItem("itemRemoved")) === "true") {
         console.log("itemRemoved", "true")
         await AsyncStorage.removeItem("itemRemoved");
@@ -126,7 +175,7 @@ export default function Home() {
         setToast({ message: "Yangi ma'lumot qo'shildi", type: "success" });
         AsyncStorage.removeItem("newItemCreated");
 
-        if (await AsyncStorage.getItem("destination") != null) {
+        if ((await AsyncStorage.getItem("destination")) != null) {
           await AsyncStorage.removeItem("destination");
           setCurrentDestination(null);
           setPage(0);
@@ -191,18 +240,30 @@ export default function Home() {
         console.error("Error handling destination:", error);
       }
     }
+    
     fetchData();
   }, [isFocused]);
 
   const handleVisiting = async () => {
     try {
+      const deviceId = Application.getAndroidId() || Application.getIosIdForVendorAsync();
+
       const response = await fetch("https://ipinfo.io/json");
       const data = await response.json();
 
       fetch("http://167.86.107.247:8080/interest/visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip: data.ip, city: data.city, region: data.region }),
+        body: JSON.stringify({ 
+          ip: data.ip, 
+          city: data.city, 
+          region: data.region,
+          deviceId: deviceId,
+          model: Device.modelName,
+          brand: Device.brand,
+          systemVersion: Device.osVersion,
+          timezone: "",
+         }),
       });
     } catch (error) {
       console.error("Error in handleVisiting:", error);
@@ -311,7 +372,11 @@ export default function Home() {
     </View>
   );
 
-  return (
+  if (!checkedToken) {
+    return null;
+  }
+  
+  return hasToken ?  (
     <View style={{ flex: 1, backgroundColor: "#EFEFEF" }}>
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
 
@@ -373,5 +438,5 @@ export default function Home() {
 
       {toast && <AnimatedToast message={toast.message} onClose={() => setToast(null)} />}
     </View>
-  );
+  ) : <Redirect href="/login" />;
 }

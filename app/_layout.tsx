@@ -46,7 +46,9 @@ export default function RootLayout() {
         <Stack.Screen
           name="(drawer)"
           options={{
-            headerShown: false
+            headerShown: false,
+            presentation: 'modal', 
+            animation: 'flip'
           }}
         />
         <Stack.Screen name="+not-found" />

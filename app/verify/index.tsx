@@ -1,16 +1,18 @@
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import { Platform, Pressable, Text, TextInput, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Verify() {
-  const router = useRouter();
+  // const router = useRouter();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", ""]);
   const [selection, setSelection] = useState(
     otp.map(() => ({ start: 0, end: 0 }))
   ); // Track selection positions
   const inputRefs = useRef<TextInput[]>([]);
+
 
   // Handle input change
   const handleChange = (text: string, index: number) => {
@@ -24,6 +26,10 @@ export default function Verify() {
     // Move to next input if not last digit
     if (text && index < 4) {
       inputRefs.current[index + 1]?.focus();
+    } else if (text && index === 4) {
+      AsyncStorage.setItem("fromRoute", "Verify");
+      AsyncStorage.setItem("token", "&&&&");
+      router.push("/");      
     }
 
     // Move cursor to end
@@ -55,7 +61,7 @@ export default function Verify() {
         Kodni kiriting
       </Text>
       <Text style={{ textAlign: "center", fontFamily: "SfProDisplayRegular", fontSize: 15, color: "#000", marginTop: 10 }}>
-        Biz sizing +998 917972385 telefoningizga SMS kodini jo‘natdik
+        Biz sizning +998 917972385 telefoningizga SMS kodini jo‘natdik
       </Text>
 
       {/* OTP Input Fields */}
