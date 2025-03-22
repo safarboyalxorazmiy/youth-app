@@ -41,6 +41,10 @@ export default function Verify() {
   return (
     <View style={{ backgroundColor: "#FFF", paddingHorizontal: 30, height: "100%", paddingTop: 140 }}>
       <Pressable
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          router.back();
+        }}
         android_ripple={{ color: "#E5E7EB", borderless: true, radius: 20 }} // Ripple for Android
         style={({ pressed }) => ({
           position: "absolute",
