@@ -138,7 +138,44 @@ export default function Home() {
     };
 
     checkToken();
+
+    const startSocket = async () => {
+      const socket = new SockJS('http://167.86.107.247:8080/ws-cargo');
+      
+      const stompClient = new Client({
+        webSocketFactory: () => socket,
+        reconnectDelay: 5000,
+        onConnect: () => {
+          console.log('Connected to WebSocket');
+          stompClient.subscribe('/topic/new-cargo', async (message) => {
+            const newCargo = JSON.parse(message.body);
+          
+            console.log('New Cargo:', newCargo);
+          
+            const destination = await AsyncStorage.getItem("destination");
+            if (destination != null) {
+              return;
+            }
+          
+            setData((prevData) => [newCargo, ...prevData]);
+          });          
+        },
+        onStompError: (frame) => {
+          console.error('STOMP error:', frame);
+        },
+      });
+  
+      stompClient.activate();
+  
+      return () => {
+        stompClient.deactivate();
+      };
+    }
+
+    startSocket();
   }, []);
+
+
 
   useEffect(() => {
     const checkToken = async () => {
@@ -157,29 +194,6 @@ export default function Home() {
           await AsyncStorage.removeItem("fromRoute");
           return;
         }
-
-        const socket = new SockJS('http://167.86.107.247:8080/ws-cargo');
-    
-        const stompClient = new Client({
-          webSocketFactory: () => socket,
-          reconnectDelay: 5000,
-          onConnect: () => {
-            console.log('Connected to WebSocket');
-            stompClient.subscribe('/topic/new-cargo', (message) => {
-              const newCargo = JSON.parse(message.body);
-              console.log('New Cargo:', newCargo);
-            });
-          },
-          onStompError: (frame) => {
-            console.error('STOMP error:', frame);
-          },
-        });
-
-        stompClient.activate();
-
-        return () => {
-          stompClient.deactivate();
-        };
       }
     };
 
@@ -216,17 +230,17 @@ export default function Home() {
           return;
         }
 
-        try {
-          const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${0}&size=${1}&sort=string`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          });
+        // try {
+        //   const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${0}&size=${1}&sort=string`, {
+        //     method: "GET",
+        //     headers: { "Content-Type": "application/json" },
+        //   });
 
-          const result = await response.json();
-          setData([result.content[0], ...data]);          
-        } catch (error) {
-          console.error("Error fetching cargo data:", error);
-        }
+        //   const result = await response.json();
+        //   setData([result.content[0], ...data]);          
+        // } catch (error) {
+        //   console.error("Error fetching cargo data:", error);
+        // }
       }
 
       try {
