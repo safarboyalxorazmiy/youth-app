@@ -343,16 +343,16 @@ export default function Home() {
       {
         currentDestination != null && (
           <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
-            <View>
-              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationARegion} </Text>
-              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationADistinct}</Text>
+            <View style={{justifyContent: "center"}}>
+              {currentDestination.destinationARegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12, }}>{currentDestination.destinationARegion} </Text>}
+              {currentDestination.destinationADistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationADistinct}</Text>}
             </View>
 
             <ArrowRightIconSm />
 
-            <View>
-              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBRegion}</Text>
-              <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBDistinct}</Text>
+            <View style={{justifyContent: "center"}}>
+              {currentDestination.destinationBRegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBRegion}</Text>}
+              {currentDestination.destinationBDistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBDistinct}</Text>}
             </View>
           </View>
         )

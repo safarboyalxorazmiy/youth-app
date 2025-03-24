@@ -70,7 +70,6 @@ export default function CargoSearch() {
       {
         console.log(response)
         return response.json()
-
       })
     .then(data => {
       console.log(data.length == 0);
@@ -141,6 +140,12 @@ export default function CargoSearch() {
             }}
             style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
             onChange={async (e) => {
+              if (e.nativeEvent.text == "") {
+                setDestinationADistinct("");
+                setDestinationARegion("");
+                setLocationAReccumendationVisible(false)
+              }
+
               setLocationAInputValue(e.nativeEvent.text)
               await searchAndSetLocationA();
             }} 
@@ -227,7 +232,13 @@ export default function CargoSearch() {
             ref={locationBInputRef}
             style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
             onChange={async (e) => {
-              setLocationBInputValue(e.nativeEvent.text)
+              if (e.nativeEvent.text == "") {
+                setDestinationBDistinct("");
+                setDestinationBRegion("");
+                setLocationBReccumendationVisible(false)
+              }
+
+              setLocationBInputValue(e.nativeEvent.text);
               await searchAndSetLocationB();
             }} 
             value={locationBInputValue}
@@ -278,14 +289,15 @@ export default function CargoSearch() {
       <Pressable 
         android_ripple={{color: "#1E1E1E"}} 
         onPress={() => {
-          if (locationAInputValue == "" || locationBInputValue == "") {
+          if (locationAInputValue == "" && locationBInputValue == "") {
             router.push("/");
             return;
           }
+
           AsyncStorage.setItem("destination", JSON.stringify({
             destinationARegion: destinationARegion,
             destinationADistinct: destinationADistinct,
-            destinationBRegion: destinationARegion,
+            destinationBRegion: destinationBRegion,
             destinationBDistinct: destinationBDistinct
           }));
           router.push("/");
