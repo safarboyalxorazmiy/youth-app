@@ -26,6 +26,8 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import LiveTimeAgo from "./LiveTimeAgo";
 import NewBadge from "./NewBadge";
 
+import { t } from '@/i18n';
+
 const SkeletonLoader = () => {
   return (
     <View style={{
@@ -200,7 +202,7 @@ export default function MyCargo() {
 
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
         <TruckDeliverySpeedIcon />
-        <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+        <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{t("transportType")}: {item.transportType}</Text>
       </View>
 
       <View style={{ 
@@ -225,7 +227,7 @@ export default function MyCargo() {
           android_ripple={{ color: "#B00020" }}
           style={{ flex: 1, flexDirection: "row", columnGap: 15, width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}>
           <DeleteIcon />
-          <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#B00020" }}>OLIB TASHLASH</Text>
+          <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#B00020" }}>{t("delete")}</Text>
         </Pressable>
       </View>
     </View>
@@ -254,7 +256,7 @@ export default function MyCargo() {
 
     //   <View style={{ flexDirection: "row", alignItems: "center", marginTop: 20, columnGap: 10 }}>
     //     <TruckDeliverySpeedIcon />
-    //     <Text allowFontScaling={false} style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+    //     <Text allowFontScaling={false} style={{ fontSize: 20, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{t("transportType")}: {item.transportType}</Text>
     //   </View>
 
       

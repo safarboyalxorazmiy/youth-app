@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { StatusBar } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from "expo-router";
+import { t } from '@/i18n';
 
 type LocationDetails = {
   id: number;
@@ -153,7 +154,7 @@ export default function CargoAdd() {
           </Pressable>
         </View>
 
-        <Text allowFontScaling={false} style={{fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
+        <Text allowFontScaling={false} style={{fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>{t("cargoAdd")}</Text>
 
         <View></View>
       </View>
@@ -177,12 +178,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "LocationAInput" || locationAInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>dan</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>{t("from")}</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text allowFontScaling={false} style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
+              <Text allowFontScaling={false} style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>{t("from")}</Text>
               <TextInput 
                 onPress={() => {
                   setLocationAReccumendationVisible(true);
@@ -234,12 +235,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "LocationBInput" || locationBInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>ga</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>{t("to")}</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text allowFontScaling={false} style={focusedInput != "LocationBInput" && locationBInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>ga</Text>
+              <Text allowFontScaling={false} style={focusedInput != "LocationBInput" && locationBInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>{t("to")}</Text>
               <TextInput 
                 onPress={() => {
                   setLocationBReccumendationVisible(true);
@@ -298,12 +299,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "TypeInput" || typeInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>Yuk moshinasi turi *</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>{t("cargoVehicleType")}</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text allowFontScaling={false} style={focusedInput != "TypeInput" && typeInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Yuk moshinasi turi *</Text>
+              <Text allowFontScaling={false} style={focusedInput != "TypeInput" && typeInputValue == "" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>{t("cargoVehicleType")}</Text>
               <TextInput 
                 style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"}} 
                 onChange={(e) => setTypeInputValue(e.nativeEvent.text)} 
@@ -314,7 +315,7 @@ export default function CargoAdd() {
               <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular"}}></Text>
             </View>
 
-            <Text allowFontScaling={false} style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>misol uchun: ISUZU</Text>
+            <Text allowFontScaling={false} style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{t("ex1")}</Text>
           </View>
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
@@ -329,12 +330,12 @@ export default function CargoAdd() {
               {
                 focusedInput == "DetailInput" || detailInputValue != "" ? (
                   <View style={{position: "absolute", top: "-10%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>Tavsif</Text>
+                    <Text allowFontScaling={false} style={{color: "#000000", fontSize: 12}}>{t("comment")}</Text>
                   </View>
                 ) : (<></>)
               }
 
-              <Text allowFontScaling={false} style={focusedInput != "DetailInput" && detailInputValue == "" ? {position: "absolute", top: "20%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Tavsif</Text>
+              <Text allowFontScaling={false} style={focusedInput != "DetailInput" && detailInputValue == "" ? {position: "absolute", top: "20%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>{t("comment")}</Text>
               <TextInput 
                 ref={detailInputRef}
                 onPress={() => {
@@ -350,7 +351,7 @@ export default function CargoAdd() {
                 onBlur={() => setFocusedInput("")} />
             </Pressable>
 
-            <Text allowFontScaling={false} style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>misol uchun: 4 tonna sement</Text>
+            <Text allowFontScaling={false} style={{color: "#4F4F4F", marginLeft: 18, marginTop: 8, fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{t("ex2")}</Text>
           </View>
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
@@ -362,7 +363,7 @@ export default function CargoAdd() {
           <View style={{paddingHorizontal: 38, marginTop: 40}}>
             <View style={{width: "100%", alignItems: "center", justifyContent: "center"}}>
               <Pressable onPress={handleCreateData} style={{width: "100%", height: 50, backgroundColor: "#000000", borderRadius: 12, alignItems: "center", justifyContent: "center"}}>
-                <Text allowFontScaling={false} style={{color: "#FFF", fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>TAYYOR</Text>
+                <Text allowFontScaling={false} style={{color: "#FFF", fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>{t("compleate")}</Text>
               </Pressable>
             </View>
           </View>

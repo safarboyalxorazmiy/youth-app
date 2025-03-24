@@ -6,7 +6,7 @@ export default function IndexLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="index"
-        options={{ headerShown: false, presentation: 'modal' }}
+        options={{ headerShown: false }}
       />
     </Stack>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import moment from 'moment';
+import { t } from '@/i18n';
 
 const getTimeAgo = (createdDate: string): string => {
   const createdTime = moment(createdDate);
@@ -10,11 +11,11 @@ const getTimeAgo = (createdDate: string): string => {
   const diffDays = now.diff(createdTime, "days");
 
   if (diffMinutes < 60) {
-    return `${diffMinutes} daqiqa oldin`;
+    return `${diffMinutes} ${t("minuteAgo")}`;
   } else if (diffHours < 24) {
-    return `${diffHours} soat oldin`;
+    return `${diffHours} ${t("hourAgo")}`;
   } else {
-    return `${diffDays} kun oldin`;
+    return `${diffDays} ${t("dayAgo")}`;
   }
 };
 

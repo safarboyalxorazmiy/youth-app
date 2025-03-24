@@ -10,6 +10,7 @@ import ArrowRightBottom from "@/assets/images/arrow-right-bottom.svg";
 import RefreshIcon from "@/assets/images/refresh-icon.svg";
 import LocationDeleteIcon from "@/assets/images/location-delete-icon.svg";
 import Constants from 'expo-constants';
+import { t } from '@/i18n';
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -98,7 +99,7 @@ export default function CargoSearch() {
             </Pressable>
           </View>
 
-          <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>Yuk qidiruvi</Text>
+          <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
 
           <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
             <Pressable onPress={() => {
@@ -127,12 +128,12 @@ export default function CargoSearch() {
           {
             focusedInput == "LocationAInput" || locationAInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
-                <Text allowFontScaling={false} style={{color: "white", fontSize: 12}}>dan</Text>
+                <Text allowFontScaling={false} style={{color: "white", fontSize: 12}}>{t("from")}</Text>
               </View>
             ) : (<></>)
           }
 
-          <Text allowFontScaling={false} style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>dan</Text>
+          <Text allowFontScaling={false} style={focusedInput != "LocationAInput" && locationAInputValue == "" ? {position: "absolute", top: "25%", color: "#FFF", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>{t("from")}</Text>
           <TextInput 
             onPress={() => {
               setLocationAReccumendationVisible(true);
@@ -206,7 +207,7 @@ export default function CargoSearch() {
           {
             focusedInput == "LocationBInput" || locationBInputValue != "" ? (
               <View style={{position: "absolute", top: "-25%", backgroundColor: "#232325", paddingHorizontal: 7, left: 18}}>
-                <Text allowFontScaling={false} style={{color: "#FFF", fontSize: 12}}>ga</Text>
+                <Text allowFontScaling={false} style={{color: "#FFF", fontSize: 12}}>{t("to")}</Text>
               </View>
             ) : (<></>)
           }
@@ -223,7 +224,7 @@ export default function CargoSearch() {
               fontFamily: "SfProDisplayRegular"
             } : {
               display: "none"
-            }}>ga</Text>
+            }}>{t("to")}</Text>
             
           <TextInput 
             onPress={() => {
@@ -311,7 +312,7 @@ export default function CargoSearch() {
           justifyContent: "center",
           columnGap: 15,
         }}>
-        <Text allowFontScaling={false} style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16}}>KO’RISH</Text>
+        <Text allowFontScaling={false} style={{color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16}}>{t("view")}</Text>
         <RefreshIcon />
       </Pressable>
       </View>

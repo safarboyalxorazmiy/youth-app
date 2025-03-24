@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 
+import { t } from '@/i18n';
+
 type Props = {
   createdDate: string | null;
 };
@@ -42,7 +44,7 @@ const NewBadge = ({ createdDate }: Props) => {
         fontFamily: "SfProDisplayBold",
         fontWeight: "700"
       }}>
-        Yangi
+        {t("new")}
       </Text>
     </View>
   );

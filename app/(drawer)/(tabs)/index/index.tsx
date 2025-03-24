@@ -26,6 +26,8 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import NewBadge from './NewBadge';
 import LiveTimeAgo from "./LiveTimeAgo";
 
+import { t } from '@/i18n';
+
 const statusBarHeight = Constants.statusBarHeight;
 
 const screenWidth = Dimensions.get("window").width;
@@ -189,6 +191,12 @@ export default function Home() {
 
       if (!!token) {
         console.log("routeInfo.pathname", routeInfo.pathname);
+
+        if (routeInfo.pathname === "/language") {
+          router.push("/lang")
+          return;
+        }
+        
         if ((await AsyncStorage.getItem("fromRoute")) === "Verify") {
           routeInfo.pathname === "/"
           ? {}
@@ -204,6 +212,17 @@ export default function Home() {
 
     async function fetchData() {
       // AsyncStorage.removeItem("token");
+
+      if ((await AsyncStorage.getItem("mainCargoLoaded")) === "true") {
+        await AsyncStorage.removeItem("destination");
+        setCurrentDestination(null);
+        setPage(0);
+        setData([]);
+        setDataFullyLoaded(false);
+
+        await loadCargoData();
+        return;
+      }
 
       if ((await AsyncStorage.getItem("itemRemoved")) === "true") {
         console.log("itemRemoved", "true")
@@ -413,7 +432,7 @@ export default function Home() {
 
       // <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
       //   <TruckDeliverySpeedIcon />
-      //   <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+      //   <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{t("transportType")}: {item.transportType}</Text>
       // </View>
 
       // <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
@@ -424,7 +443,7 @@ export default function Home() {
       //       navigation.navigate("cargoDetail");
       //     }} 
       //     style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
-      //     <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
+      //     <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>{t("detail")}</Text>
       //   </Pressable>
       // </View>
   //   </View>
@@ -468,7 +487,7 @@ export default function Home() {
 
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
         <TruckDeliverySpeedIcon />
-        <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+        <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{t("transportType")}: {item.transportType}</Text>
       </View>
 
       <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
@@ -479,7 +498,7 @@ export default function Home() {
             navigation.navigate("cargoDetail");
           }} 
           style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
+          <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>{t("detail")}</Text>
         </Pressable>
       </View>
     </View>
@@ -526,7 +545,7 @@ export default function Home() {
               router.push("/cargoSearch")
             }}
           >
-            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : "Qidiruv"}</Text>
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : t("search")}</Text>
             {
               currentDestination != null ? (
                 <CrossIcon />

@@ -7,6 +7,7 @@ import LogoutIcon from "@/assets/images/logout-icon.svg";
 import { router, useRouter } from "expo-router";
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
+import { t } from '@/i18n';
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -33,23 +34,25 @@ function Me() {
             router.push("/myCargo");
           }} android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
             <CargoIcon />
-            <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>Yuklarim</Text>
+            <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>{t("myCargo")}</Text>
           </Pressable>
 
-          <Pressable android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
+          <Pressable onPress={() => {
+            router.push("/lang");
+          }} android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
             <LanguageIcon />
-            <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>Tilni o’zgartirish</Text>
+            <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>{t("changeLanguage")}</Text>
           </Pressable>
 
           <Pressable android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
             <QuestionIcon />
-            <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>Yordam</Text>
+            <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>{t("help")}</Text>
           </Pressable>
         </View>
 
         <Pressable android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", justifyContent: "center", columnGap: 16, height: 57, borderTopColor: "#5A5A5A", borderTopWidth: 1, marginTop: 26}}>
           <LogoutIcon />
-          <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayBold", fontSize: 14}}>Chiqish</Text>
+          <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayBold", fontSize: 14}}>{t("logOut")}</Text>
         </Pressable>
     </View>
   );

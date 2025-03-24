@@ -13,6 +13,8 @@ import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
 
 import Constants from 'expo-constants';
 
+import { t } from '@/i18n';
+
 const statusBarHeight = Constants.statusBarHeight;
 
 type CargoDTO = {
@@ -81,7 +83,7 @@ export default function CargoDetail() {
               router.push("/cargoSearch")
             }}
           >
-            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{t("search")}</Text>
             <SearchIcon />
           </Pressable>
         </View>
@@ -105,13 +107,13 @@ export default function CargoDetail() {
       <View style={{ flexDirection: "row", justifyContent: "flex-start", alignItems: "center", marginTop: 24, columnGap: 10, paddingHorizontal: 22, marginBottom: 30}}>
         <TruckDeliverySpeedIcon />
         <View style={{flexDirection: "row", alignItems: "center", columnGap: 1}}>
-          <Text allowFontScaling={false} style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>Transport turi: </Text> 
+          <Text allowFontScaling={false} style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>{t("transportType")}: </Text> 
           <Text allowFontScaling={false} style={{fontSize: 14, color: "#000", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>ISUZU</Text>
         </View>
       </View>
 
       <View style={{paddingHorizontal: 22, marginBottom: 100}}>
-        <Text allowFontScaling={false} style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold", marginBottom: 11}}>Izoh:</Text>
+        <Text allowFontScaling={false} style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold", marginBottom: 11}}>{t("comment2")}:</Text>
 
         <View style={{height: 106, borderWidth: 1, borderRadius: 8, borderColor: "#232325", width: "100%", padding: 20}}>
           <Text allowFontScaling={false} style={{fontSize: 14, fontFamily: "SfProDisplayRegular", fontWeight: "400"}}>{cargoData?.comment || ""}</Text>

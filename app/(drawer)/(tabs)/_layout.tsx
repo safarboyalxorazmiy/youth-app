@@ -18,6 +18,8 @@ import HomeIconActive from "@/assets/images/navbar/HomeIconActive.svg";
 import PlusIcon from "@/assets/images/plus-icon.svg";
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { t } from '@/i18n';
+
 export default function TabLayout() {
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
@@ -152,7 +154,7 @@ export default function TabLayout() {
                     }}
                     onPress={() => router.push("/cargoAdd")}
                   >
-                    <Text style={{ fontSize: 12, fontFamily: "SfProDisplayBold", fontWeight: 500, color: "#FFF"}}>Yuk qo'shish</Text>
+                    <Text style={{ fontSize: 12, fontFamily: "SfProDisplayBold", fontWeight: 500, color: "#FFF"}}>{t("cargoAdd")}</Text>
                     <PlusIcon />
                   </Pressable>
                 </View>
