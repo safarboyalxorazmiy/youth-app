@@ -23,6 +23,8 @@ import Constants from 'expo-constants';
 const statusBarHeight = Constants.statusBarHeight;
 
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import LiveTimeAgo from "./LiveTimeAgo";
+import NewBadge from "./NewBadge";
 
 const SkeletonLoader = () => {
   return (
@@ -177,10 +179,9 @@ export default function MyCargo() {
   const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
     <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
-        <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
-          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
-        </View>
-        <Text allowFontScaling={false} style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
+        <NewBadge createdDate={item.createdDate} />
+
+        <LiveTimeAgo createdDate={item.createdDate} />
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
