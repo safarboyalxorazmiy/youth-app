@@ -13,7 +13,7 @@ const NewBadge = ({ createdDate }: Props) => {
     const now = Date.now();
     const created = new Date(createdDate).getTime();
     const diffMinutes = (now - created) / 60000;
-    return diffMinutes <= 20;
+    return diffMinutes <= 15;
   };
 
   useEffect(() => {
