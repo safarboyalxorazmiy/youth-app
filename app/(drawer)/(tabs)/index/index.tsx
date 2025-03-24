@@ -23,6 +23,9 @@ import { Client } from '@stomp/stompjs';
 import Constants from 'expo-constants';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import NewBadge from './NewBadge';
+import LiveTimeAgo from "./LiveTimeAgo";
+
 const statusBarHeight = Constants.statusBarHeight;
 
 const screenWidth = Dimensions.get("window").width;
@@ -374,14 +377,80 @@ export default function Home() {
     }
   } 
 
+  // const isItemNew = (createdDate: string | null) => {
+  //   if (!createdDate) return false;
+  //   const createdAt = new Date(createdDate).getTime();
+  //   const now = Date.now();
+  //   const diffInMinutes = (now - createdAt) / 60000;
+  //   return diffInMinutes <= 20;
+  // };
+
+  // const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
+  //   <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
+  //     <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
+  //       {
+  //         item.createdDate != null && item.createdDate
+  //         <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
+  //           <Text allowFontScaling={false} style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
+  //         </View>
+  //       }
+  //       <Text allowFontScaling={false} style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
+  //     </View>
+
+      // <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
+      //   <View style={{ width: 135, alignItems: "flex-start" }}>
+      //     <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
+      //     {item.destinationADistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
+      //   </View>
+
+      //   <ArrowRightIcon style={{ marginLeft: -20 }} />
+
+      //   <View style={{ width: 135, alignItems: "flex-start" }}>
+      //     <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
+      //     {item.destinationBDistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
+      //   </View>
+      // </View>
+
+      // <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
+      //   <TruckDeliverySpeedIcon />
+      //   <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>Transport turi: {item.transportType}</Text>
+      // </View>
+
+      // <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
+      //   <Pressable 
+      //     android_ripple={{ color: "#808080" }}
+      //     onPress={async () => {
+      //       await AsyncStorage.setItem("cargoData", JSON.stringify(item));
+      //       navigation.navigate("cargoDetail");
+      //     }} 
+      //     style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
+      //     <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>BATAFSIL</Text>
+      //   </Pressable>
+      // </View>
+  //   </View>
+  // );
+
+
   const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
-    <View style={{ marginTop: index === 0 ? 0 : 20, paddingHorizontal: 30, paddingTop: 10, paddingBottom: 16, backgroundColor: "#FFF" }}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 39, width: "100%" }}>
-        <View style={{ alignItems: "center", justifyContent: "center", width: 56, height: 30, backgroundColor: "#2CA82A", borderRadius: 8 }}>
-          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#FFF", fontFamily: "SfProDisplayBold", fontWeight: "700" }}>Yangi</Text>
-        </View>
-        <Text allowFontScaling={false} style={{ fontSize: 12, fontFamily: "SfProDisplayRegular"}}>{getTimeAgo(item.createdDate)}</Text>
+    <View style={{
+      marginTop: index === 0 ? 0 : 20,
+      paddingHorizontal: 30,
+      paddingTop: 10,
+      paddingBottom: 16,
+      backgroundColor: "#FFF"
+    }}>
+      <View style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: 39,
+        width: "100%"
+      }}>
+        <NewBadge createdDate={item.createdDate} />
+
+        <LiveTimeAgo createdDate={item.createdDate} />
       </View>
+
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
         <View style={{ width: 135, alignItems: "flex-start" }}>
@@ -415,6 +484,7 @@ export default function Home() {
       </View>
     </View>
   );
+
 
   if (!checkedToken) {
     return null;
