@@ -140,7 +140,7 @@ export default function CargoAdd() {
         hidden={false}
       />
       
-      <View style={{marginTop: Platform.OS === "ios" ? statusBarHeight : 0,flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
+      <View style={{marginTop: statusBarHeight, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
         <View style={{ borderRadius: 50, overflow: 'hidden' }}>
           <Pressable
             android_ripple={{ color: "#808080" }}
