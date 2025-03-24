@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { Pressable, Text, ScrollView, View, StatusBar, Linking } from "react-native";
+import { Pressable, Text, ScrollView, View, StatusBar, Linking, Platform } from "react-native";
 import LocationIcon from "@/assets/images/location-icon.svg";
 import TruckDeliverySpeedIcon from "@/assets/images/truck-delivery-speed-icon-green.svg";
 import CallIcon from "@/assets/images/call-icon.svg";
@@ -10,6 +10,10 @@ import ArrowLeftIconLight from "@/assets/images/arrow-left-light.svg";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import SearchIcon from "@/assets/images/search-icon.svg";
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
+
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 type CargoDTO = {
   id: number;
@@ -45,7 +49,7 @@ export default function CargoDetail() {
   return (
     <ScrollView style={{backgroundColor: "#FFF"}}>
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
-      <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0,  backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
           <Pressable
             style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}

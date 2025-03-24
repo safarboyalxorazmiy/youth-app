@@ -1,18 +1,26 @@
 import { Drawer } from "expo-router/drawer";
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Pressable, Image, Platform } from "react-native";
 import CargoIcon from "@/assets/images/cargo-icon.svg";
 import LanguageIcon from "@/assets/images/language-icon.svg";
 import QuestionIcon from "@/assets/images/question-icon.svg";
 import LogoutIcon from "@/assets/images/logout-icon.svg";
 import { router, useRouter } from "expo-router";
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 function Me() {
   const router = useRouter();
 
+  const insets = useSafeAreaInsets();
+  
   return (
     <View
       style={{
         width: 300,
+        marginBottom: insets.bottom,
+        marginTop: Platform.OS === "ios" ? statusBarHeight : 0,
       }}>
         <View style={{borderBottomColor: "#4F4F4F", borderBottomWidth: 1.5, paddingBottom: 14.5, marginHorizontal: 16,}}>
           <Image source={require("@/assets/images/avatar.png")} style={{width: 56, height: 56, borderRadius: 50, marginTop: 50}} />

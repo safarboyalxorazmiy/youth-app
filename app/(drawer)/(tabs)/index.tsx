@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, FlatList, StatusBar } from "react-native";
+import { View, Text, Pressable, FlatList, StatusBar, Platform } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,6 +18,12 @@ import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import { Redirect } from 'expo-router';
 import { useRouteInfo } from "expo-router/build/hooks";
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import Constants from 'expo-constants';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -70,8 +76,6 @@ const SkeletonLoader = () => {
   );
 };
 
-
-
 type CargoDTO = {
   id: number;
   comment: string;
@@ -106,8 +110,10 @@ export default function Home() {
   const [checkedToken, setCheckedToken] = useState(false);
   const routeInfo = useRouteInfo();
 
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
-    
+    console.log("Statusbar height", statusBarHeight);
     // handleVisiting();
     // loadCargoData();
 
@@ -149,7 +155,31 @@ export default function Home() {
           : router.push("/")
 
           await AsyncStorage.removeItem("fromRoute");
+          return;
         }
+
+        const socket = new SockJS('http://167.86.107.247:8080/ws-cargo');
+    
+        const stompClient = new Client({
+          webSocketFactory: () => socket,
+          reconnectDelay: 5000,
+          onConnect: () => {
+            console.log('Connected to WebSocket');
+            stompClient.subscribe('/topic/new-cargo', (message) => {
+              const newCargo = JSON.parse(message.body);
+              console.log('New Cargo:', newCargo);
+            });
+          },
+          onStompError: (frame) => {
+            console.error('STOMP error:', frame);
+          },
+        });
+
+        stompClient.activate();
+
+        return () => {
+          stompClient.deactivate();
+        };
       }
     };
 
@@ -380,7 +410,7 @@ export default function Home() {
     <View style={{ flex: 1, backgroundColor: "#EFEFEF" }}>
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
 
-      <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0, backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
           <Pressable
             style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}

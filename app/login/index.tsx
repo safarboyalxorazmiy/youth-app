@@ -1,9 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { act, useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, Text, TextInput, View, Vibration, TouchableOpacity, Button  } from "react-native";
+import { Pressable, Text, TextInput, View, Vibration, TouchableOpacity, Platform  } from "react-native";
 import * as Haptics from "expo-haptics";
 import * as Application from 'expo-application';
+import { useIsFocused } from "@react-navigation/native";
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
@@ -18,6 +22,21 @@ export default function Login() {
 
   const router = useRouter();
 
+  
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      console.log("token", !!token);
+      if (!!token) {
+        await AsyncStorage.setItem("fromRoute", "Verify");
+        router.push("/");
+      }
+    }
+
+    checkToken();
+  }, [isFocused]);
+
   useEffect(() => {
     phoneNumberInputRef.current?.focus();
   }, []);
@@ -31,8 +50,9 @@ export default function Login() {
           accept: '*/*',
         },
         body: JSON.stringify({
-          phone: '998917972385',
-          deviceId: 'stringali',
+          phone: "998" + phoneNumberInputValue,
+          // deviceId: Application.getAndroidId() || Application.getIosIdForVendorAsync(),
+          deviceId: "dsadasdsdaasa"
         }),
       });
   
@@ -45,7 +65,7 @@ export default function Login() {
   };  
   
   return (
-    <View style={{backgroundColor: "#FFF", paddingHorizontal: 30, height: "100%", paddingTop: 140, position: "relative"}}>
+    <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0, backgroundColor: "#FFF", paddingHorizontal: 30, height: "100%", paddingTop: 140, position: "relative"}}>
       <View>
         <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16, textAlign: "center"}}>Telefon raqamingiz</Text>
 
@@ -110,36 +130,18 @@ export default function Login() {
                 limitActionRef.current?.show();
                 return;
               }
-
-              fetch('http://167.86.107.247:8080/api/v1/auth/register', {
-                method: 'POST',
-                headers: {
-                  'Accept': '*/*',
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  phone: "998" + phoneNumberInputValue,
-                  deviceId: Application.getAndroidId() || Application.getIosIdForVendorAsync(),
-                })
-              })
-                .then(response => {
-                  if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  if (!data) {
-                    limitActionRef.current?.show();
-                    return;
-                  }
-                })
-                .catch(error => {
-                  console.error('❌ Error:', error);
-                });
+              registerUser().then(data => {
+                if (!data) {
+                  limitActionRef.current?.show();
+                  return;
+                } else {
+                  AsyncStorage.setItem("userPhoneNumber", "998" + phoneNumberInputValue);
+                  router.push("/verify");      
+                }
+              }).catch(error => {
+                console.error('❌ Error:', error);
+              });
               
-              await AsyncStorage.setItem("userPhoneNumber", "998" + phoneNumberInputValue);
-              router.push("/verify");
             }}
             android_ripple={{color: "#1E1E1E"}} 
             style={{width: "100%", height: "100%", backgroundColor: "#2CA82A", alignItems: "center", justifyContent: "center"}} >

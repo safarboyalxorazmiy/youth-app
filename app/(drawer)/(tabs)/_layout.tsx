@@ -16,15 +16,17 @@ import { StatusBar } from "react-native";
 import HomeIcon from "@/assets/images/navbar/HomeIcon.svg";
 import HomeIconActive from "@/assets/images/navbar/HomeIconActive.svg";
 import PlusIcon from "@/assets/images/plus-icon.svg";
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const router = useRouter();
   const routeInfo = useRouteInfo();
+  const insets = useSafeAreaInsets();
 
   return (
-    <>
+    <View style={{ height: "100%", paddingBottom: insets.bottom}}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <Tabs
@@ -159,6 +161,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
-    </>
+    </View>
   );
 }

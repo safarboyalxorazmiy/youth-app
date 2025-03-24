@@ -35,15 +35,14 @@ export default function RootLayout() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
           <Stack>
-            <Stack.Screen name="login" options={{ headerShown: false, presentation: 'modal', animation: 'fade_from_bottom' }} />
-            <Stack.Screen name="verify" options={{ headerShown: false, presentation: 'modal', animation: 'slide_from_right' }} />
-            <Stack.Screen name="myCargo" options={{ headerShown: false, presentation: 'modal' }} />
-            <Stack.Screen name="cargoAdd" options={{ headerShown: false, presentation: 'modal' }} />
+            <Stack.Screen name="login" options={{ headerShown: false, animation: 'fade_from_bottom' }} />
+            <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right' }} />
+            <Stack.Screen name="myCargo" options={{ headerShown: false }} />
+            <Stack.Screen name="cargoAdd" options={{ headerShown: false}} />
             <Stack.Screen
               name="(drawer)"
               options={{
                 headerShown: false,
-                presentation: 'modal',
                 animation: 'flip'
               }}
             />

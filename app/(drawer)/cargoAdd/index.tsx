@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, Pressable, FlatList, Keyboard } from "react-native";
+import { View, Text, TextInput, ScrollView, Pressable, FlatList, Platform } from "react-native";
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
 import { useRef, useState } from "react";
 import { StatusBar } from "react-native";
@@ -10,6 +10,10 @@ type LocationDetails = {
   locationRegion: string;
   locationDistinct: string;
 };
+
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function CargoAdd() {  
   const [focusedInput, setFocusedInput] = useState<String>("");
@@ -136,25 +140,27 @@ export default function CargoAdd() {
         hidden={false}
       />
       
-      <ScrollView ref={scrollRef} keyboardShouldPersistTaps="always">
-        <View style={{ paddingTop: 16, paddingBottom: 26 }}>
-          <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
-            <View style={{ borderRadius: 50, overflow: 'hidden' }}>
-              <Pressable
-                android_ripple={{ color: "#808080" }}
-                style={{ padding: 10 }}
-                onPress={() => {
-                  router.push("/");
-                }}
-              >
-                <ArrowLeftIcon />
-              </Pressable>
-            </View>
+      <View style={{marginTop: Platform.OS === "ios" ? statusBarHeight : 0,flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
+        <View style={{ borderRadius: 50, overflow: 'hidden' }}>
+          <Pressable
+            android_ripple={{ color: "#808080" }}
+            style={{ padding: 10 }}
+            onPress={() => {
+              router.push("/");
+            }}
+          >
+            <ArrowLeftIcon />
+          </Pressable>
+        </View>
 
-            <Text allowFontScaling={false} style={{fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
+        <Text allowFontScaling={false} style={{fontSize: 14, fontWeight: 700, fontFamily: "SfProDisplayBold"}}>Yuk qo’shish</Text>
 
-            <View></View>
-          </View>
+        <View></View>
+      </View>
+      
+      <ScrollView ref={scrollRef} keyboardShouldPersistTaps={Platform.OS === "ios" ? "never" : "always"} showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+        <View style={{ paddingTop: 16, paddingBottom: 70 }}>
+          
 
           <View style={{paddingHorizontal: 38, marginTop: 50, width: "100%"}}>
             <View style={{

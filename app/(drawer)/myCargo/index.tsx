@@ -1,4 +1,4 @@
-import { FlatList, Pressable, ScrollView, StatusBar, Text, View } from "react-native";
+import { FlatList, Pressable, Platform, StatusBar, Text, View } from "react-native";
 import TruckDeliverySpeedIcon from "@/assets/images/navbar/TruckDeliverySpeedIcon.svg";
 import ArrowRightIcon from "@/assets/images/navbar/ArrowRightIcon.svg";
 import DeleteIcon from "@/assets/images/delete-icon.svg";
@@ -17,6 +17,12 @@ import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const screenWidth = Dimensions.get("window").width;
+
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
+
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SkeletonLoader = () => {
   return (
@@ -82,6 +88,7 @@ export default function MyCargo() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(11);
   const [dataFullyLoaded, setDataFullyLoaded] = useState(false);
+  const insets = useSafeAreaInsets();
   
   // useEffect(() => {
   //   handleCargoData();
@@ -256,7 +263,7 @@ export default function MyCargo() {
   return (
     <View style={{flex: 1, backgroundColor: "#EFEFEF" }}>  
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
-      <View style={{ backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0,  backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ height: 40, width: 40, borderRadius: 20, overflow: "hidden", alignItems: "center", justifyContent: "center" }}>
           <Pressable
             style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center" }}
@@ -306,6 +313,7 @@ export default function MyCargo() {
         }
       />
 
+    <View style={{ paddingBottom: insets.bottom}}>
       <View
         style={{
           flexDirection: "row",
@@ -345,6 +353,8 @@ export default function MyCargo() {
           <CargoAddIcon />
         </Pressable>
       </View>
+    </View>
+      
     </View>
   )  
 }

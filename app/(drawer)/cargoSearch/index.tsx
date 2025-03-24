@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, Pressable, FlatList, Dimensions } from "react-native";
+import { View, Text, TextInput, ScrollView, Pressable, FlatList, Dimensions, Platform } from "react-native";
 
 import { useRef, useState } from "react";
 import { StatusBar } from "react-native";
@@ -9,6 +9,9 @@ import ArrowLeftLightIcon from "@/assets/images/arrow-left-light.svg";
 import ArrowRightBottom from "@/assets/images/arrow-right-bottom.svg";
 import RefreshIcon from "@/assets/images/refresh-icon.svg";
 import LocationDeleteIcon from "@/assets/images/location-delete-icon.svg";
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function CargoSearch() {
   const [focusedInput, setFocusedInput] = useState<String>("");
@@ -83,7 +86,7 @@ export default function CargoSearch() {
     <ScrollView style={{backgroundColor: "#232325"}} keyboardShouldPersistTaps="always">
       <StatusBar />
 
-      <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 25, paddingHorizontal: 25, width: "100%"}}>
+      <View style={{marginTop: Platform.OS === "ios" ? statusBarHeight : 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
           <View style={{ borderRadius: 50, overflow: 'hidden' }}>
             <Pressable
               android_ripple={{ color: "#808080" }}
