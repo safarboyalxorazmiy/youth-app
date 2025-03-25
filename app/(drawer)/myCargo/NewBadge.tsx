@@ -1,6 +1,6 @@
-import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
+import { t } from '@/i18n';
 
 type Props = {
   createdDate: string | null;

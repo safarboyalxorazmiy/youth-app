@@ -1,6 +1,6 @@
 import { View, Text, TextInput, ScrollView, Pressable, FlatList, Platform } from "react-native";
 import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusBar } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from "expo-router";
@@ -8,11 +8,17 @@ import { t } from '@/i18n';
 
 type LocationDetails = {
   id: number;
-  locationRegion: string;
-  locationDistinct: string;
+  locationRegionUz: string;
+  locationRegionCy: string;
+  locationRegionRu: string;
+
+  locationDistinctUz: string;
+  locationDistinctCy: string;
+  locationDistinctRu: string;
 };
 
 import Constants from 'expo-constants';
+import { useIsFocused } from "@react-navigation/native";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -47,6 +53,16 @@ export default function CargoAdd() {
 
   const router = useRouter();
 
+  const isFocused = useIsFocused();
+  const [userLanguage, setUserLanguage] = useState<string>("");
+  
+  useEffect(() => {
+    async function fetchData() {
+      setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
+    }
+    fetchData();
+  }, [isFocused])
+
   const scrollToEnd = () => {
     setTimeout(() => {
       scrollRef.current?.scrollToEnd({ animated: true });
@@ -68,18 +84,25 @@ export default function CargoAdd() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          destinationARegion,
-          destinationADistinct,
-          destinationBRegion,
-          destinationBDistinct,
+          destinationARegion: destinationARegion || "",
+          destinationADistinct: destinationADistinct || "",
+          destinationBRegion: destinationBRegion || "",
+          destinationBDistinct: destinationBDistinct || "",
           transportType: typeInputValue, 
           comment: detailInputValue,
           phone: "+998917972385"
         })
       });
 
-      console.log(response);
-      console.log(response.status);
+      console.log("data:", { 
+        destinationARegion,
+        destinationADistinct,
+        destinationBRegion,
+        destinationBDistinct,
+        transportType: typeInputValue, 
+        comment: detailInputValue,
+        phone: "+998917972385"
+      });
 
       if (response.status === 200) {
         await AsyncStorage.setItem("newItemCreated", "true");
@@ -213,14 +236,19 @@ export default function CargoAdd() {
                     <Pressable 
                       android_ripple={{ color: "#EFEFEF" }} 
                       onPress={() => {
-                        setLocationAInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                        const region = userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy;
+                        console.log("'" + region + "'");
+                        
+                        const distinct = userLanguage == "uz" ? item.locationDistinctUz : userLanguage == "ru" ? item.locationDistinctRu : item.locationDistinctCy;
+                        
+                        setLocationAInputValue(`${region} ${distinct != null ? distinct : ""}`);
                         setLocationAReccumendationVisible(false);
-                        setDestinationARegion(item.locationRegion == null ? "" : item.locationRegion);
-                        setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
+                        setDestinationARegion(region);
+                        setDestinationADistinct(distinct);
                       }} 
                       style={{ paddingVertical: 15, paddingHorizontal: 20, height: 50, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                      <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                      {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                      <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "ru" ? item.locationRegionRu : userLanguage == "cy" ? item.locationRegionCy : item.locationRegionUz}</Text>
+                      {item.locationDistinctUz != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "ru" ? item.locationDistinctRu : userLanguage == "cy" ? item.locationDistinctCy : item.locationDistinctUz}</Text>}
                     </Pressable>
                   )}
                   nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -271,14 +299,16 @@ export default function CargoAdd() {
                     <Pressable 
                       android_ripple={{ color: "#EFEFEF" }} 
                       onPress={() => {
-                        setLocationBInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                        const region = userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy;
+                        const distinct = userLanguage == "uz" ? item.locationDistinctUz : userLanguage == "ru" ? item.locationDistinctRu : item.locationDistinctCy;
+                        setLocationBInputValue(`${region} ${distinct != null ? distinct : ""}`);
                         setLocationBReccumendationVisible(false);
-                        setDestinationBRegion(item.locationRegion == null ? "" : item.locationRegion);
-                        setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
+                        setDestinationBRegion(region);
+                        setDestinationBDistinct(distinct);
                       }} 
                       style={{ paddingVertical: 15, paddingHorizontal: 20, height: 50, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                      <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                      {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                      <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? (item.locationRegionUz) : userLanguage == "ru" ? (item.locationRegionRu) : (item.locationRegionCy)}</Text>
+                      {item.locationDistinctUz != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? (item.locationDistinctUz) : userLanguage == "ru" ? (item.locationDistinctRu) : (item.locationDistinctCy)}</Text>}
                     </Pressable>
                   )}
                   nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!

@@ -13,13 +13,18 @@ export default function LanguageScreen() {
   const router = useRouter();
 
   const changeLanguage = async (code: string) => {
-    if (i18n.locale === code) return;
     await setLocale(code);
     
     await AsyncStorage.setItem("mainCargoLoad", "true");
     await AsyncStorage.setItem("myCargoLoad", "true");
 
-    router.replace('/');
+    const token = await AsyncStorage.getItem('token');
+    console.log("token", !!token);
+    if (!!token) {
+      router.replace('/');
+    } else {
+      router.replace('/login');
+    }
   };
 
   return (
@@ -42,7 +47,7 @@ export default function LanguageScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 30 },
+  container: { backgroundColor: "#F2F2F2", flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 30 },
   title: { fontSize: 24, marginBottom: 20, fontFamily: "SfProDisplayBold", fontWeight: 700 },
   button: {
     height: 45,

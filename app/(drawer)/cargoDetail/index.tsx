@@ -14,6 +14,7 @@ import ArrowLeftIcon from "@/assets/images/navbar/ArrowLeftIcon.svg";
 import Constants from 'expo-constants';
 
 import { t } from '@/i18n';
+import { useIsFocused } from "@react-navigation/native";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -21,21 +22,41 @@ type CargoDTO = {
   id: number;
   comment: string;
   createdDate: string;
-  destinationADistinct?: string;
-  destinationARegion: string;
-  destinationBDistinct?: string;
-  destinationBRegion: string;
+
+  destinationADistinctUz?: string;
+  destinationADistinctRu?: string;
+  destinationADistinctCy?: string;
+
+  destinationARegionUz: string;
+  destinationARegionRu: string;
+  destinationARegionCy: string;
+
+  destinationBDistinctUz?: string;
+  destinationBDistinctRu?: string;
+  destinationBDistinctCy?: string;
+
+  destinationBRegionUz: string;
+  destinationBRegionRu: string;
+  destinationBRegionCy: string;
+
   transportType: string;
 };
 
 export default function CargoDetail() { 
-  const router = useRouter();
   const navigation = useNavigation<DrawerNavigationProp<any>>();
 
   const [cargoData, setCargoData] = useState<CargoDTO | null>(null);
 
+  const [userLanguage, setUserLanguage] = useState<string>("");
+
+  const router = useRouter();
+  const isFocused = useIsFocused();
+  
+
   useEffect(() => {
     async function loadCargoDetail() {
+      setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
+
       let cargoDataString = await AsyncStorage.getItem("cargoData");
   
       if (cargoDataString !== null) {
@@ -46,8 +67,8 @@ export default function CargoDetail() {
     }
   
     loadCargoDetail();
-  }, [router]);
-
+  }, [isFocused]);
+  
   return (
     <ScrollView style={{backgroundColor: "#FFF"}}>
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
@@ -94,12 +115,12 @@ export default function CargoDetail() {
 
         <View style={{flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start"}}>
           <View>
-            <Text allowFontScaling={false} style={{fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 40}}>{cargoData?.destinationARegion || ""}</Text>
-            <Text allowFontScaling={false} style={{fontSize: 12, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 8}}>{cargoData?.destinationADistinct || ""}</Text>
+            <Text allowFontScaling={false} style={{fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 40}}>{userLanguage === "uz" ? cargoData?.destinationARegionUz : userLanguage === "ru" ? cargoData?.destinationARegionRu : cargoData?.destinationARegionCy || ""}</Text>
+            <Text allowFontScaling={false} style={{fontSize: 12, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 8}}>{userLanguage === "uz" ? cargoData?.destinationADistinctUz : userLanguage === "ru" ? cargoData?.destinationADistinctRu : cargoData?.destinationADistinctCy || ""}</Text>
           </View>
           <View>
-            <Text allowFontScaling={false} style={{fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 8, }}>{cargoData?.destinationBRegion || ""}</Text>
-            <Text allowFontScaling={false} style={{fontSize: 12, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 25}}>{cargoData?.destinationBDistinct || ""}</Text>
+            <Text allowFontScaling={false} style={{fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: "700", marginTop: 8, }}>{userLanguage === "uz" ? cargoData?.destinationBRegionUz : userLanguage === "ru" ? cargoData?.destinationBRegionRu : cargoData?.destinationBRegionCy || ""}</Text>
+            <Text allowFontScaling={false} style={{fontSize: 12, fontFamily: "SfProDisplayMedium", fontWeight: "500", marginBottom: 25}}>{userLanguage === "uz" ? cargoData?.destinationBDistinctUz : userLanguage === "ru" ? cargoData?.destinationBDistinctRu : cargoData?.destinationBDistinctCy || ""}</Text>
           </View>
         </View>
       </View>
@@ -108,7 +129,7 @@ export default function CargoDetail() {
         <TruckDeliverySpeedIcon />
         <View style={{flexDirection: "row", alignItems: "center", columnGap: 1}}>
           <Text allowFontScaling={false} style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>{t("transportType")}: </Text> 
-          <Text allowFontScaling={false} style={{fontSize: 14, color: "#000", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>ISUZU</Text>
+          <Text allowFontScaling={false} style={{fontSize: 14, color: "#000", fontWeight: "700", fontFamily: "SfProDisplayBold"}}>{cargoData?.transportType || ""}</Text>
         </View>
       </View>
 

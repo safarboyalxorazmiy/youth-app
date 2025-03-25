@@ -92,7 +92,7 @@ export default function Verify() {
           phone: userPhoneNumber,
           code: newOtp.join(""),
           // deviceId: Application.getAndroidId() || Application.getIosIdForVendorAsync(),
-          deviceId: "dsadasdsdaasa"
+          deviceId: "sasaadsada"
         }),
       })
         .then(async response => {

@@ -85,10 +85,23 @@ type CargoDTO = {
   id: number;
   comment: string;
   createdDate: string;
-  destinationADistinct?: string;
-  destinationARegion: string;
-  destinationBDistinct?: string;
-  destinationBRegion: string;
+
+  destinationADistinctUz?: string;
+  destinationADistinctRu?: string;
+  destinationADistinctCy?: string;
+
+  destinationARegionUz: string;
+  destinationARegionRu: string;
+  destinationARegionCy: string;
+
+  destinationBDistinctUz?: string;
+  destinationBDistinctRu?: string;
+  destinationBDistinctCy?: string;
+
+  destinationBRegionUz: string;
+  destinationBRegionRu: string;
+  destinationBRegionCy: string;
+
   transportType: string;
 };
 
@@ -123,7 +136,7 @@ export default function Home() {
     // loadCargoData();
 
     const checkToken = async () => {
-      // await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("token");
 
       const token = await AsyncStorage.getItem('token');
       console.log("token", !!token);
@@ -180,10 +193,12 @@ export default function Home() {
     startSocket();
   }, []);
 
-
+  const [userLanguage, setUserLanguage] = useState<string>("");
 
   useEffect(() => {
     const checkToken = async () => {
+      setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
+      
       const token = await AsyncStorage.getItem('token');
       console.log("token", !!token);
       setHasToken(!!token);
@@ -473,15 +488,15 @@ export default function Home() {
 
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}  >{item.destinationARegion}</Text>
-          {item.destinationADistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationADistinct}</Text>}
+          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}>{userLanguage === "uz" ? item.destinationARegionUz : userLanguage === "ru" ? item.destinationARegionRu : item.destinationARegionCy}</Text>
+          {item.destinationADistinctUz && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage === "uz" ? item.destinationADistinctUz : userLanguage === "ru" ? item.destinationADistinctRu : item.destinationADistinctCy}</Text>}
         </View>
 
         <ArrowRightIcon style={{ marginLeft: -20 }} />
 
         <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{item.destinationBRegion}</Text>
-          {item.destinationBDistinct && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.destinationBDistinct}</Text>}
+          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{userLanguage === "uz" ? item.destinationBRegionUz : userLanguage === "ru" ? item.destinationBRegionRu : item.destinationBRegionCy}</Text>
+          {item.destinationBDistinctUz && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage === "uz" ? item.destinationBDistinctUz : userLanguage === "ru" ? item.destinationBDistinctRu : item.destinationBDistinctCy}</Text>}
         </View>
       </View>
 
@@ -571,5 +586,5 @@ export default function Home() {
 
       {toast && <AnimatedToast message={toast.message} onClose={() => setToast(null)} />}
     </View>
-  ) : <Redirect href="/login" />;
+  ) : <Redirect href="/lang" />;
 }

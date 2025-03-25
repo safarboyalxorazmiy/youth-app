@@ -1,6 +1,6 @@
 import { View, Text, TextInput, ScrollView, Pressable, FlatList, Dimensions, Platform } from "react-native";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusBar } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from "expo-router";
@@ -11,6 +11,7 @@ import RefreshIcon from "@/assets/images/refresh-icon.svg";
 import LocationDeleteIcon from "@/assets/images/location-delete-icon.svg";
 import Constants from 'expo-constants';
 import { t } from '@/i18n';
+import { useIsFocused } from "@react-navigation/native";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -21,9 +22,25 @@ export default function CargoSearch() {
 
   type LocationDetails = {
     id: number;
-    locationRegion: string;
-    locationDistinct: string;
+    locationRegionUz: string;
+    locationRegionCy: string;
+    locationRegionRu: string;
+  
+    locationDistinctUz: string;
+    locationDistinctCy: string;
+    locationDistinctRu: string;
   };
+
+  const [userLanguage, setUserLanguage] = useState<string>("");
+  const isFocused = useIsFocused();
+  
+  useEffect(() => {
+    async function fetchData() {
+      setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
+    }
+    fetchData();
+  }, [isFocused])
+  
 
   const [locationAReccommendData, setLocationAReccommendData] = useState<LocationDetails[]>([]);
   const [locationBReccommendData, setLocationBReccommendData] = useState<LocationDetails[]>([]);
@@ -169,14 +186,26 @@ export default function CargoSearch() {
                 <Pressable 
                   android_ripple={{ color: "#EFEFEF" }} 
                   onPress={() => {
-                    setLocationAInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                    console.log("qarasart:: ", item)
+                    if (userLanguage == "uz") {
+                      setLocationAInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + " " + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
+                      setDestinationARegion(item.locationRegionUz == null ? "" : item.locationRegionUz);
+                      setDestinationADistinct(item.locationDistinctUz == null ? "" : item.locationDistinctUz);
+                    } else if (userLanguage == "ru") {
+                      setLocationAInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + " " + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
+                      setDestinationARegion(item.locationRegionRu == null ? "" : item.locationRegionRu);
+                      setDestinationADistinct(item.locationDistinctRu == null ? "" : item.locationDistinctRu);
+                    } else {
+                      setLocationAInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + " " + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
+                      setDestinationARegion(item.locationRegionCy == null ? "" : item.locationRegionCy);
+                      setDestinationADistinct(item.locationDistinctCy == null ? "" : item.locationDistinctCy);
+                    }
+
                     setLocationAReccumendationVisible(false);
-                    setDestinationARegion(item.locationRegion == null ? "" : item.locationRegion);
-                    setDestinationADistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                   }} 
                   style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                  <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                  {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                  <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy}</Text>
+                  {item.locationDistinctUz != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? item.locationDistinctUz : userLanguage == "ru" ? item.locationDistinctRu : item.locationDistinctCy}</Text>}
                 </Pressable>
               )}
               nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!
@@ -261,14 +290,25 @@ export default function CargoSearch() {
                 <Pressable 
                   android_ripple={{ color: "#EFEFEF" }} 
                   onPress={() => {
-                    setLocationBInputValue((item.locationRegion == null ? "" : item.locationRegion) + " " + (item.locationDistinct == null ? "" : item.locationDistinct))
+                    if (userLanguage == "uz") {
+                      setLocationBInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + " " + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
+                      setDestinationBRegion(item.locationRegionUz == null ? "" : item.locationRegionUz);
+                      setDestinationBDistinct(item.locationDistinctUz == null ? "" : item.locationDistinctUz);
+                    } else if (userLanguage == "ru") {
+                      setLocationBInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + " " + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
+                      setDestinationBRegion(item.locationRegionRu == null ? "" : item.locationRegionRu);
+                      setDestinationBDistinct(item.locationDistinctRu == null ? "" : item.locationDistinctRu);
+                    } else {
+                      setLocationBInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + " " + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
+                      setDestinationBRegion(item.locationRegionCy == null ? "" : item.locationRegionCy);
+                      setDestinationBDistinct(item.locationDistinctCy == null ? "" : item.locationDistinctCy);
+                    }
+
                     setLocationBReccumendationVisible(false);
-                    setDestinationBRegion(item.locationRegion == null ? "" : item.locationRegion);
-                    setDestinationBDistinct(item.locationDistinct == null ? "" : item.locationDistinct);
                   }} 
                   style={{ paddingVertical: 15, paddingHorizontal: 20, height: 55, justifyContent: "center", columnGap: 5, borderBottomColor: "#EFEFEF", borderBottomWidth: 1 }}>
-                  <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationRegion}</Text>
-                  {item.locationDistinct != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{item.locationDistinct}</Text>}
+                  <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy}</Text>
+                  {item.locationDistinctUz != null && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? item.locationDistinctUz : userLanguage == "ru" ? item.locationDistinctRu : item.locationDistinctCy}</Text>}
                 </Pressable>
               )}
               nestedScrollEnabled={true} // ✅ This fixes the nested scroll issue!

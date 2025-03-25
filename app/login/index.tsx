@@ -22,6 +22,7 @@ export default function Login() {
 
   const router = useRouter();
 
+  const [requestStarted, setRequestStarted] = useState(false);
   
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -52,7 +53,7 @@ export default function Login() {
         body: JSON.stringify({
           phone: "998" + phoneNumberInputValue,
           // deviceId: Application.getAndroidId() || Application.getIosIdForVendorAsync(),
-          deviceId: "dsadasdsdaasa"
+          deviceId: "sasaadsada"
         }),
       });
   
@@ -123,14 +124,22 @@ export default function Login() {
           overflow: 'hidden',
         }}>
           <Pressable 
-            onPress={async () => {
+            unstable_pressDelay={200}
+            onPressIn={async () => {
+              if (requestStarted) return;
+
+              setRequestStarted(true);
+
               if (phoneNumberInputValue == "" || phoneNumberInputValue.length < 9) {
                 setWrongInput(true);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
                 limitActionRef.current?.show();
+                setRequestStarted(false);
                 return;
               }
-              registerUser().then(data => {
+
+              try {
+                const data = await registerUser();
                 if (!data) {
                   limitActionRef.current?.show();
                   return;
@@ -138,10 +147,11 @@ export default function Login() {
                   AsyncStorage.setItem("userPhoneNumber", "998" + phoneNumberInputValue);
                   router.push("/verify");      
                 }
-              }).catch(error => {
+              } catch (error) {
                 console.error('❌ Error:', error);
-              });
-              
+              }
+
+              setRequestStarted(false);
             }}
             android_ripple={{color: "#1E1E1E"}} 
             style={{width: "100%", height: "100%", backgroundColor: "#2CA82A", alignItems: "center", justifyContent: "center"}} >
