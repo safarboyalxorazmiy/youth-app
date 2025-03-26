@@ -10,53 +10,63 @@ const LANGUAGES = [
   { code: 'uzCy', label: 'Ўзбекча', icon: require('@/assets/uzb.png') },
   { code: 'ru', label: 'Русский', icon: require('@/assets/rus.png') },
 ];
+import { ActivityIndicator } from 'react-native';
 
 export default function LanguageScreen() {
   const router = useRouter();
-  const [currentCode, setCurrentCode] = useState("");
 
   const isFocused = useIsFocused();
   useEffect(() => {
     loadLocale();
   }, [isFocused]);
 
+  const [loading, setLoading] = useState(false);
+
   const changeLanguage = async (code: string) => {
+    setLoading(true);
     await setLocale(code);
-    setCurrentCode(code);
+    setLoading(false);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('selectLanguage')}</Text>
-      {LANGUAGES.map(lang => (
-        <TouchableOpacity
-          key={lang.code}
-          onPress={() => changeLanguage(lang.code)}
-          style={i18n.locale === lang.code ? styles.buttonActive  : styles.button}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <Image style={{width: 25, height: 25}} source={lang.icon} />
-            <Text style={i18n.locale === lang.code ? styles.textActive : styles.text}>{lang.label}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+      {loading ? <ActivityIndicator size="large" color="#2CA82A" /> : (
+        <>
+          <Text style={styles.title}>{t('selectLanguage')}</Text>
+            {LANGUAGES.map(lang => (
+              <TouchableOpacity
+                key={lang.code}
+                onPress={() => changeLanguage(lang.code)}
+                style={i18n.locale === lang.code ? styles.buttonActive  : styles.button}
+              >
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                  <Image style={{width: 25, height: 25}} source={lang.icon} />
+                  <Text style={i18n.locale === lang.code ? styles.textActive : styles.text}>{lang.label}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
 
-      <Pressable 
-        style={{backgroundColor: "#020202", width: "100%", height: 50, borderRadius: 8, alignItems: "center", justifyContent: "center", marginTop: 20,}}
-        onPress={async () => {
-          await AsyncStorage.setItem("mainCargoLoad", "true");
-          await AsyncStorage.setItem("myCargoLoad", "true");
-      
-          const token = await AsyncStorage.getItem('token');
-          console.log("token", !!token);
-          if (!!token) {
-            router.replace('/');
-          } else {
-            router.replace('/login');
-          }        
-        }}>
-        <Text style={{ fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: 700, color: "#FFF" }}>{t("next")}</Text>
-      </Pressable>
+            <Pressable 
+              style={{backgroundColor: "#020202", width: "100%", height: 50, borderRadius: 8, alignItems: "center", justifyContent: "center", marginTop: 20,}}
+              onPress={async () => {
+                setLoading(true);
+                await AsyncStorage.setItem("mainCargoLoad", "true");
+                await AsyncStorage.setItem("myCargoLoad", "true");
+            
+                const token = await AsyncStorage.getItem('token');
+                console.log("token", !!token);
+                setLoading(false);
+
+                if (!!token) {
+                  router.replace('/');
+                } else {
+                  router.replace('/login');
+                }        
+              }}>
+              <Text style={{ fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: 700, color: "#FFF" }}>{t("next")}</Text>
+            </Pressable>
+        </>
+      )}
     </View>
   );
 }
