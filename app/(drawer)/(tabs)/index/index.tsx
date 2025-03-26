@@ -26,7 +26,7 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import NewBadge from './NewBadge';
 import LiveTimeAgo from "./LiveTimeAgo";
 
-import { t } from '@/i18n';
+import { loadLocale, t } from '@/i18n';
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -131,6 +131,7 @@ export default function Home() {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
+    loadLocale();
     
     console.log("Statusbar height", statusBarHeight);
     // handleVisiting();
@@ -526,7 +527,7 @@ export default function Home() {
   }
   
   return hasToken ?  (
-    <View style={{ flex: 1, backgroundColor: "#EFEFEF" }}>
+    <View style={{ flex: 1, backgroundColor: "#EFEFEF", height: "100%" }}>
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
 
       <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0, backgroundColor: "#232325", height: 69, paddingHorizontal: 22, alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>

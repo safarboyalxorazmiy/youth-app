@@ -15,6 +15,7 @@ import { Dimensions, Appearance } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PlusIcon from "@/assets/images/plus-icon.svg";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -365,18 +366,41 @@ export default function MyCargo() {
         </Pressable>
 
         {/* Cargo Add Button */}
-        <Pressable
-          style={{
+        <View style={{
+            width: "50%",
+            height: 60,
             justifyContent: "center",
             alignItems: "center",
             paddingRight: 39,
-            width: "50%",
-            height: 60,
-          }}
-          onPress={() => router.push("/cargoAdd")}
-        >
-          <CargoAddIcon />
-        </Pressable>
+          }}>
+            <View style={{
+              borderRadius: 20,
+              overflow: "hidden",
+              height: 37,
+              width: 133,
+            }}>
+              <Pressable
+                android_ripple={{ color: "#808080" }}
+                style={{
+                  // backgroundColor:"red",
+                  // display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  rowGap: 4,
+                  backgroundColor: "#000000",
+                  columnGap: 13,
+                  width: "100%",
+                  height: "100%",
+                  // borderRadius: 20
+                }}
+                onPress={() => router.push("/cargoAdd")}
+              >
+                <Text style={{ fontSize: 12, fontFamily: "SfProDisplayBold", fontWeight: 500, color: "#FFF"}}>{t("cargoAdd")}</Text>
+                <PlusIcon />
+              </Pressable>
+            </View>
+          </View>
       </View>
     </View>
       
