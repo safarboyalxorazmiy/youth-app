@@ -42,7 +42,7 @@ export default function RootLayout() {
           <BottomSheetModalProvider>
             <Stack>
               <Stack.Screen name="lang" options={{ headerShown: false, animation: 'slide_from_right' }} />
-              <Stack.Screen name="login" options={{ headerShown: false, animation: 'fade_from_bottom' }} />
+              <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
               <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right' }} />
               <Stack.Screen name="myCargo" options={{ headerShown: false }} />
               <Stack.Screen name="cargoAdd" options={{ headerShown: false}} />

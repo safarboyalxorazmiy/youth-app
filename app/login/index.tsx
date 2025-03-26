@@ -7,6 +7,8 @@ import * as Application from 'expo-application';
 import { useIsFocused } from "@react-navigation/native";
 import Constants from 'expo-constants';
 
+import { t } from "@/i18n";
+
 const statusBarHeight = Constants.statusBarHeight;
 
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
@@ -43,6 +45,15 @@ export default function Login() {
   }, []);
 
   const registerUser = async () => {
+    let deviceId;
+    if (Platform.OS === "ios") {
+      console.log("IOS deviceId: ", await Application.getIosIdForVendorAsync());  
+      deviceId = await Application.getIosIdForVendorAsync();
+    } else if (Platform.OS === "android") {
+      console.log("deviceId: ", await Application.getAndroidId()); 
+      deviceId = await Application.getAndroidId();     
+    }
+
     try {
       const response = await fetch('http://167.86.107.247:8080/api/v1/auth/register', {
         method: 'POST',
@@ -52,8 +63,8 @@ export default function Login() {
         },
         body: JSON.stringify({
           phone: "998" + phoneNumberInputValue,
-          // deviceId: Application.getAndroidId() || Application.getIosIdForVendorAsync(),
-          deviceId: "sasaadsada"
+          deviceId: deviceId,
+          // deviceId: "sasaadsada"
         }),
       });
   
@@ -68,7 +79,7 @@ export default function Login() {
   return (
     <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0, backgroundColor: "#FFF", paddingHorizontal: 30, height: "100%", paddingTop: 140, position: "relative"}}>
       <View>
-        <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16, textAlign: "center"}}>Telefon raqamingiz</Text>
+        <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 16, textAlign: "center"}}>{t("yourPhoneNumber")}</Text>
 
         <View style={{marginTop: 15, width: "100%"}}>
             <View style={{
@@ -85,7 +96,7 @@ export default function Login() {
               {
                 focusedInput == "PhoneNumberInput" || phoneNumberInputValue != "" ? (
                   <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                    <Text allowFontScaling={false} style={{color: wrongInput ? "#FF0000" : "#2CA82A", fontSize: 12}}>Telefon raqam</Text>
+                    <Text allowFontScaling={false} style={{color: wrongInput ? "#FF0000" : "#2CA82A", fontSize: 12}}>{t("phoneNumber")}</Text>
                   </View>
                 ) : (<></>)
               }
@@ -142,8 +153,10 @@ export default function Login() {
                 const data = await registerUser();
                 if (!data) {
                   limitActionRef.current?.show();
+                  setRequestStarted(false);
                   return;
                 } else {
+                  setRequestStarted(false);
                   AsyncStorage.setItem("userPhoneNumber", "998" + phoneNumberInputValue);
                   router.push("/verify");      
                 }
@@ -155,7 +168,7 @@ export default function Login() {
             }}
             android_ripple={{color: "#1E1E1E"}} 
             style={{width: "100%", height: "100%", backgroundColor: "#2CA82A", alignItems: "center", justifyContent: "center"}} >
-            <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>Davom etish</Text>
+            <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>{t("enterCode")}</Text>
           </Pressable>
         </View>
       </View>

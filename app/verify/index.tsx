@@ -12,6 +12,8 @@ const statusBarHeight = Constants.statusBarHeight;
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { useIsFocused } from "@react-navigation/native";
 
+import { t } from "@/i18n";
+
 export default function Verify() {
   // const router = useRouter();
   const [otp, setOtp] = useState<string[]>(Array(5).fill(""));
@@ -49,6 +51,10 @@ export default function Verify() {
 
   const isFocused = useIsFocused();
   useEffect(() => {
+    setOtp(Array(5).fill(""));
+    setSecondsLeft(60);
+    setTryCount(5);
+
     const checkToken = async () => {
       const token = await AsyncStorage.getItem('token');
       console.log("token", !!token);
@@ -82,6 +88,16 @@ export default function Verify() {
       inputRefs.current[index + 1]?.focus();
     } else if (text && index === 4) {
       console.log(newOtp.join(""));
+
+      let deviceId;
+      if (Platform.OS === "ios") {
+        console.log("IOS deviceId: ", await Application.getIosIdForVendorAsync());  
+        deviceId = await Application.getIosIdForVendorAsync();
+      } else if (Platform.OS === "android") {
+        console.log("deviceId: ", await Application.getAndroidId()); 
+        deviceId = await Application.getAndroidId();     
+      }
+
       fetch('http://167.86.107.247:8080/api/v1/auth/authenticate', {
         method: 'POST',
         headers: {
@@ -91,8 +107,8 @@ export default function Verify() {
         body: JSON.stringify({
           phone: userPhoneNumber,
           code: newOtp.join(""),
-          // deviceId: Application.getAndroidId() || Application.getIosIdForVendorAsync(),
-          deviceId: "sasaadsada"
+          deviceId: deviceId,
+          // deviceId: "sasaadsada"
         }),
       })
         .then(async response => {
@@ -163,10 +179,10 @@ export default function Verify() {
       </Pressable>
 
       <Text style={{ fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 18, textAlign: "center" }}>
-        Kodni kiriting
+        {t("enterCode")}
       </Text>
       <Text style={{ textAlign: "center", fontFamily: "SfProDisplayRegular", fontSize: 15, color: "#000", marginTop: 10 }}>
-        Biz sizning +{userPhoneNumber} telefoningizga SMS kodini jo‘natdik
+        {t("enterCodeDescription")}
       </Text>
 
       {/* OTP Input Fields */}
@@ -211,7 +227,7 @@ export default function Verify() {
 
       {/* Resend Button */}
       <Pressable onPress={() => {}} style={{ marginTop: 20, alignItems: "center" }}>
-        <Text style={{ color: "#2CA82A", fontWeight: "600" }}>Qolgan urunishlar soni: {tryCount}</Text>
+        <Text style={{ color: "#2CA82A", fontWeight: "600" }}>{t("tryingAttemptCount")}: {tryCount}</Text>
         <Text style={{ color: "#2CA82A", fontWeight: "600" }}>{formatTime(secondsLeft)}</Text>
       </Pressable>
 

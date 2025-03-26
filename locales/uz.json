@@ -31,5 +31,12 @@
 
   "ex1": "misol uchun: ISUZU",
   "ex2": "misol uchun: 4 tonna sment",
-  "compleate": "TAYYOR"
+  "compleate": "TAYYOR",
+
+  "phoneNumber": "Telefon raqam",
+  "yourPhoneNumber": "Telefon raqamingiz",
+  "continue": "Davom etish",
+  "enterCode": "Kodni kiriting",
+  "enterCodeDescription": "Biz sizning telefoningizga SMS kodini jo'natdik.",
+  "tryingAttemptCount": "Qolgan urunishlar soni"
 }

@@ -1,8 +1,10 @@
 // import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Pressable } from 'react-native';
 import i18n, { loadLocale, setLocale, t } from '../../i18n';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 const LANGUAGES = [
   { code: 'uz', label: "O'zbekcha", icon: require('@/assets/uzb.png') },
   { code: 'uzCy', label: 'Ўзбекча', icon: require('@/assets/uzb.png') },
@@ -11,20 +13,16 @@ const LANGUAGES = [
 
 export default function LanguageScreen() {
   const router = useRouter();
+  const [currentCode, setCurrentCode] = useState("");
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    loadLocale();
+  }, [isFocused]);
 
   const changeLanguage = async (code: string) => {
     await setLocale(code);
-    
-    await AsyncStorage.setItem("mainCargoLoad", "true");
-    await AsyncStorage.setItem("myCargoLoad", "true");
-
-    const token = await AsyncStorage.getItem('token');
-    console.log("token", !!token);
-    if (!!token) {
-      router.replace('/');
-    } else {
-      router.replace('/login');
-    }
+    setCurrentCode(code);
   };
 
   return (
@@ -42,6 +40,23 @@ export default function LanguageScreen() {
           </View>
         </TouchableOpacity>
       ))}
+
+      <Pressable 
+        style={{backgroundColor: "#020202", width: "100%", height: 50, borderRadius: 8, alignItems: "center", justifyContent: "center", marginTop: 20,}}
+        onPress={async () => {
+          await AsyncStorage.setItem("mainCargoLoad", "true");
+          await AsyncStorage.setItem("myCargoLoad", "true");
+      
+          const token = await AsyncStorage.getItem('token');
+          console.log("token", !!token);
+          if (!!token) {
+            router.replace('/');
+          } else {
+            router.replace('/login');
+          }        
+        }}>
+        <Text style={{ fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: 700, color: "#FFF" }}>{t("next")}</Text>
+      </Pressable>
     </View>
   );
 }

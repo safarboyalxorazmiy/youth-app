@@ -131,12 +131,13 @@ export default function Home() {
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
+    
     console.log("Statusbar height", statusBarHeight);
     // handleVisiting();
     // loadCargoData();
 
     const checkToken = async () => {
-      await AsyncStorage.removeItem("token");
+      // await AsyncStorage.removeItem("token");
 
       const token = await AsyncStorage.getItem('token');
       console.log("token", !!token);

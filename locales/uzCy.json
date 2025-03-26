@@ -4,7 +4,6 @@
   "uzCyrillic": "Ўзбекча",
   "russian": "Русский",
   "next": "Кейинги",
-
   "transportType": "Транспорт тури",
   "search": "Қидирув",
   "hourAgo": "соат олдин",
@@ -26,11 +25,15 @@
   "cargoVehicleType": "Юк мошинаси тури*",
   "delete": "ОЛИБ ТАШЛАШ",
   "new": "Янги",
-
   "comment": "Тавсиф",
   "comment2": "Изоҳ",
-
   "ex1": "мисол учун: ISUZU",
   "ex2": "мисол учун: 4 тонна смент",
-  "compleate": "ТАЙЁР"
+  "compleate": "ТАЙЁР",
+  "phoneNumber": "Телефон рақамингиз",
+  "yourPhoneNumber": "Сизнинг телефон рақамингиз",
+  "continue": "Давом этиш",
+  "enterCode": "Кодни киритинг",
+  "enterCodeDescription": "Биз сизга телефон рақамингизга СМС код жўнатдик.",
+  "tryingAttemptCount": "Қолган уринишлар сони"
 }
