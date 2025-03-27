@@ -51,6 +51,8 @@ export default function CargoAdd() {
 
   const scrollRef = useRef<ScrollView>(null);
 
+  const [userPhoneNumber, setUserPhoneNumber] = useState<string | null>(null);
+
   const router = useRouter();
 
   const isFocused = useIsFocused();
@@ -59,8 +61,34 @@ export default function CargoAdd() {
   useEffect(() => {
     async function fetchData() {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
+      const phoneNumber = await AsyncStorage.getItem("userPhoneNumber");
+      setUserPhoneNumber(phoneNumber);
     }
     fetchData();
+
+    setFocusedInput("");
+    setTypeInputValue("");
+
+    setLocationAInputValue("");
+    setLocationBInputValue("");
+
+    setLocationAReccommendData([]);
+    setLocationBReccommendData([]);
+
+    setDetailInputValue("");
+
+    setLocationAReccumendationVisible(false);
+    setLocationBReccumendationVisible(false);
+
+    setDestinationARegion("");
+    setDestinationADistinct("");
+
+    setDestinationBRegion("");
+    setDestinationBDistinct("");
+
+    setTransactionStarted(false);
+
+    scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
   }, [isFocused])
 
   const scrollToEnd = () => {
