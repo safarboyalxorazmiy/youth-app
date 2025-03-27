@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, FlatList, StatusBar, Platform } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text, Pressable, FlatList, StatusBar, Platform, ScrollView } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,6 +22,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import Constants from 'expo-constants';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ViewToken } from '@react-native/virtualized-lists';
 
 import NewBadge from './NewBadge';
 import LiveTimeAgo from "./LiveTimeAgo";
@@ -126,9 +127,39 @@ export default function Home() {
   const isFocused = useIsFocused();
   const [hasToken, setHasToken] = useState(false);
   const [checkedToken, setCheckedToken] = useState(false);
+
+  const [lastVisibleIndex, setLastVisibleIndex] = useState<number | null>(1);
+
   const routeInfo = useRouteInfo();
 
   const insets = useSafeAreaInsets();
+  const viewabilityConfig = { viewAreaCoveragePercentThreshold: 50 };
+  const onViewableItemsChanged = async ({ viewableItems }: { viewableItems: Array<ViewToken> }) => {
+    if (viewableItems.length > 0) {
+      const lastItem = viewableItems[viewableItems.length - 1];
+      if (lastItem.index !== null) {
+        setLastVisibleIndex(lastItem.index);
+        await AsyncStorage.setItem('lastVisibleIndex', lastItem.index.toString());
+      }
+    }
+  };
+
+  const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }]);
+
+  useEffect(() => {
+    const getLastVisibleIndex = async () => {
+      const lastVisibleIndexString = await AsyncStorage.getItem('lastVisibleIndex');
+      if (lastVisibleIndexString) {
+        const lastVisibleIndexNumber = parseInt(lastVisibleIndexString, 10);
+        if (isFocused && !isNaN(lastVisibleIndexNumber)) {
+          flatListRef.current?.scrollToIndex({ index: lastVisibleIndexNumber - 1, animated: true });
+        }
+      }
+    };
+
+    getLastVisibleIndex();
+  }, [isFocused]);
+
 
   useEffect(() => {
     loadLocale();
@@ -197,6 +228,8 @@ export default function Home() {
 
   const [userLanguage, setUserLanguage] = useState<string>("");
 
+  const flatListRef = useRef<FlatList>(null);
+
   useEffect(() => {
     const checkToken = async () => {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
@@ -232,6 +265,8 @@ export default function Home() {
 
       if ((await AsyncStorage.getItem("mainCargoLoaded")) === "true") {
         await AsyncStorage.removeItem("destination");
+        await AsyncStorage.removeItem("mainCargoLoaded");
+
         setCurrentDestination(null);
         setPage(0);
         setData([]);
@@ -256,6 +291,14 @@ export default function Home() {
 
       if ((await AsyncStorage.getItem("newItemCreated")) === "true") {
         setToast({ message: "Yangi ma'lumot qo'shildi", type: "success" });
+        
+        const savedScrollY = await AsyncStorage.getItem("scrollY");
+        if (savedScrollY != null) {
+          setTimeout(() => {
+            flatListRef.current?.scrollToIndex({ index: 0, animated: false });
+          }, 0);
+        }
+
         AsyncStorage.removeItem("newItemCreated");
 
         if ((await AsyncStorage.getItem("destination")) != null) {
@@ -589,6 +632,9 @@ export default function Home() {
       </View>
 
       <FlatList
+        ref={flatListRef}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+
         data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
