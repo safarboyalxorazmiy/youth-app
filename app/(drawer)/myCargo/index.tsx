@@ -309,11 +309,11 @@ export default function MyCargo() {
           <Pressable
             android_ripple={{ color: "#808080" }}
             style={{
-              backgroundColor: "#0c0c0d",
+              backgroundColor: "#EEEFF4",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              paddingHorizontal: 14,
+              paddingLeft: 14,
               width: "100%",
               height: "100%"
             }}
@@ -321,8 +321,11 @@ export default function MyCargo() {
               router.push("/cargoSearch")
             }}
           >
-            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>Qidiruv</Text>
-            <SearchIcon />
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#000", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{t("search")}</Text>
+            
+            <View style={{paddingHorizontal: 14}}>
+              <SearchIcon />
+            </View>
           </Pressable>
         </View>
       </View>

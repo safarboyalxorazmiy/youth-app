@@ -550,11 +550,11 @@ export default function Home() {
           <Pressable
             android_ripple={{ color: "#808080" }}
             style={{
-              backgroundColor: "#0c0c0d",
+              backgroundColor: "#EEEFF4",
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              paddingHorizontal: 14,
+              paddingLeft: 14,
               width: "100%",
               height: "100%"
             }}
@@ -562,12 +562,26 @@ export default function Home() {
               router.push("/cargoSearch")
             }}
           >
-            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#fff", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : t("search")}</Text>
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#000", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : t("search")}</Text>
             {
               currentDestination != null ? (
-                <CrossIcon />
+                <Pressable 
+                  android_ripple={{ color: "#808080" }}
+                  style={{ alignItems: "center", justifyContent: "center", height: "100%", paddingHorizontal: 14 }} 
+                  onPress={async () => {
+                    setCurrentDestination(null);
+                    setPage(0);
+                    setData([]);
+                    setDataFullyLoaded(false);
+                    await loadCargoData();
+                    await AsyncStorage.removeItem("destination");
+                  }}>
+                  <CrossIcon />
+                </Pressable>
               ): (
-                <SearchIcon />
+                <View style={{paddingHorizontal: 14}}>
+                  <SearchIcon />
+                </View>
               )
           }
           </Pressable>

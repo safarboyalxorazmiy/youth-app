@@ -39,7 +39,13 @@ export default function CargoSearch() {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
     }
     fetchData();
+
+    setFocusedInput("");
+    setLocationAInputValue("");
+    setLocationBInputValue("");
   }, [isFocused])
+
+
   
 
   const [locationAReccommendData, setLocationAReccommendData] = useState<LocationDetails[]>([]);
@@ -118,14 +124,15 @@ export default function CargoSearch() {
 
           <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
 
-          <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
+          <View></View>
+          {/* <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
             <Pressable onPress={() => {
               AsyncStorage.removeItem("destination");
               router.push("/");
             }} android_ripple={{ color: "#808080" }} style={{backgroundColor: "#0c0c0d", width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}}>
               <LocationDeleteIcon />
             </Pressable>
-          </View>
+          </View> */}
       </View>
 
       <View style={{paddingHorizontal: 38, marginTop: 50, width: "100%"}}>
