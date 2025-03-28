@@ -55,17 +55,14 @@ export default function CargoSearch() {
   const [locationBReccumendationVisible, setLocationBReccumendationVisible] = useState<boolean>(false);
 
   const [destinationARegion , setDestinationARegion] = useState<string>("");
-  const [destinationADistinct , setDestinationADistinct] = useState<string>("");
-
   const [destinationBRegion , setDestinationBRegion] = useState<string>("");
-  const [destinationBDistinct , setDestinationBDistinct] = useState<string>("");
 
   const locationBInputRef = useRef<TextInput>(null);
   const scrollRef = useRef<ScrollView>(null);
   const router = useRouter();
 
   const searchAndSetLocationA = async () => {  
-    await fetch('http://167.86.107.247:8080/location/search?query=' + locationAInputValue, {
+    await fetch('http://167.86.107.247:8080/location/search/region?query=' + locationAInputValue, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +81,7 @@ export default function CargoSearch() {
   }
 
   const searchAndSetLocationB = async () => {  
-    await fetch('http://167.86.107.247:8080/location/search?query=' + locationBInputValue, {
+    await fetch('http://167.86.107.247:8080/location/search/region?query=' + locationBInputValue, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -166,7 +163,6 @@ export default function CargoSearch() {
             style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
             onChange={async (e) => {
               if (e.nativeEvent.text == "") {
-                setDestinationADistinct("");
                 setDestinationARegion("");
                 setLocationAReccumendationVisible(false)
               }
@@ -197,15 +193,12 @@ export default function CargoSearch() {
                     if (userLanguage == "uz") {
                       setLocationAInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + " " + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
                       setDestinationARegion(item.locationRegionUz == null ? "" : item.locationRegionUz);
-                      setDestinationADistinct(item.locationDistinctUz == null ? "" : item.locationDistinctUz);
                     } else if (userLanguage == "ru") {
                       setLocationAInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + " " + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
                       setDestinationARegion(item.locationRegionRu == null ? "" : item.locationRegionRu);
-                      setDestinationADistinct(item.locationDistinctRu == null ? "" : item.locationDistinctRu);
                     } else {
                       setLocationAInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + " " + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
                       setDestinationARegion(item.locationRegionCy == null ? "" : item.locationRegionCy);
-                      setDestinationADistinct(item.locationDistinctCy == null ? "" : item.locationDistinctCy);
                     }
 
                     setLocationAReccumendationVisible(false);

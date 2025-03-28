@@ -334,14 +334,12 @@ export default function Home() {
           setPage(0);
           setData([]);
 
-          const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-location`, {
+          const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-location/region`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               destinationARegion: destination.destinationARegion,
-              destinationADistinct: destination.destinationADistinct,
               destinationBRegion: destination.destinationBRegion,
-              destinationBDistinct: destination.destinationBDistinct,
               page: 0,
               size: 11
             })
