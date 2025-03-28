@@ -108,9 +108,7 @@ type CargoDTO = {
 
 type Destination = {
   destinationARegion: string;
-  destinationADistinct: string;
   destinationBRegion: string;
-  destinationBDistinct: string;
 }
 export default function Home() {
   const navigation = useNavigation<DrawerNavigationProp<any>>();
@@ -191,7 +189,7 @@ export default function Home() {
     checkToken();
 
     const startSocket = async () => {
-      const socket = new SockJS('http://167.86.107.247:8080/ws-cargo');
+      const socket = new SockJS('https://api.e-yuk.uz/ws-cargo');
       
       const stompClient = new Client({
         webSocketFactory: () => socket,
@@ -313,7 +311,7 @@ export default function Home() {
         }
 
         // try {
-        //   const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${0}&size=${1}&sort=string`, {
+        //   const response = await fetch(`https://api.e-yuk.uz/cargo/get?page=${0}&size=${1}&sort=string`, {
         //     method: "GET",
         //     headers: { "Content-Type": "application/json" },
         //   });
@@ -334,7 +332,7 @@ export default function Home() {
           setPage(0);
           setData([]);
 
-          const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-location/region`, {
+          const response = await fetch(`https://api.e-yuk.uz/cargo/get/by-location/region`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -375,7 +373,7 @@ export default function Home() {
       const response = await fetch("https://ipinfo.io/json");
       const data = await response.json();
 
-      fetch("http://167.86.107.247:8080/interest/visit", {
+      fetch("https://api.e-yuk.uz/interest/visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -398,7 +396,7 @@ export default function Home() {
     if (dataFullyLoaded) return;
 
     try {
-      const response = await fetch(`http://167.86.107.247:8080/cargo/get?page=${page}&size=${size}&sort=string`, {
+      const response = await fetch(`https://api.e-yuk.uz/cargo/get?page=${page}&size=${size}&sort=string`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -422,14 +420,14 @@ export default function Home() {
           <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
             <View style={{justifyContent: "center"}}>
               {currentDestination.destinationARegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12, }}>{currentDestination.destinationARegion} </Text>}
-              {currentDestination.destinationADistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationADistinct}</Text>}
+              {/* {currentDestination.destinationADistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationADistinct}</Text>} */}
             </View>
 
             <ArrowRightIconSm />
 
             <View style={{justifyContent: "center"}}>
               {currentDestination.destinationBRegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBRegion}</Text>}
-              {currentDestination.destinationBDistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBDistinct}</Text>}
+              {/* {currentDestination.destinationBDistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBDistinct}</Text>} */}
             </View>
           </View>
         )
@@ -634,7 +632,7 @@ export default function Home() {
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
 
         data={data}
-        keyExtractor={(item) => item.id.toString()}
+        // keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
         onEndReached={loadCargoData}

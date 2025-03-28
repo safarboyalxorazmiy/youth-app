@@ -62,7 +62,7 @@ export default function CargoSearch() {
   const router = useRouter();
 
   const searchAndSetLocationA = async () => {  
-    await fetch('http://167.86.107.247:8080/location/search/region?query=' + locationAInputValue, {
+    await fetch('https://api.e-yuk.uz/location/search/region?query=' + locationAInputValue, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export default function CargoSearch() {
   }
 
   const searchAndSetLocationB = async () => {  
-    await fetch('http://167.86.107.247:8080/location/search/region?query=' + locationBInputValue, {
+    await fetch('https://api.e-yuk.uz/location/search/region?query=' + locationBInputValue, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -263,7 +263,6 @@ export default function CargoSearch() {
             style={{width: "100%", height: "100%", marginTop: "7%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
             onChange={async (e) => {
               if (e.nativeEvent.text == "") {
-                setDestinationBDistinct("");
                 setDestinationBRegion("");
                 setLocationBReccumendationVisible(false)
               }
@@ -293,15 +292,12 @@ export default function CargoSearch() {
                     if (userLanguage == "uz") {
                       setLocationBInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + " " + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
                       setDestinationBRegion(item.locationRegionUz == null ? "" : item.locationRegionUz);
-                      setDestinationBDistinct(item.locationDistinctUz == null ? "" : item.locationDistinctUz);
                     } else if (userLanguage == "ru") {
                       setLocationBInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + " " + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
                       setDestinationBRegion(item.locationRegionRu == null ? "" : item.locationRegionRu);
-                      setDestinationBDistinct(item.locationDistinctRu == null ? "" : item.locationDistinctRu);
                     } else {
                       setLocationBInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + " " + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
                       setDestinationBRegion(item.locationRegionCy == null ? "" : item.locationRegionCy);
-                      setDestinationBDistinct(item.locationDistinctCy == null ? "" : item.locationDistinctCy);
                     }
 
                     setLocationBReccumendationVisible(false);
@@ -337,9 +333,7 @@ export default function CargoSearch() {
 
           AsyncStorage.setItem("destination", JSON.stringify({
             destinationARegion: destinationARegion,
-            destinationADistinct: destinationADistinct,
             destinationBRegion: destinationBRegion,
-            destinationBDistinct: destinationBDistinct
           }));
           router.push("/");
         }}  

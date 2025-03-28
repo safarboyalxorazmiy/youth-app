@@ -114,7 +114,7 @@ export default function MyCargo() {
 
   // const handleCargoData = async () => {
   //   try {
-  //     const response = await fetch("http://167.86.107.247:8080/cargo/get/by-phone?phone=+998901234567?page=0&size=10&sort=string", {
+  //     const response = await fetch("https://api.e-yuk.uz/cargo/get/by-phone?phone=+998901234567?page=0&size=10&sort=string", {
   //       method: "GET",
   //       headers: { "Content-Type": "application/json" },
   //     });
@@ -163,7 +163,7 @@ export default function MyCargo() {
     if (dataFullyLoaded) return;
 
     try {
-      const response = await fetch(`http://167.86.107.247:8080/cargo/get/by-phone?phone=%2B998917972385&page=${page}&size=${size}`, {
+      const response = await fetch(`https://api.e-yuk.uz/cargo/get/by-phone?phone=%2B998917972385&page=${page}&size=${size}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -189,7 +189,7 @@ export default function MyCargo() {
     
     try {
       console.log("CargoID::", id)
-      await fetch(`http://167.86.107.247:8080/cargo/delete?id=${id}`, {
+      await fetch(`https://api.e-yuk.uz/cargo/delete?id=${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });

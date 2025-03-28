@@ -139,7 +139,7 @@ export default function CargoDetail() {
       <View style={{paddingHorizontal: 22, marginBottom: 100}}>
         <Text allowFontScaling={false} style={{fontSize: 14, color: "#2CA82A", fontWeight: "700", fontFamily: "SfProDisplayBold", marginBottom: 11}}>{t("comment2")}:</Text>
 
-        <View style={{height: 106, borderWidth: 1, borderRadius: 8, borderColor: "#232325", width: "100%", padding: 20}}>
+        <View style={{minHeight: 106, borderWidth: 1, borderRadius: 8, borderColor: "#232325", width: "100%", padding: 20}}>
           <Text allowFontScaling={false} style={{fontSize: 14, fontFamily: "SfProDisplayRegular", fontWeight: "400"}}>{cargoData?.comment || ""}</Text>
         </View>
 

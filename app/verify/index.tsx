@@ -98,7 +98,7 @@ export default function Verify() {
         deviceId = await Application.getAndroidId();     
       }
 
-      fetch('http://167.86.107.247:8080/api/v1/auth/authenticate', {
+      fetch('https://api.e-yuk.uz/api/v1/auth/authenticate', {
         method: 'POST',
         headers: {
           'Accept': '*/*',

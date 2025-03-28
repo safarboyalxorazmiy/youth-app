@@ -106,7 +106,7 @@ export default function CargoAdd() {
 
     setTransactionStarted(true);
     try {
-      const response = await fetch('http://167.86.107.247:8080/cargo/create', {
+      const response = await fetch('https://api.e-yuk.uz/cargo/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export default function CargoAdd() {
   }
 
   const searchAndSetLocationA = async () => {  
-    await fetch('http://167.86.107.247:8080/location/search?query=' + locationAInputValue, {
+    await fetch('https://api.e-yuk.uz/location/search?query=' + locationAInputValue, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ export default function CargoAdd() {
   }
 
   const searchAndSetLocationB = async () => {  
-    await fetch('http://167.86.107.247:8080/location/search?query=' + locationBInputValue, {
+    await fetch('https://api.e-yuk.uz/location/search?query=' + locationBInputValue, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

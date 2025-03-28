@@ -55,7 +55,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch('http://167.86.107.247:8080/api/v1/auth/register', {
+      const response = await fetch('https://api.e-yuk.uz/api/v1/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
