@@ -9,12 +9,21 @@ import {
   Platform,
   ScrollView,
   Pressable,
+  Alert
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { t } from "@/i18n";
 import CameraAvatarIcon from "@/assets/images/camera-avatar-icon.svg";
 import LinerIcon from "@/assets/images/liner-icon.svg";
+import * as Application from 'expo-application';
+
+import axios from "axios";
+
+import * as ImageManipulator from "expo-image-manipulator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+
 
 const RegistrationScreen: React.FC = () => {
   const [name, setName] = useState("");
@@ -25,28 +34,117 @@ const RegistrationScreen: React.FC = () => {
   const [nameInputValue, setNameInputValue] = useState<string>("");
   const [surnameInputValue, setSurnameInputValue] = useState<string>("");
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const nameInputRef = useRef<TextInput>(null);
   const surnameInputRef = useRef<TextInput>(null);
+  const router = useRouter();
+
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images, // Use array format
+  //     allowsEditing: true,
+  //     aspect: [1, 1],
+  //     quality: 1,
+  //   });
+  
+  //   if (!result.canceled) {
+  //     console.log(result.assets[0].uri);
+  //   }   
+
+  //   if (!result.canceled) {
+  //     setImageUri(result.assets[0].uri);
+  //   }
+  // };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 1,
     });
-
+  
     if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
+      const compressedImage = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 800 } }], // Resize to reduce size
+        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Reduce quality
+      );
+  
+      await AsyncStorage.setItem('compressedImageUri', compressedImage.uri);
+      setImageUri(compressedImage.uri);
+    }
+  };
+  
+
+  const uploadImage = async () => {
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", {
+        uri: imageUri,
+        name: "profile.jpg",
+        type: "image/jpeg",
+      } as any);
+
+      const response = await axios.post("https://api.e-yuk.uz/attach/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      Alert.alert("Success", "Rasm muvaffaqiyatli yuklandi!");
+      console.log("API Response:", response.data);
+
+      await updateProfile(response.data.url);
+    } catch (error) {
+      Alert.alert("Xatolik", "Rasm yuklashda muammo yuz berdi.");
+      console.error("Upload Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateProfile = async (url: string) => {
+    let deviceId;
+    if (Platform.OS === "ios") {
+      console.log("IOS deviceId: ", await Application.getIosIdForVendorAsync());  
+      deviceId = await Application.getIosIdForVendorAsync();
+    } else if (Platform.OS === "android") {
+      console.log("deviceId: ", await Application.getAndroidId()); 
+      deviceId = await Application.getAndroidId();     
+    }
+    try {
+      const response = await axios.put(
+        "https://api.e-yuk.uz/profile/update",
+        {
+          name: nameInputValue,
+          surname: surnameInputValue,
+          profilePhotoUrl: url,
+          deviceId: deviceId,
+        }
+      );
+
+      await AsyncStorage.setItem("name", nameInputValue);
+      await AsyncStorage.setItem("surname", surnameInputValue);
+
+      const token2 = await AsyncStorage.getItem("token2");
+      if (token2) {
+        await AsyncStorage.setItem("token", token2);
+        await AsyncStorage.removeItem("token2");
+      }
+
+      router.push("/");
+      console.log("Profile updated:", response.data);
+    } catch (error: any) {
+      console.error("Error updating profile:", error.response?.data || error.message);
     }
   };
 
   const scrollViewRef = useRef<ScrollView>(null);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: "#fff" }}
+    <View
+      style={{ flex: 1, backgroundColor: "#fff", height: "100%" }}
     >
       <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled"
         onScrollEndDrag={(event) => {
@@ -188,7 +286,7 @@ const RegistrationScreen: React.FC = () => {
                     scrollViewRef.current?.scrollTo({ x: 0, y: 202.5454559326172, animated: true });
                   }}
                   ref={surnameInputRef}
-                  style={{width: "100%", height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#FFF"}} 
+                  style={{width: "100%", height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#000"}} 
                   onChange={(e) => {
                     setSurnameInputValue(e.nativeEvent.text);
                   }} 
@@ -210,6 +308,9 @@ const RegistrationScreen: React.FC = () => {
             marginBottom: 522
            }}>
             <Pressable
+              onPress={() => {
+                uploadImage();
+              }}
               android_ripple={{ color: "#4F4F4F" }}
               style={{
                 backgroundColor: "black",
@@ -222,7 +323,7 @@ const RegistrationScreen: React.FC = () => {
           </View>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

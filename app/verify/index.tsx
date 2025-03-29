@@ -30,19 +30,24 @@ export default function Verify() {
 
   const [secondsLeft, setSecondsLeft] = useState(60); // 1 minute = 60 seconds
 
+  
+  const [timerIntervalId, setTimerIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+
   useEffect(() => {
     if (secondsLeft === 0) {
-      router.back();
+      setTimerIntervalId(null);
       return;
     }
 
     const timer = setInterval(() => {
       setSecondsLeft(prev => prev - 1);
     }, 1000);
+    setTimerIntervalId(timer);
 
-    return () => clearInterval(timer); // cleanup
+    return () => clearInterval(timer); 
   }, [secondsLeft]);
 
+  
   const formatTime = (secs: number) => {
     const mins = Math.floor(secs / 60);
     const secsLeft = secs % 60;
@@ -59,6 +64,10 @@ export default function Verify() {
       const token = await AsyncStorage.getItem('token');
       console.log("token", !!token);
       if (!!token) {
+        if (timerIntervalId) {
+          clearInterval(timerIntervalId);
+        }
+        
         await AsyncStorage.setItem("fromRoute", "Verify");
         router.push("/");
       }
@@ -137,8 +146,18 @@ export default function Verify() {
           }
           
           const data = await response.json();
-          await AsyncStorage.setItem("token", data.access_token);
-          router.push("/");
+          
+          if (timerIntervalId) {
+            clearInterval(timerIntervalId);
+          }
+
+          if (data.newUser) {
+            await AsyncStorage.setItem("token2", data.access_token);
+            router.push("/register");
+          } else {
+            await AsyncStorage.setItem("token", data.access_token);
+            router.push("/")
+          }
         })
         .catch(error => {
           console.log('❌ Network error:', error.message);
