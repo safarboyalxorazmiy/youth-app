@@ -14,6 +14,7 @@ import { useIsFocused } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
 import axios from "axios";
 import * as Application from 'expo-application';
+import { format } from "i18next";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -64,23 +65,11 @@ function Me() {
       }
       
       let userPhoneNumber = await AsyncStorage.getItem("userPhoneNumber");
-      setPhone(userPhoneNumber || "");
+      setPhone(formatPhoneNumber(userPhoneNumber || ""));
     };
 
     fetchImage();
   }, [isFocused]);
-  
-  const downloadImage = async (imageUrl: string) => {
-    try {
-      const fileUri = FileSystem.documentDirectory + "downloadedImage.jpg";
-      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
-      await AsyncStorage.setItem("compressedImageUri", uri);
-      setLocalImageUri(uri);
-      console.log("Image saved to:", uri);
-    } catch (error) {
-      console.error("Error downloading image:", error);
-    }
-  };
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -117,10 +106,26 @@ function Me() {
       }
 
       let userPhoneNumber = await AsyncStorage.getItem("userPhoneNumber");
-      setPhone(userPhoneNumber || "");
+      setPhone(formatPhoneNumber(userPhoneNumber || ""));
     };
     fetchImage();
   }, []);
+  
+  const formatPhoneNumber = (number: string) => {
+    return number.replace(/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+  }
+
+  const downloadImage = async (imageUrl: string) => {
+    try {
+      const fileUri = FileSystem.documentDirectory + "downloadedImage.jpg";
+      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+      await AsyncStorage.setItem("compressedImageUri", uri);
+      setLocalImageUri(uri);
+      console.log("Image saved to:", uri);
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
   
   return (
     <View
