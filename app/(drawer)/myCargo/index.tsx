@@ -162,8 +162,10 @@ export default function MyCargo() {
   const loadCargoData = async () => {
     if (dataFullyLoaded) return;
 
+    let userPhoneNumber = await AsyncStorage.getItem("userPhoneNumber");
+
     try {
-      const response = await fetch(`https://api.e-yuk.uz/cargo/get/by-phone?phone=%2B998917972385&page=${page}&size=${size}`, {
+      const response = await fetch(`https://api.e-yuk.uz/cargo/get/by-phone?phone=${userPhoneNumber}&page=${page}&size=${size}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -286,6 +288,10 @@ export default function MyCargo() {
     // </View>
   );
 
+  const formatPhoneNumber = (number: string) => {
+    return number.replace(/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+  }
+
   return (
     <View style={{flex: 1, backgroundColor: "#EFEFEF" }}>  
       <StatusBar animated={true} backgroundColor="#232325" barStyle={"default"} showHideTransition={"slide"} hidden={false} />
@@ -391,7 +397,7 @@ export default function MyCargo() {
                   alignItems: "center",
                   justifyContent: "center",
                   rowGap: 4,
-                  backgroundColor: "#000000",
+                  backgroundColor: "#2CA82A",
                   columnGap: 13,
                   width: "100%",
                   height: "100%",

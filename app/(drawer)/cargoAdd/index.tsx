@@ -118,7 +118,7 @@ export default function CargoAdd() {
           destinationBDistinct: destinationBDistinct || "",
           transportType: typeInputValue, 
           comment: detailInputValue,
-          phone: "+998917972385"
+          phone: userPhoneNumber
         })
       });
 
@@ -129,7 +129,7 @@ export default function CargoAdd() {
         destinationBDistinct,
         transportType: typeInputValue, 
         comment: detailInputValue,
-        phone: "+998917972385"
+        phone: userPhoneNumber
       });
 
       if (response.status === 200) {
@@ -414,7 +414,7 @@ export default function CargoAdd() {
 
           <View style={{paddingHorizontal: 38, marginTop: 28, width: "100%"}}>
             <View style={{width: "100%", borderColor: "#ADADAD", backgroundColor: "#D9D9D9", borderRadius: 10, paddingHorizontal: 12, borderWidth: 1, height: 45, position: "relative", alignItems: "center", justifyContent: "center"}}>
-              <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular", position: "absolute", left: 18}}>+998 91 797 23 85</Text>
+              <Text allowFontScaling={false} style={{color: "#4F4F4F", fontSize: 14, fontFamily: "SfProDisplayRegular", position: "absolute", left: 18}}>+{userPhoneNumber}</Text>
             </View>
           </View>
 

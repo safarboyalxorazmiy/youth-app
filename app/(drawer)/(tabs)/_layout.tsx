@@ -146,7 +146,7 @@ export default function TabLayout() {
                       alignItems: "center",
                       justifyContent: "center",
                       rowGap: 4,
-                      backgroundColor: "#000000",
+                      backgroundColor: "#2CA82A",
                       columnGap: 13,
                       width: "100%",
                       height: "100%",

@@ -52,9 +52,13 @@ export default function CargoDetail() {
   const router = useRouter();
   const isFocused = useIsFocused();
   
+  const [userPhoneNumber, setUserPhoneNumber] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadCargoDetail() {
+      const phoneNumber = await AsyncStorage.getItem("userPhoneNumber");
+      setUserPhoneNumber(phoneNumber);
+
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
 
       let cargoDataString = await AsyncStorage.getItem("cargoData");
@@ -68,6 +72,10 @@ export default function CargoDetail() {
   
     loadCargoDetail();
   }, [isFocused]);
+
+  const formatPhoneNumber = (number: string) => {
+    return number.replace(/(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+  }
   
   return (
     <ScrollView style={{backgroundColor: "#FFF"}}>
@@ -146,7 +154,7 @@ export default function CargoDetail() {
         <View style={{height: 45, borderRadius: 11, width: "100%", marginTop: 32, overflow: "hidden"}}>
           <Pressable 
             onPress={() => {
-              Linking.openURL(`tel:+998917972385`);
+              Linking.openURL(`tel:${userPhoneNumber}`);
             }}
             android_ripple={{color: "#1E1E1E"}} 
             style={{
@@ -160,14 +168,14 @@ export default function CargoDetail() {
               columnGap: 15
             }}>
             <CallIcon />
-            <Text allowFontScaling={false} style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>+998 91 797 23 85</Text>
+            <Text allowFontScaling={false} style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>{formatPhoneNumber(userPhoneNumber || "")}</Text>
           </Pressable>
         </View>
 
         <View style={{height: 45, borderRadius: 11, width: "100%", marginTop: 15, overflow: "hidden"}}>
           <Pressable
             onPress={() => {
-              Linking.openURL(`https://t.me/+998917972385`);
+              Linking.openURL(`https://t.me/+${userPhoneNumber}`);
             }}
             android_ripple={{color: "#000"}}
             style={{
