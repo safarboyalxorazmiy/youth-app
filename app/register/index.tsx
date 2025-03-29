@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -23,11 +23,15 @@ import axios from "axios";
 import * as ImageManipulator from "expo-image-manipulator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import { ActivityIndicator } from 'react-native';
+
+import { Dimensions } from 'react-native';
+import { useIsFocused } from "@react-navigation/native";
+
+const screenHeight = Dimensions.get("window").height;
 
 
 const RegistrationScreen: React.FC = () => {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [focusedInput, setFocusedInput] = useState<String>("NameInput");
 
@@ -39,6 +43,7 @@ const RegistrationScreen: React.FC = () => {
   const nameInputRef = useRef<TextInput>(null);
   const surnameInputRef = useRef<TextInput>(null);
   const router = useRouter();
+  const isFocused = useIsFocused();
 
   // const pickImage = async () => {
   //   let result = await ImagePicker.launchImageLibraryAsync({
@@ -56,6 +61,18 @@ const RegistrationScreen: React.FC = () => {
   //     setImageUri(result.assets[0].uri);
   //   }
   // };
+
+  useEffect(() => {
+    setNameInputValue("");
+    setSurnameInputValue("");
+    nameInputRef.current?.focus();
+  }, [isFocused]);
+
+  useEffect(() => {
+    setNameInputValue("");
+    setSurnameInputValue("");
+    nameInputRef.current?.focus();
+  }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -77,8 +94,15 @@ const RegistrationScreen: React.FC = () => {
   };
   
 
-  const uploadImage = async () => {
+  const uploadImageAndEditProfile = async () => {
     setLoading(true);
+
+    if (loading) return;
+
+    if (!imageUri || imageUri === "") {
+      await AsyncStorage.setItem('compressedImageUri', "");
+      await updateProfile("");
+    }
 
     try {
       const formData = new FormData();
@@ -92,13 +116,11 @@ const RegistrationScreen: React.FC = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      Alert.alert("Success", "Rasm muvaffaqiyatli yuklandi!");
       console.log("API Response:", response.data);
 
       await updateProfile(response.data.url);
     } catch (error) {
-      Alert.alert("Xatolik", "Rasm yuklashda muammo yuz berdi.");
-      console.error("Upload Error:", error);
+      await updateProfile("");
     } finally {
       setLoading(false);
     }
@@ -133,6 +155,10 @@ const RegistrationScreen: React.FC = () => {
         await AsyncStorage.removeItem("token2");
       }
 
+      await AsyncStorage.setItem("fromRoute", "Verify");
+      
+      setLoading(false);
+
       router.push("/");
       console.log("Profile updated:", response.data);
     } catch (error: any) {
@@ -143,32 +169,10 @@ const RegistrationScreen: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
 
   return (
-    <View
-      style={{ flex: 1, backgroundColor: "#fff", height: "100%" }}
-    >
-      <ScrollView ref={scrollViewRef} contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled"
-        onScrollEndDrag={(event) => {
-          console.log("scroll y position:", event.nativeEvent.contentOffset.y);
-        }}
-      >
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-          {/* Title */}
-          <Animated.Text
-            entering={FadeInUp.duration(500)}
-            style={{
-              fontSize: 18,
-              fontFamily: "SfProDisplayMedium",
-              textAlign: "left",
-            }}
-          >
-            Buyurtmalarni joylashtirish yoki qabul qilish uchun ilovada ro'yxatdan o'ting
-          </Animated.Text>
-
-
-          {/* Profile Image */}
-          <Animated.View entering={FadeInDown.duration(500)} style={{ alignItems: "center", marginLeft: 117, marginTop: -5 }}>
-            <LinerIcon />
-
+    <View style={{ flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", height: screenHeight, width: "100%", backgroundColor: "#fff", padding: 20 }}>
+      {loading ? <ActivityIndicator size="large" color="#2CA82A" /> : (
+        <View style={{width: "100%"}}>
+          <Animated.View entering={FadeInDown.duration(500)} style={{  alignItems: "center", marginTop: -5 }}>
             <TouchableOpacity
               onPress={pickImage}
               style={{
@@ -298,18 +302,16 @@ const RegistrationScreen: React.FC = () => {
 
           </Animated.View>
 
-
           <View style={{ 
             width: "100%", 
             alignItems: "center", 
             marginTop: 30, 
             borderRadius: 12, 
             overflow: "hidden",
-            marginBottom: 522
-           }}>
+            }}>
             <Pressable
-              onPress={() => {
-                uploadImage();
+              onPress={async () => {
+                uploadImageAndEditProfile();
               }}
               android_ripple={{ color: "#4F4F4F" }}
               style={{
@@ -322,9 +324,10 @@ const RegistrationScreen: React.FC = () => {
             </Pressable>
           </View>
         </View>
-      </ScrollView>
+      )}
     </View>
   );
 };
+
 
 export default RegistrationScreen;

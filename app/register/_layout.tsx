@@ -6,8 +6,8 @@ export default function RegisterLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="register"
-        options={{ headerShown: false, presentation: 'modal' }}
-      />
+        options={{ headerShown: false, animation: 'slide_from_right'}} 
+        />
     </Stack>
   );
 }
