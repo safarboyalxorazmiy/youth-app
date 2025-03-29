@@ -264,10 +264,10 @@ export default function Verify() {
           // backgroundColor: "white"
         }}>
         <View style={{paddingHorizontal: 30}}>
-          <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, marginTop: 40, textAlign: "left"}}>Siz juda ko‘p SMS olishga urindingiz. Limit tugadi. Iltimos, 24 soatdan keyin qayta urinib ko‘ring.</Text>
+          <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, marginTop: 40, textAlign: "left"}}>{t("limitModalText")}</Text>
 
           <Pressable onPress={() => limitActionRef.current?.hide()} style={{backgroundColor: "#F2F2F2", height: 50, borderRadius: 12, alignItems: "center", justifyContent: "center", marginTop: 20}}>
-            <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, textAlign: "left", color: "black"}}>Yopish</Text>
+            <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, textAlign: "left", color: "black"}}>{t("close")}</Text>
           </Pressable>
         </View>
       </ActionSheet>

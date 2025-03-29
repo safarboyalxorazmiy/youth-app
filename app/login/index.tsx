@@ -101,7 +101,7 @@ export default function Login() {
                 ) : (<></>)
               }
 
-              <Text allowFontScaling={false} style={focusedInput != "PhoneNumberInput" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>Telefon raqam</Text>
+              <Text allowFontScaling={false} style={focusedInput != "PhoneNumberInput" ? {position: "absolute", top: "25%", color: "#4F4F4F", left: 18, height: "100%", fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"} : {display: "none"}}>{t("phoneNumber")}</Text>
               <View style={{flexDirection: "row", alignItems: "center", width: "100%", height: "100%", columnGap: 7}}>
                 <Text style={{fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular"}}>+998</Text>
                 <View style={{width: 0.5, height: "20%", backgroundColor: "#111111"}}></View>

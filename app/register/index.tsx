@@ -211,7 +211,7 @@ const RegistrationScreen: React.FC = () => {
                 {
                   focusedInput == "NameInput" || nameInputValue != "" ? (
                     <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                      <Text allowFontScaling={false} style={{color: "#000", fontSize: 12}}>Ismingiz</Text>
+                      <Text allowFontScaling={false} style={{color: "#000", fontSize: 12}}>{t("name")}</Text>
                     </View>
                   ) : (<></>)
                 }
@@ -228,7 +228,7 @@ const RegistrationScreen: React.FC = () => {
                     fontFamily: "SfProDisplayRegular"
                   } : {
                     display: "none"
-                  }}>Ismingiz</Text>
+                  }}>{t("name")}</Text>
                   
                 <TextInput 
                   ref={nameInputRef}
@@ -262,7 +262,7 @@ const RegistrationScreen: React.FC = () => {
                 {
                   focusedInput == "SurnameInput" || surnameInputValue != "" ? (
                     <View style={{position: "absolute", top: "-25%", backgroundColor: "#FFF", paddingHorizontal: 7, left: 18}}>
-                      <Text allowFontScaling={false} style={{color: "#000", fontSize: 12}}>Familyangiz</Text>
+                      <Text allowFontScaling={false} style={{color: "#000", fontSize: 12}}>{t("surname")}</Text>
                     </View>
                   ) : (<></>)
                 }
@@ -279,7 +279,7 @@ const RegistrationScreen: React.FC = () => {
                     fontFamily: "SfProDisplayRegular"
                   } : {
                     display: "none"
-                  }}>Familyangiz</Text>
+                  }}>{t("surname")}</Text>
                   
                 <TextInput 
                   onPress={() => {
@@ -318,7 +318,7 @@ const RegistrationScreen: React.FC = () => {
                 width: "100%",
                 alignItems: "center",
               }}>
-              <Text style={{ color: "white", fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: 700 }}>Tugallash</Text>
+              <Text style={{ color: "white", fontSize: 16, fontFamily: "SfProDisplayBold", fontWeight: 700 }}>{t("compleate2")}</Text>
             </Pressable>
           </View>
         </View>

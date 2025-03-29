@@ -31,12 +31,20 @@
 
   "ex1": "misol uchun: ISUZU",
   "ex2": "misol uchun: 4 tonna sment",
+
   "compleate": "TAYYOR",
+  "compleate2": "Tugallash",
 
   "phoneNumber": "Telefon raqam",
   "yourPhoneNumber": "Telefon raqamingiz",
   "continue": "Davom etish",
   "enterCode": "Kodni kiriting",
   "enterCodeDescription": "Biz sizning telefoningizga SMS kodini jo'natdik.",
-  "tryingAttemptCount": "Qolgan urunishlar soni"
+  "tryingAttemptCount": "Qolgan urunishlar soni",
+
+  "name": "Ismingiz",
+  "surname": "Familyangiz",
+  "profilePhoto": "Profil rasmi",
+  "close": "Yopish",
+  "limitModalText": "Siz juda ko‘p SMS olishga urindingiz. Limit tugadi. Iltimos, 24 soatdan keyin qayta urinib ko‘ring."
 }
