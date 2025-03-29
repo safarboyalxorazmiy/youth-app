@@ -225,8 +225,8 @@ export default function CargoSearch() {
       <View style={{paddingHorizontal: 38, marginTop: 22, width: "100%"}}>
         <View style={{
           width: "100%", 
-          backgroundColor: focusedInput == "LocationBInput" || locationAInputValue != "" ? "#232325" : "#5A5A5A", 
-          borderColor: focusedInput == "LocationBInput" || locationAInputValue != "" ? "#FFF" : "#454141", 
+          backgroundColor: focusedInput == "LocationBInput" || locationBInputValue != "" ? "#232325" : "#5A5A5A", 
+          borderColor: focusedInput == "LocationBInput" || locationBInputValue != "" ? "#FFF" : "#454141", 
           borderRadius: 10, paddingHorizontal: 18, borderWidth: focusedInput == "LocationBInput" || locationBInputValue != "" ? 1.5 : 1, 
           height: 45, 
           position: "relative", 

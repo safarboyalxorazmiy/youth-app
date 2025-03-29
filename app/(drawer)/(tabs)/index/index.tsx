@@ -229,6 +229,8 @@ export default function Home() {
   const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
+    // router.push("/register");
+
     const checkToken = async () => {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
       
