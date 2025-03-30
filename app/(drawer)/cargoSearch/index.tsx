@@ -325,16 +325,23 @@ export default function CargoSearch() {
     }}>
       <Pressable 
         android_ripple={{color: "#1E1E1E"}} 
-        onPress={() => {
+        onPress={async () => {
           if (locationAInputValue == "" && locationBInputValue == "") {
+            await AsyncStorage.removeItem("destination");
             router.push("/");
             return;
           }
 
-          AsyncStorage.setItem("destination", JSON.stringify({
+          await AsyncStorage.setItem("destination", JSON.stringify({
             destinationARegion: destinationARegion,
             destinationBRegion: destinationBRegion,
           }));
+          
+          setDestinationARegion("");
+          setDestinationBRegion("");
+          setFocusedInput("");
+          setLocationAInputValue("");
+          setLocationBInputValue("");
           router.push("/");
         }}  
         style={{

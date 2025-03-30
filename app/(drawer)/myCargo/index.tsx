@@ -191,7 +191,7 @@ export default function MyCargo() {
     
     try {
       console.log("CargoID::", id)
-      await fetch(`https://api.e-yuk.uz/cargo/delete?id=${id}`, {
+      await fetch(`https://api.e-yuk.uz/cargo/delete/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });

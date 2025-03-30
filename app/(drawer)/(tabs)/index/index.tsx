@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, Text, Pressable, FlatList, StatusBar, Platform, ScrollView } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
@@ -150,7 +150,7 @@ export default function Home() {
       if (lastVisibleIndexString) {
         const lastVisibleIndexNumber = parseInt(lastVisibleIndexString, 10);
         if (isFocused && !isNaN(lastVisibleIndexNumber)) {
-          flatListRef.current?.scrollToIndex({ index: lastVisibleIndexNumber - 1, animated: true });
+          // flatListRef.current?.scrollToIndex({ index: lastVisibleIndexNumber - 1, animated: true });
         }
       }
     };
@@ -281,6 +281,8 @@ export default function Home() {
         console.log("itemRemoved", "true")
         await AsyncStorage.removeItem("itemRemoved");
         await AsyncStorage.removeItem("destination");
+        await AsyncStorage.removeItem("mainCargoLoaded");
+
         setCurrentDestination(null);
         setPage(0);
         setData([]);
@@ -509,7 +511,7 @@ export default function Home() {
   // );
 
 
-  const renderItem = ({ item, index }: { item: CargoDTO, index: number }) => (
+  const renderItem = useCallback(({ item, index }: { item: CargoDTO, index: number }) => (
     <View style={{
       marginTop: index === 0 ? 0 : 20,
       paddingHorizontal: 30,
@@ -525,43 +527,48 @@ export default function Home() {
         width: "100%"
       }}>
         <NewBadge createdDate={item.createdDate} />
-
         <LiveTimeAgo createdDate={item.createdDate} />
       </View>
-
-
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
-        <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold",}}>{userLanguage === "uz" ? item.destinationARegionUz : userLanguage === "ru" ? item.destinationARegionRu : item.destinationARegionCy}</Text>
-          {item.destinationADistinctUz && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage === "uz" ? item.destinationADistinctUz : userLanguage === "ru" ? item.destinationADistinctRu : item.destinationADistinctCy}</Text>}
-        </View>
-
-        <ArrowRightIcon style={{ marginLeft: -20 }} />
-
-        <View style={{ width: 135, alignItems: "flex-start" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{userLanguage === "uz" ? item.destinationBRegionUz : userLanguage === "ru" ? item.destinationBRegionRu : item.destinationBRegionCy}</Text>
-          {item.destinationBDistinctUz && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage === "uz" ? item.destinationBDistinctUz : userLanguage === "ru" ? item.destinationBDistinctRu : item.destinationBDistinctCy}</Text>}
-        </View>
-      </View>
-
+  
+      <DestinationInfo item={item} />
+  
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 15, columnGap: 10 }}>
         <TruckDeliverySpeedIcon />
         <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{t("transportType")}: {item.transportType}</Text>
       </View>
+  
+      <DetailButton item={item} />
+    </View>
+  ), [navigation, userLanguage]);
 
-      <View style={{height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden"}}>
-        <Pressable 
-          android_ripple={{ color: "#808080" }}
-          onPress={async () => {
-            await AsyncStorage.setItem("cargoData", JSON.stringify(item));
-            navigation.navigate("cargoDetail");
-          }} 
-          style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
-          <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>{t("detail")}</Text>
-        </Pressable>
-      </View>
+  const DestinationInfo = ({ item }: { item: CargoDTO }) => (
+    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
+      <LocationBlock region={userLanguage === "uz" ? item.destinationARegionUz : userLanguage === "ru" ? item.destinationARegionRu : item.destinationARegionCy} district={userLanguage === "uz" ? item.destinationADistinctUz : userLanguage === "ru" ? item.destinationADistinctRu : item.destinationADistinctCy} />
+      <ArrowRightIcon style={{ marginLeft: -20 }} />
+      <LocationBlock region={userLanguage === "uz" ? item.destinationBRegionUz : userLanguage === "ru" ? item.destinationBRegionRu : item.destinationBRegionCy} district={userLanguage === "uz" ? item.destinationBDistinctUz : userLanguage === "ru" ? item.destinationBDistinctRu : item.destinationBDistinctCy} />
     </View>
   );
+  
+  const LocationBlock = ({ region, district }: { region: string, district?: string }) => (
+    <View style={{ width: 135, alignItems: "flex-start" }}>
+      <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{region}</Text>
+      {district && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{district}</Text>}
+    </View>
+  );
+
+  const DetailButton = ({ item }: { item: CargoDTO }) => (
+    <View style={{ height: 45, width: "100%", marginTop: 13, borderRadius: 11, overflow: "hidden" }}>
+      <Pressable 
+        android_ripple={{ color: "#808080" }}
+        onPress={async () => {
+          await AsyncStorage.setItem("cargoData", JSON.stringify(item));
+          navigation.navigate("cargoDetail");
+        }} 
+        style={{ height: "100%", width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#000000" }}>
+        <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "700", fontFamily: "SfProDisplayBold", color: "#FFF" }}>{t("detail")}</Text>
+      </Pressable>
+    </View>
+  );  
 
 
   if (!checkedToken) {
@@ -635,7 +642,7 @@ export default function Home() {
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
 
         data={data}
-        // keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
         onEndReached={loadCargoData}
