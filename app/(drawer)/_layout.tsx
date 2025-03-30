@@ -155,7 +155,9 @@ function Me() {
             <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>{t("changeLanguage")}</Text>
           </Pressable>
 
-          <Pressable android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
+          <Pressable onPress={() => {
+            router.push("/help");
+          }} android_ripple={{color: "#4F4F4F"}} style={{flexDirection: "row", alignItems: "center", columnGap: 22, paddingHorizontal: 16, paddingVertical: 10}}>
             <QuestionIcon />
             <Text allowFontScaling={false} style={{color: "white", fontFamily: "SfProDisplayMedium", fontSize: 14}}>{t("help")}</Text>
           </Pressable>

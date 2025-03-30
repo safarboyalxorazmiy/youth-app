@@ -46,5 +46,10 @@
   "surname": "Familyangiz",
   "profilePhoto": "Profil rasmi",
   "close": "Yopish",
-  "limitModalText": "Siz juda ko‘p SMS olishga urindingiz. Limit tugadi. Iltimos, 24 soatdan keyin qayta urinib ko‘ring."
+  "limitModalText": "Siz juda ko‘p SMS olishga urindingiz. Limit tugadi. Iltimos, 24 soatdan keyin qayta urinib ko‘ring.",
+
+  "socialNetworks": "Ijtimoiy tarmoqlar:",
+  "forContact": "Aloqa uchun:",
+  "telegram": "Telegram",
+  "instagram": "Instagram"
 }
