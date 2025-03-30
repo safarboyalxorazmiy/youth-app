@@ -231,7 +231,7 @@ export default function Home() {
   useEffect(() => {
     const checkToken = async () => {
       // await AsyncStorage.removeItem("token");
-      router.push("/register");
+      // router.push("/register");
 
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
       

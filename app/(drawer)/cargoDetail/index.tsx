@@ -52,19 +52,16 @@ export default function CargoDetail() {
   const router = useRouter();
   const isFocused = useIsFocused();
   
-  const [userPhoneNumber, setUserPhoneNumber] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadCargoDetail() {
-      const phoneNumber = await AsyncStorage.getItem("userPhoneNumber");
-      setUserPhoneNumber(phoneNumber);
-
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
 
       let cargoDataString = await AsyncStorage.getItem("cargoData");
   
       if (cargoDataString !== null) {
         let cargoData = JSON.parse(cargoDataString);
+        console.log("cargoData", cargoData);
         setCargoData(cargoData);
       }
   
@@ -154,7 +151,7 @@ export default function CargoDetail() {
         <View style={{height: 45, borderRadius: 11, width: "100%", marginTop: 32, overflow: "hidden"}}>
           <Pressable 
             onPress={() => {
-              Linking.openURL(`tel:${userPhoneNumber}`);
+              Linking.openURL(`tel:+${cargoData?.phone}`);
             }}
             android_ripple={{color: "#1E1E1E"}} 
             style={{
@@ -168,14 +165,14 @@ export default function CargoDetail() {
               columnGap: 15
             }}>
             <CallIcon />
-            <Text allowFontScaling={false} style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>{formatPhoneNumber(userPhoneNumber || "")}</Text>
+            <Text allowFontScaling={false} style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>+{formatPhoneNumber(cargoData?.phone || "")}</Text>
           </Pressable>
         </View>
 
         <View style={{height: 45, borderRadius: 11, width: "100%", marginTop: 15, overflow: "hidden"}}>
           <Pressable
             onPress={() => {
-              Linking.openURL(`https://t.me/+${userPhoneNumber}`);
+              Linking.openURL(`https://t.me/+${cargoData?.phone}`);
             }}
             android_ripple={{color: "#000"}}
             style={{
