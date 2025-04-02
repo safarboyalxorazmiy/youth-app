@@ -272,8 +272,6 @@ export default function Home() {
         setPage(0);
         setData([]);
         setDataFullyLoaded(false);
-
-        await loadCargoData();
         return;
       }
 
@@ -287,8 +285,6 @@ export default function Home() {
         setPage(0);
         setData([]);
         setDataFullyLoaded(false);
-
-        await loadCargoData();
         return;
       }
 
@@ -310,8 +306,6 @@ export default function Home() {
           setPage(0);
           setData([]);
           setDataFullyLoaded(false);
-
-          await loadCargoData();
           return;
         }
 
@@ -360,7 +354,6 @@ export default function Home() {
             setPage(0);
             setData([]);
             setDataFullyLoaded(false);
-            await loadCargoData();
           }
         }
       } catch (error) {
@@ -400,6 +393,29 @@ export default function Home() {
   const loadCargoData = async () => {
     if (dataFullyLoaded) return;
 
+    if (currentDestination != null) {
+      const response = await fetch(`https://api.e-yuk.uz/cargo/get/by-location/region`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          destinationARegion: currentDestination.destinationARegion,
+          destinationBRegion: currentDestination.destinationBRegion,
+          page: page,
+          size: 11
+        })
+      });
+
+      const result = await response.json();
+
+      setData(data.concat(result.content));
+      setPage(page + 1);
+      
+      if (result.last) {
+        setDataFullyLoaded(true);
+      }
+      return;
+    }
+    
     try {
       const response = await fetch(`https://api.e-yuk.uz/cargo/get?page=${page}&size=${size}&sort=string`, {
         method: "GET",
@@ -424,14 +440,14 @@ export default function Home() {
         currentDestination != null && (
           <View style={{marginTop: 4, paddingHorizontal: 20, paddingVertical: 30, flexDirection: "row", columnGap: 18, alignItems: "center", justifyContent: "center"}}>
             <View style={{justifyContent: "center"}}>
-              {currentDestination.destinationARegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12, }}>{currentDestination.destinationARegion} </Text>}
+              {currentDestination.destinationARegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12, }}>{currentDestination.destinationARegion || ""} </Text>}
               {/* {currentDestination.destinationADistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationADistinct}</Text>} */}
             </View>
 
             <ArrowRightIconSm />
 
             <View style={{justifyContent: "center"}}>
-              {currentDestination.destinationBRegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBRegion}</Text>}
+              {currentDestination.destinationBRegion && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBRegion || ""}</Text>}
               {/* {currentDestination.destinationBDistinct && <Text allowFontScaling={false} style={{color: "#000", fontFamily: "SfProDisplayRegular", fontSize: 12}}>{currentDestination.destinationBDistinct}</Text>} */}
             </View>
           </View>
@@ -543,16 +559,16 @@ export default function Home() {
 
   const DestinationInfo = ({ item }: { item: CargoDTO }) => (
     <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 15 }}>
-      <LocationBlock region={userLanguage === "uz" ? item.destinationARegionUz : userLanguage === "ru" ? item.destinationARegionRu : item.destinationARegionCy} district={userLanguage === "uz" ? item.destinationADistinctUz : userLanguage === "ru" ? item.destinationADistinctRu : item.destinationADistinctCy} />
+      <LocationBlock region={userLanguage === "uz" ? item.destinationARegionUz || "" : userLanguage === "ru" ? item.destinationARegionRu || "" : item.destinationARegionCy || ""} district={userLanguage === "uz" ? item.destinationADistinctUz || "" : userLanguage === "ru" ? item.destinationADistinctRu || "" : item.destinationADistinctCy || ""} />
       <ArrowRightIcon style={{ marginLeft: -20 }} />
-      <LocationBlock region={userLanguage === "uz" ? item.destinationBRegionUz : userLanguage === "ru" ? item.destinationBRegionRu : item.destinationBRegionCy} district={userLanguage === "uz" ? item.destinationBDistinctUz : userLanguage === "ru" ? item.destinationBDistinctRu : item.destinationBDistinctCy} />
+      <LocationBlock region={userLanguage === "uz" ? item.destinationBRegionUz || "" : userLanguage === "ru" ? item.destinationBRegionRu || "" : item.destinationBRegionCy || ""} district={userLanguage === "uz" ? item.destinationBDistinctUz || "" : userLanguage === "ru" ? item.destinationBDistinctRu || "" : item.destinationBDistinctCy || ""} />
     </View>
   );
   
   const LocationBlock = ({ region, district }: { region: string, district?: string }) => (
     <View style={{ width: 135, alignItems: "flex-start" }}>
-      <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{region}</Text>
-      {district && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{district}</Text>}
+      <Text allowFontScaling={false} style={{ fontSize: 14, fontWeight: "700", fontFamily: "SfProDisplayBold" }}>{region || ""}</Text>
+      {district && <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{district || ""}</Text>}
     </View>
   );
 
@@ -611,7 +627,7 @@ export default function Home() {
               router.push("/cargoSearch")
             }}
           >
-            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#000", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion} - ${currentDestination.destinationBRegion}` : t("search")}</Text>
+            <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: "SfProDisplayRegular", color: "#000", fontWeight: "400", width: "70%", textAlign: "center" }} numberOfLines={1}>{currentDestination != null ? `${currentDestination.destinationARegion || ""} - ${currentDestination.destinationBRegion || ""}` : t("search")}</Text>
             {
               currentDestination != null ? (
                 <Pressable 

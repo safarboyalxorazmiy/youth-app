@@ -61,7 +61,7 @@ export default function CargoSearch() {
   const scrollRef = useRef<ScrollView>(null);
   const router = useRouter();
 
-  const searchAndSetLocationA = async () => {  
+  const searchAndSetLocationA = async (locationAInputValue: string) => {  
     await fetch('https://api.e-yuk.uz/location/search/region?query=' + locationAInputValue, {
       method: 'GET',
       headers: {
@@ -70,12 +70,12 @@ export default function CargoSearch() {
     })
     .then(response => 
       {
-        console.log(response)
+        // console.log(response.json())
         return response.json()
 
       })
     .then(data => {
-      console.log(data.length == 0);
+      setLocationBReccumendationVisible(true);
       setLocationAReccommendData(data);
     });
   }
@@ -89,11 +89,11 @@ export default function CargoSearch() {
     })
     .then(response => 
       {
-        console.log(response)
+        // console.log(response)
         return response.json()
       })
     .then(data => {
-      console.log(data.length == 0);
+      setLocationBReccumendationVisible(true);
       setLocationBReccommendData(data);
     });
   }
@@ -167,8 +167,9 @@ export default function CargoSearch() {
                 setLocationAReccumendationVisible(false)
               }
 
+              setDestinationARegion("");
               setLocationAInputValue(e.nativeEvent.text)
-              await searchAndSetLocationA();
+              await searchAndSetLocationA(e.nativeEvent.text);
             }} 
             value={locationAInputValue}
             onFocus={() => setFocusedInput("LocationAInput")} 
@@ -191,13 +192,13 @@ export default function CargoSearch() {
                   onPress={() => {
                     console.log("qarasart:: ", item)
                     if (userLanguage == "uz") {
-                      setLocationAInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + " " + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
+                      setLocationAInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
                       setDestinationARegion(item.locationRegionUz == null ? "" : item.locationRegionUz);
                     } else if (userLanguage == "ru") {
-                      setLocationAInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + " " + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
+                      setLocationAInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu)  + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
                       setDestinationARegion(item.locationRegionRu == null ? "" : item.locationRegionRu);
                     } else {
-                      setLocationAInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + " " + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
+                      setLocationAInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
                       setDestinationARegion(item.locationRegionCy == null ? "" : item.locationRegionCy);
                     }
 
@@ -267,6 +268,7 @@ export default function CargoSearch() {
                 setLocationBReccumendationVisible(false)
               }
 
+              setDestinationBRegion("");
               setLocationBInputValue(e.nativeEvent.text);
               await searchAndSetLocationB();
             }} 
@@ -290,13 +292,13 @@ export default function CargoSearch() {
                   android_ripple={{ color: "#EFEFEF" }} 
                   onPress={() => {
                     if (userLanguage == "uz") {
-                      setLocationBInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + " " + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
+                      setLocationBInputValue((item.locationRegionUz == null ? "" : item.locationRegionUz) + (item.locationDistinctUz == null ? "" : item.locationDistinctUz))
                       setDestinationBRegion(item.locationRegionUz == null ? "" : item.locationRegionUz);
                     } else if (userLanguage == "ru") {
-                      setLocationBInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + " " + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
+                      setLocationBInputValue((item.locationRegionRu == null ? "" : item.locationRegionRu) + (item.locationDistinctRu == null ? "" : item.locationDistinctRu))
                       setDestinationBRegion(item.locationRegionRu == null ? "" : item.locationRegionRu);
                     } else {
-                      setLocationBInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + " " + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
+                      setLocationBInputValue((item.locationRegionCy == null ? "" : item.locationRegionCy) + (item.locationDistinctCy == null ? "" : item.locationDistinctCy))
                       setDestinationBRegion(item.locationRegionCy == null ? "" : item.locationRegionCy);
                     }
 
@@ -326,8 +328,29 @@ export default function CargoSearch() {
       <Pressable 
         android_ripple={{color: "#1E1E1E"}} 
         onPress={async () => {
-          if (locationAInputValue == "" && locationBInputValue == "") {
+          if (locationAInputValue == "" && locationBInputValue == "") {            
             await AsyncStorage.removeItem("destination");
+            router.push("/");
+            return;
+          }
+
+          if (destinationARegion == "" || destinationBRegion == "") {
+            console.log("destinationARegion == '' || destinationBRegion == ''");
+            await AsyncStorage.setItem("destination", JSON.stringify({
+              destinationARegion: locationAInputValue == "" ? null : locationAInputValue,
+              destinationBRegion: locationBInputValue == "" ? null : locationBInputValue,
+            }));
+
+            console.log({
+              destinationARegion: locationAInputValue == "" ? null : locationAInputValue,
+              destinationBRegion: locationBInputValue == "" ? null : locationBInputValue,
+            })
+
+            setDestinationARegion("");
+            setDestinationBRegion("");
+            setFocusedInput("");
+            setLocationAInputValue("");
+            setLocationBInputValue("");
             router.push("/");
             return;
           }
