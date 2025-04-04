@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { act, useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, Text, TextInput, View, Vibration, TouchableOpacity, Platform  } from "react-native";
+import { Pressable, Text, TextInput, View, Vibration, TouchableOpacity, Platform, Linking  } from "react-native";
 import * as Haptics from "expo-haptics";
 import * as Application from 'expo-application';
 import { useIsFocused } from "@react-navigation/native";
@@ -127,6 +127,8 @@ export default function Login() {
             </View>
         </View> 
 
+        
+
         <View style={{
           marginTop: 30,
           height: 45,
@@ -171,6 +173,10 @@ export default function Login() {
             <Text style={{fontFamily: "SfProDisplayBold", fontWeight: "700", fontSize: 14, color: "#FFF"}}>{t("enterCode")}</Text>
           </Pressable>
         </View>
+
+        <TouchableOpacity style={{marginTop: 10}} onPress={() => Linking.openURL('https://e-yuk.uz/privacy-policy.html')}>
+          <Text style={{ color: 'black', textDecorationLine: 'underline'}}>{t("privacyPolicy")}</Text>
+        </TouchableOpacity>
       </View>
 
       <View>
@@ -196,10 +202,10 @@ export default function Login() {
           }}
         >
           <View style={{paddingHorizontal: 30}}>
-            <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, marginTop: 40, textAlign: "left"}}>Siz juda ko‘p SMS olishga urindingiz. Limit tugadi. Iltimos, 24 soatdan keyin qayta urinib ko‘ring.</Text>
+            <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, marginTop: 40, textAlign: "left"}}>{t("limitModalText")}</Text>
 
             <Pressable onPress={() => limitActionRef.current?.hide()} style={{backgroundColor: "#F2F2F2", height: 50, borderRadius: 12, alignItems: "center", justifyContent: "center", marginTop: 20}}>
-              <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, textAlign: "left", color: "black"}}>Yopish</Text>
+              <Text style={{fontFamily: "SfProDisplayMedium", fontWeight: "500", fontSize: 18, textAlign: "left", color: "black"}}>{t("close")}</Text>
             </Pressable>
           </View>
         </ActionSheet>
