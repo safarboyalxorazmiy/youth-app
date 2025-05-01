@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { View, Text, Pressable, FlatList, StatusBar, Platform, ScrollView } from "react-native";
+import { View, Text, Pressable, FlatList, StatusBar, Platform, ScrollView, AppState, AppStateStatus } from "react-native";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -144,6 +144,53 @@ export default function Home() {
 
   const viewabilityConfigCallbackPairs = useRef([{ viewabilityConfig, onViewableItemsChanged }]);
 
+
+  const stompClientRef = useRef<Client | null>(null);
+  const appState = useRef<AppStateStatus>('active');
+
+  const connectSocket = () => {
+    const socket = new SockJS('https://api.e-yuk.uz/ws-cargo');
+    const client = new Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000, // auto reconnect every 5s
+      onConnect: () => {
+        console.log('✅ WebSocket connected');
+        client.subscribe('/topic/new-cargo', async (message) => {
+          const newCargo = JSON.parse(message.body);
+          const destination = await AsyncStorage.getItem("destination");
+          if (!destination) {
+            setData((prev) => [newCargo, ...prev]);
+          }
+        });
+      },
+      onStompError: (frame) => {
+        console.error('❌ STOMP Error:', frame);
+      },
+      onDisconnect: () => {
+        console.warn('🔌 Disconnected from WebSocket');
+      },
+    });
+
+    client.activate();
+    stompClientRef.current = client;
+  };
+
+  const disconnectSocket = () => {
+    stompClientRef.current?.deactivate();
+    stompClientRef.current = null;
+  };
+
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      console.log('🔄 App came to foreground, reconnecting WebSocket...');
+      connectSocket();
+    } else if (nextAppState.match(/inactive|background/)) {
+      console.log('🔕 App going to background, disconnecting WebSocket...');
+      disconnectSocket();
+    }
+    appState.current = nextAppState;
+  };
+
   useEffect(() => {
     const getLastVisibleIndex = async () => {
       const lastVisibleIndexString = await AsyncStorage.getItem('lastVisibleIndex');
@@ -188,40 +235,13 @@ export default function Home() {
 
     checkToken();
 
-    const startSocket = async () => {
-      const socket = new SockJS('https://api.e-yuk.uz/ws-cargo');
-      
-      const stompClient = new Client({
-        webSocketFactory: () => socket,
-        reconnectDelay: 5000,
-        onConnect: () => {
-          console.log('Connected to WebSocket');
-          stompClient.subscribe('/topic/new-cargo', async (message) => {
-            const newCargo = JSON.parse(message.body);
-          
-            console.log('New Cargo:', newCargo);
-          
-            const destination = await AsyncStorage.getItem("destination");
-            if (destination != null) {
-              return;
-            }
-          
-            setData((prevData) => [newCargo, ...prevData]);
-          });          
-        },
-        onStompError: (frame) => {
-          console.error('STOMP error:', frame);
-        },
-      });
-  
-      stompClient.activate();
-  
-      return () => {
-        stompClient.deactivate();
-      };
-    }
+    connectSocket();
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
 
-    startSocket();
+    return () => {
+      disconnectSocket();
+      subscription.remove();
+    };
   }, []);
 
   const [userLanguage, setUserLanguage] = useState<string>("");

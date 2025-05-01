@@ -48,6 +48,10 @@ export default function RootLayout() {
               <Stack.Screen name="myCargo" options={{ headerShown: false }} />
               <Stack.Screen name="help" options={{ headerShown: false, animation: 'slide_from_right'  }} />
               <Stack.Screen name="cargoAdd" options={{ headerShown: false}} />
+
+              <Stack.Screen name="chooseFrom" options={{ headerShown: false, animation: 'slide_from_right'}} />
+              <Stack.Screen name="chooseTo" options={{ headerShown: false, animation: 'slide_from_right'}} />
+              
               <Stack.Screen
                 name="(drawer)"
                 options={{
