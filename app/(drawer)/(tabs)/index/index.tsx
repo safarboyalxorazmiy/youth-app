@@ -410,9 +410,12 @@ export default function Home() {
     }
   };
 
-  const loadCargoData = async () => {
-    if (dataFullyLoaded) return;
+  const [isFetching, setIsFetching] = useState(false);
 
+  const loadCargoData = async () => {
+    if (dataFullyLoaded || isFetching) return;
+
+    setIsFetching(true);
     if (currentDestination != null) {
       const response = await fetch(`https://api.e-yuk.uz/cargo/get/by-location/region`, {
         method: "POST",
@@ -445,7 +448,8 @@ export default function Home() {
       const result = await response.json();
       setData(data.concat(result.content));
       setPage(page + 1);
-      
+      setIsFetching(false);
+
       if (result.last) {
         setDataFullyLoaded(true);
       }
@@ -682,7 +686,7 @@ export default function Home() {
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
         onEndReached={loadCargoData}
-        onEndReachedThreshold={1}
+        onEndReachedThreshold={5}
         ListFooterComponent={
           dataFullyLoaded ? <></> : <SkeletonLoader />
         }
