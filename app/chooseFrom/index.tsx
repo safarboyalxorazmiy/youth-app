@@ -52,29 +52,21 @@ export default function ChooseFrom() {
       <StatusBar />
       
       <View style={{marginTop: Platform.OS === "ios" ? statusBarHeight : 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
-          <View style={{ borderRadius: 50, overflow: 'hidden' }}>
-            <Pressable
-              android_ripple={{ color: "#808080" }}
-              style={{ padding: 10 }}
-              onPress={() => {
-                router.push("/");
-              }}
-            >
-              <ArrowLeftLightIcon />
-            </Pressable>
-          </View>
-
-          <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
-
-          <View></View>
-          {/* <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
-            <Pressable onPress={() => {
-              AsyncStorage.removeItem("destination");
+        <View style={{ borderRadius: 50, overflow: 'hidden' }}>
+          <Pressable
+            android_ripple={{ color: "#808080" }}
+            style={{ padding: 10 }}
+            onPress={() => {
               router.push("/");
-            }} android_ripple={{ color: "#808080" }} style={{backgroundColor: "#0c0c0d", width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}}>
-              <LocationDeleteIcon />
-            </Pressable>
-          </View> */}
+            }}
+          >
+            <ArrowLeftLightIcon />
+          </Pressable>
+        </View>
+
+        <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
+
+        <View></View>
       </View>
 
       <View style={{ 
