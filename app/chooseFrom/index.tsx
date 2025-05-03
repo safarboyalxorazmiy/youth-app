@@ -26,6 +26,8 @@ export default function ChooseFrom() {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
     }
     fetchData();
+
+    search("");
   }, [isFocused])
   
 
@@ -45,102 +47,121 @@ export default function ChooseFrom() {
   }
 
   return (
-    <View style={{
-      backgroundColor: "#232325", 
-      height: "100%",
-    }}>
-      <StatusBar />
-      
-      <View style={{marginTop: Platform.OS === "ios" ? statusBarHeight : 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
-        <View style={{ borderRadius: 50, overflow: 'hidden' }}>
-          <Pressable
-            android_ripple={{ color: "#808080" }}
-            style={{ padding: 10 }}
-            onPress={() => {
-              router.push("/");
-            }}
-          >
-            <ArrowLeftLightIcon />
-          </Pressable>
-        </View>
+    <View style={{backgroundColor: "#232325", height: "100%"}}>
+      <FlatList
+        ListHeaderComponent={
+          <>
+            <View style={{
+              marginTop: Platform.OS === "ios" ? statusBarHeight : 25,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingHorizontal: 25,
+              width: "100%",
+            }}>
+              <View style={{ borderRadius: 50, overflow: 'hidden' }}>
+                <Pressable
+                  android_ripple={{ color: "#808080" }}
+                  style={{ padding: 10 }}
+                  onPress={() => {
+                    router.back();
+                  }}
+                >
+                  <ArrowLeftLightIcon />
+                </Pressable>
+              </View>
 
-        <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
+              <Text allowFontScaling={false} style={{
+                fontSize: 16,
+                fontWeight: "700",
+                fontFamily: "SfProDisplayBold",
+                color: "#FFF"
+              }}>
+                {t("cargoSearch")}
+              </Text>
 
-        <View></View>
-      </View>
+              <View></View>
+            </View>
 
-      <View style={{ 
-        flexDirection: "column", 
-        alignItems: "flex-start",
-        
-        paddingLeft: 25,
-        paddingRight: 25,
-      }}>
-        <TextInput 
-          onChangeText={(text) => {
-            // setQuery(text);
-            search(text);
-          }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          cursorColor={"#232325"}
-          placeholder={t("from")}
-          placeholderTextColor={"#000"}
-          style={{ 
-            width: "100%",
-            borderRadius: 8,
-            marginTop: 25,
-            marginBottom: 25,
-            
-            // flex: 1, 
-            fontSize: 16, 
-            height: 50,
-            paddingHorizontal: 20,
-            // paddingVertical: 40,
-            fontWeight: "400", 
-            color: "#000",
-            backgroundColor: "#FFFFFF",
-            borderBottomWidth: isFocused ? 1 : 0.7,
-            borderBottomColor: isFocused ? "#000" : "#CCC",
-            fontFamily: "SfProDisplayRegular"
-          }} />
-
-        <View style={{
-          width: "100%",
-          borderRadius: 8, 
-          overflow: "hidden",
-        }}>
-          <FlatList
-            data={recommendData}
-            renderItem={({ item }) => (
-              <Pressable 
-                // android_ripple={{ color: "#CCC" }}
-                style={{ 
-                  backgroundColor: "#FFF", 
-                  height: 55,
+            <View style={{ paddingHorizontal: 25 }}>
+              <TextInput
+                onChangeText={(text) => search(text)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                cursorColor={"#232325"}
+                placeholder={t("from")}
+                placeholderTextColor={"#000"}
+                style={{
                   width: "100%",
-                  // borderBottomWidth: 0.5,
-                  // borderBottomColor: "#000",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  borderRadius: 8,
+                  marginTop: 25,
+                  marginBottom: 25,
+                  fontSize: 16,
+                  height: 50,
                   paddingHorizontal: 20,
-                  marginBottom: -1
-                }}>
-                
-                <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>
-                  {userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy}
-                </Text>
+                  fontWeight: "400",
+                  color: "#000",
+                  backgroundColor: "#FFFFFF",
+                  borderBottomWidth: isFocused ? 1 : 0.7,
+                  borderBottomColor: isFocused ? "#000" : "#CCC",
+                  fontFamily: "SfProDisplayRegular"
+                }} />
+            </View>
+          </>
+        }
+        data={recommendData}
+        renderItem={({ item, index }) => (
+          <View style={{
+            backgroundColor: "#FFF",
+            marginHorizontal: 25,
+            // marginBottom: 10,
+            borderTopLeftRadius: index === 0 ? 8 : 0,
+            borderTopRightRadius: index === 0 ? 8 : 0,
+            borderBottomLeftRadius: index === recommendData.length - 1 ? 8 : 0,
+            borderBottomRightRadius: index === recommendData.length - 1 ? 8 : 0,
 
-                <ArrowRightForChoosing />
-              </Pressable>
-            )}
-            keyExtractor={(item) => item.id.toString()}
-          />
-        </View>
-      </View>
-
-      
+            overflow: "hidden",
+            // Optional: add shadow on iOS and elevation on Android
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.2,
+            shadowRadius: 1.41,
+            elevation: 2,
+          }}>
+            <Pressable
+              style={{
+                height: 55,
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingHorizontal: 20,
+              }}
+              android_ripple={{ color: "#EEE" }}
+            >
+              <Text
+                allowFontScaling={false}
+                style={{
+                  fontSize: 12,
+                  fontWeight: "400",
+                  fontFamily: "SfProDisplayRegular"
+                }}
+              >
+                {userLanguage == "uz"
+                  ? item.locationRegionUz
+                  : userLanguage == "ru"
+                  ? item.locationRegionRu
+                  : item.locationRegionCy}
+              </Text>
+        
+              <ArrowRightForChoosing />
+            </Pressable>
+          </View>
+        )}
+        
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ paddingBottom: 50 }}
+      />
     </View>
   );
 };
