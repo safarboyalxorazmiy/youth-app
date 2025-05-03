@@ -29,7 +29,7 @@ export default function ChooseFrom() {
   }, [isFocused])
   
 
-  const search = async () => {  
+  const search = async (query: string) => {  
     await fetch('https://api.e-yuk.uz/location/search/region?query=' + query, {
       method: 'GET',
       headers: {
@@ -86,8 +86,8 @@ export default function ChooseFrom() {
       }}>
         <TextInput 
           onChangeText={(text) => {
-            setQuery(text);
-            search();
+            // setQuery(text);
+            search(text);
           }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
@@ -122,19 +122,23 @@ export default function ChooseFrom() {
             data={recommendData}
             renderItem={({ item }) => (
               <Pressable 
-                android_ripple={{ color: "#CCC" }}
+                // android_ripple={{ color: "#CCC" }}
                 style={{ 
                   backgroundColor: "#FFF", 
-                  height: 50,
+                  height: 55,
                   width: "100%",
-                  borderBottomWidth: 0.5,
-                  borderBottomColor: "#000",
+                  // borderBottomWidth: 0.5,
+                  // borderBottomColor: "#000",
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  paddingHorizontal: 20
+                  paddingHorizontal: 20,
+                  marginBottom: -1
                 }}>
-                <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>{userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy}</Text>
+                
+                <Text allowFontScaling={false} style={{ fontSize: 12, fontWeight: "400", fontFamily: "SfProDisplayRegular" }}>
+                  {userLanguage == "uz" ? item.locationRegionUz : userLanguage == "ru" ? item.locationRegionRu : item.locationRegionCy}
+                </Text>
 
                 <ArrowRightForChoosing />
               </Pressable>
