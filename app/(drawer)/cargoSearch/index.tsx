@@ -18,8 +18,6 @@ const statusBarHeight = Constants.statusBarHeight;
 
 export default function CargoSearch() {
   const [focusedInput, setFocusedInput] = useState<String>("");
-  const [locationAInputValue, setLocationAInputValue] = useState<string>("");
-  const [locationBInputValue, setLocationBInputValue] = useState<string>("");
 
   type LocationDetails = {
     id: number;
@@ -34,70 +32,27 @@ export default function CargoSearch() {
 
   const [userLanguage, setUserLanguage] = useState<string>("");
   const isFocused = useIsFocused();
+
+  const [locationFrom, setLocationFrom] = useState<string>("");
+  const [locationTo, setLocationTo] = useState<string>("");
   
   useEffect(() => {
     async function fetchData() {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
+      setLocationFrom((await AsyncStorage.getItem("locationFrom")) as string || "");
+      setLocationTo((await AsyncStorage.getItem("locationTo")) as string || "");
     }
-    fetchData();
 
-    setFocusedInput("");
-    setLocationAInputValue("");
-    setLocationBInputValue("");
+
+    fetchData();
   }, [isFocused])
 
-
-  
-
-  const [locationAReccommendData, setLocationAReccommendData] = useState<LocationDetails[]>([]);
-  const [locationBReccommendData, setLocationBReccommendData] = useState<LocationDetails[]>([]);
-
-  const [locationAReccumendationVisible, setLocationAReccumendationVisible] = useState<boolean>(false);
-  const [locationBReccumendationVisible, setLocationBReccumendationVisible] = useState<boolean>(false);
 
   const [destinationARegion , setDestinationARegion] = useState<string>("");
   const [destinationBRegion , setDestinationBRegion] = useState<string>("");
 
-  const locationBInputRef = useRef<TextInput>(null);
   const scrollRef = useRef<ScrollView>(null);
   const router = useRouter();
-
-  const searchAndSetLocationA = async (locationAInputValue: string) => {  
-    await fetch('https://api.e-yuk.uz/location/search/region?query=' + locationAInputValue, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => 
-      {
-        // console.log(response.json())
-        return response.json()
-
-      })
-    .then(data => {
-      setLocationBReccumendationVisible(true);
-      setLocationAReccommendData(data);
-    });
-  }
-
-  const searchAndSetLocationB = async () => {  
-    await fetch('https://api.e-yuk.uz/location/search/region?query=' + locationBInputValue, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => 
-      {
-        // console.log(response)
-        return response.json()
-      })
-    .then(data => {
-      setLocationBReccumendationVisible(true);
-      setLocationBReccommendData(data);
-    });
-  }
 
   const scrollToStart = () => {
     scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
@@ -108,30 +63,23 @@ export default function CargoSearch() {
       <StatusBar />
 
       <View style={{marginTop: Platform.OS === "ios" ? statusBarHeight : 25, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 25, width: "100%"}}>
-          <View style={{ borderRadius: 50, overflow: 'hidden' }}>
-            <Pressable
-              android_ripple={{ color: "#808080" }}
-              style={{ padding: 10 }}
-              onPress={() => {
-                router.push("/");
-              }}
-            >
-              <ArrowLeftLightIcon />
-            </Pressable>
-          </View>
-
-          <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
-
-          <View></View>
-          {/* <View style={{width: 44, height: 44, borderRadius: 8, overflow: "hidden"}}>
-            <Pressable onPress={() => {
-              AsyncStorage.removeItem("destination");
+        <View style={{ borderRadius: 50, overflow: 'hidden' }}>
+          <Pressable
+            android_ripple={{ color: "#808080" }}
+            style={{ padding: 10 }}
+            onPress={() => {
               router.push("/");
-            }} android_ripple={{ color: "#808080" }} style={{backgroundColor: "#0c0c0d", width: "100%", height: "100%", alignItems: "center", justifyContent: "center"}}>
-              <LocationDeleteIcon />
-            </Pressable>
-          </View> */}
+            }}
+          >
+            <ArrowLeftLightIcon />
+          </Pressable>
+        </View>
+
+        <Text allowFontScaling={false} style={{fontSize: 16, fontWeight: 700, fontFamily: "SfProDisplayBold", color: "#FFF"}}>{t("cargoSearch")}</Text>
+
+        <View></View>
       </View>
+
 
       <View style={{paddingHorizontal: 38, marginTop: 50, width: "100%"}}>
         <Pressable 
@@ -141,12 +89,11 @@ export default function CargoSearch() {
           }}
           style={{
             width: "100%", 
-            backgroundColor: focusedInput == "LocationAInput" || locationAInputValue != "" ? "#232325" : "#FFFFFF", 
-            borderColor: focusedInput == "LocationAInput" || locationAInputValue != "" ? "#FFF" : "#454141", 
+            backgroundColor: "#FFFFFF", 
+            borderColor: "#454141", 
             borderRadius: 10, 
             paddingHorizontal: 18, 
-            borderWidth: focusedInput == "LocationAInput" || 
-            locationAInputValue != "" ? 1.5 : 1, 
+            borderWidth: 1, 
             height: 45, 
             position: "relative", 
             alignItems: "center", 
@@ -160,45 +107,35 @@ export default function CargoSearch() {
               fontWeight: 400, 
               fontFamily: "SfProDisplayRegular", 
               color: "#000000"
-            }}>Tanlash</Text>
+            }}>{locationFrom != "" ? locationFrom : "Tanlash"}</Text>
           <ArrowRightForChoosing />
         </Pressable>
       </View> 
 
-      
-
       <View style={{paddingHorizontal: 38, marginTop: 22, width: "100%"}}>
-      <Pressable 
+        <Pressable 
           android_ripple={{ color: "#808080" }} 
           onPress={() => {
             router.push("/chooseTo");
           }}
           style={{
             width: "100%", 
-            backgroundColor: focusedInput == "LocationAInput" || locationAInputValue != "" ? "#232325" : "#FFFFFF", 
-            borderColor: focusedInput == "LocationAInput" || locationAInputValue != "" ? "#FFF" : "#454141", 
+            backgroundColor: "#FFFFFF", 
+            borderColor: "#454141", 
             borderRadius: 10, 
             paddingHorizontal: 18, 
-            borderWidth: focusedInput == "LocationAInput" || 
-            locationAInputValue != "" ? 1.5 : 1, 
+            borderWidth: 1, 
             height: 45, 
             position: "relative", 
             alignItems: "center", 
             justifyContent: "space-between",
             flexDirection: "row",
           }}>
-          <Text 
-            allowFontScaling={false} 
-            style={{
-              fontSize: 14, 
-              fontWeight: 400, 
-              fontFamily: "SfProDisplayRegular", 
-              color: "#000000"
-            }}>Tanlash</Text>
-          <ArrowRightForChoosing />
+            <Text allowFontScaling={false} style={{fontSize: 14, fontWeight: 400, fontFamily: "SfProDisplayRegular", color: "#000000"}}>{locationTo != "" ? locationTo : "Tanlash"}</Text>
+            <ArrowRightForChoosing />
         </Pressable>
       </View> 
-      
+
 
     <View style={{
       height: 55,
@@ -212,48 +149,17 @@ export default function CargoSearch() {
       <Pressable 
         android_ripple={{color: "#1E1E1E"}} 
         onPress={async () => {
-          router.push("/chooseFrom");
-          return;
-          
-          if (locationAInputValue == "" && locationBInputValue == "") {            
-            await AsyncStorage.removeItem("destination");
-            router.push("/");
-            return;
-          }
-
-          if (destinationARegion == "" || destinationBRegion == "") {
-            console.log("destinationARegion == '' || destinationBRegion == ''");
-            await AsyncStorage.setItem("destination", JSON.stringify({
-              destinationARegion: locationAInputValue == "" ? null : locationAInputValue,
-              destinationBRegion: locationBInputValue == "" ? null : locationBInputValue,
-            }));
-
-            console.log({
-              destinationARegion: locationAInputValue == "" ? null : locationAInputValue,
-              destinationBRegion: locationBInputValue == "" ? null : locationBInputValue,
-            })
-
-            setDestinationARegion("");
-            setDestinationBRegion("");
-            setFocusedInput("");
-            setLocationAInputValue("");
-            setLocationBInputValue("");
-            router.push("/");
-            return;
-          }
+          const locationFrom = await AsyncStorage.getItem("locationFrom") || "";
+          const locationTo = await AsyncStorage.getItem("locationTo") || "";
 
           await AsyncStorage.setItem("destination", JSON.stringify({
-            destinationARegion: destinationARegion,
-            destinationBRegion: destinationBRegion,
+            destinationARegion: locationFrom,
+            destinationBRegion: locationTo,
           }));
           
-          setDestinationARegion("");
-          setDestinationBRegion("");
-          setFocusedInput("");
-          setLocationAInputValue("");
-          setLocationBInputValue("");
           router.push("/");
         }}  
+
         style={{
           width: "100%",
           height: "100%",

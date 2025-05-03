@@ -21,6 +21,7 @@ export default function ChooseFrom() {
   const [userLanguage, setUserLanguage] = useState<string>("");
   const router = useRouter();
 
+
   useEffect(() => {
     async function fetchData() {
       setUserLanguage((await AsyncStorage.getItem("userLocale") || "uz") as string);
@@ -138,7 +139,7 @@ export default function ChooseFrom() {
                   AsyncStorage.setItem("locationFrom", (item.locationRegionCy == null ? "" : item.locationRegionCy));
                 }
 
-                router.push("/cargoSearch");
+                router.back();
               }}
               style={{
                 height: 55,
@@ -153,7 +154,7 @@ export default function ChooseFrom() {
               <Text
                 allowFontScaling={false}
                 style={{
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: "400",
                   fontFamily: "SfProDisplayRegular"
                 }}
