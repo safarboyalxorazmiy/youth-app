@@ -129,6 +129,17 @@ export default function ChooseFrom() {
             elevation: 2,
           }}>
             <Pressable
+              onPress={() => {
+                if (userLanguage == "uz") {
+                  AsyncStorage.setItem("locationFrom", (item.locationRegionUz == null ? "" : item.locationRegionUz));
+                } else if (userLanguage == "ru") {
+                  AsyncStorage.setItem("locationFrom", (item.locationRegionRu == null ? "" : item.locationRegionRu));
+                } else {
+                  AsyncStorage.setItem("locationFrom", (item.locationRegionCy == null ? "" : item.locationRegionCy));
+                }
+
+                router.push("/cargoSearch");
+              }}
               style={{
                 height: 55,
                 width: "100%",
