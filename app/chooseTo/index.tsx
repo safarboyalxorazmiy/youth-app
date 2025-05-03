@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, Text, TextInput, View, StatusBar, Platform } from "react-native";
+import { Pressable, Text, TextInput, View, StatusBar, Platform } from "react-native";
 import { t } from '@/i18n';
 import ArrowRightForChoosing from "@/assets/images/ArrowRightForChoosing.svg";
 import { useEffect, useState } from "react";
@@ -6,13 +6,11 @@ import { FlatList } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ArrowLeftLightIcon from "@/assets/images/arrow-left-light.svg";
 import { useRouter } from "expo-router";
-
-const screenWidth = Dimensions.get("window").width;
-
 import Constants from 'expo-constants';
+import { useWindowDimensions } from 'react-native';
 
 const statusBarHeight = Constants.statusBarHeight;
-
+const { width: screenWidth } = useWindowDimensions();
 
 export default function ChooseTo() {
   const [isFocused, setIsFocused] = useState(false);
