@@ -1,5 +1,3 @@
-import { loadLocale } from '../i18n';
-
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -23,10 +21,6 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    loadLocale();
-  }, []);
-
-  useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }
@@ -41,24 +35,16 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }}>
           <BottomSheetModalProvider>
             <Stack>
-              <Stack.Screen name="lang" options={{ headerShown: false, animation: 'slide_from_right' }} />
-              <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
-              <Stack.Screen name="register" options={{ headerShown: false, animation: 'slide_from_right'}} />
-              <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right' }} />
-              <Stack.Screen name="myCargo" options={{ headerShown: false }} />
-              <Stack.Screen name="help" options={{ headerShown: false, animation: 'slide_from_right'  }} />
-              <Stack.Screen name="cargoAdd" options={{ headerShown: false}} />
-
-              <Stack.Screen name="chooseFrom" options={{ headerShown: false, animation: 'slide_from_right'}} />
-              <Stack.Screen name="chooseTo" options={{ headerShown: false, animation: 'slide_from_right'}} />
-              
               <Stack.Screen
-                name="(drawer)"
+                name="index"
                 options={{
                   headerShown: false,
                   animation: 'flip'
                 }}
               />
+              <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
+              <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right' }} />
+
               <Stack.Screen name="+not-found" />
             </Stack>
 
