@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -59,13 +60,18 @@ export default function Login() {
   useEffect(() => {
 
   }, [isFocused]);
+=======
+import { ImageBackground, StyleSheet, View, Text, Dimensions } from "react-native";
+>>>>>>> d43dc0c (Font fully implemented, Index directory created, Small ui changes on login)
 
+export default function Login() {
   return (
     <ImageBackground
       source={require("@/assets/images/auth-bg.png")} // or use { uri: "https://..." }
       style={styles.background}
       resizeMode="cover"
     >
+<<<<<<< HEAD
       <BlurView intensity={80} tint="light" style={styles.content}>
         <Text style={styles.text}>Kirish</Text>
 
@@ -145,6 +151,11 @@ export default function Login() {
         </Pressable>
 
       </BlurView>
+=======
+      <View style={styles.content}>
+        <Text style={styles.text}>Kirish</Text>
+      </View>
+>>>>>>> d43dc0c (Font fully implemented, Index directory created, Small ui changes on login)
     </ImageBackground>
   );
 }
@@ -155,20 +166,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   content: {
+<<<<<<< HEAD
+=======
+    alignItems: "center",
+>>>>>>> d43dc0c (Font fully implemented, Index directory created, Small ui changes on login)
     backgroundColor: "#FFFFFFCC",
     width: Dimensions.get('window').width - 32,
     marginLeft: "auto",
     marginRight: "auto",
+<<<<<<< HEAD
     height: 315,
     padding: 16,
     borderRadius: 16,
     overflow: "hidden",
+=======
+>>>>>>> d43dc0c (Font fully implemented, Index directory created, Small ui changes on login)
   },
   text: {
     color: "#3E97FF",
     fontSize: 28,
     fontFamily: "Gilroy-Bold",
     fontWeight: "bold",
+<<<<<<< HEAD
     textAlign: "center",
+=======
+>>>>>>> d43dc0c (Font fully implemented, Index directory created, Small ui changes on login)
   },
 });
