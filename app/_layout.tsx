@@ -35,9 +35,9 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#232325' }}>
           <BottomSheetModalProvider>
-            <Stack>
+            <Stack screenOptions={{gestureEnabled: true}}>
               <Stack.Screen
                 name="index"
                 options={{
