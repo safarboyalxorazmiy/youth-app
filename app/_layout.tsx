@@ -15,9 +15,12 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    'SfProDisplayRegular': require('../assets/fonts/SF-Pro-Display-Regular.ttf'),
-    'SfProDisplayMedium': require('../assets/fonts/SF-Pro-Display-Medium.ttf'),
-    'SfProDisplayBold': require('../assets/fonts/SF-Pro-Display-Bold.ttf'),
+    "Gilroy-Light": require("@/assets/fonts/gilroy/Gilroy-Light.ttf"),
+    "Gilroy-Regular": require("@/assets/fonts/gilroy/Gilroy-Regular.ttf"),
+    "Gilroy-Medium": require("@/assets/fonts/gilroy/Gilroy-Medium.ttf"),
+    "Gilroy-SemiBold": require("@/assets/fonts/gilroy/Gilroy-SemiBold.ttf"),
+    "Gilroy-Bold": require("@/assets/fonts/gilroy/Gilroy-Bold.ttf"),
+    "Gilroy-Black": require("@/assets/fonts/gilroy/Gilroy-Black.ttf"),
   });
 
   useEffect(() => {

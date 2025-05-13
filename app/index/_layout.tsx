@@ -1,11 +1,11 @@
 import { Stack } from 'expo-router';
 
-export default function LoginLayout() {
+export default function IndexLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="login"
-        options={{ headerShown: false, presentation: 'modal' }}
+        name="index"
+        options={{ headerShown: false }}
       />
     </Stack>
   );
