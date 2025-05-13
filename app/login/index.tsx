@@ -81,7 +81,7 @@ export default function Login() {
     router.push({
       pathname: "/verify",
       params: {
-        phone: rawPhone,
+        phone: "+" + rawPhone,
       },
     });
 

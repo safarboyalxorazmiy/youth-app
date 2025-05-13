@@ -6,6 +6,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Verify({ route }: { route: { params: { phone: string; } } }) {
   const { phone } = useLocalSearchParams();
@@ -14,7 +15,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const [otp, setOtp] = useState<string[]>(Array(5).fill(""));
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [selection, setSelection] = useState(
     otp.map(() => ({ start: 0, end: 0 }))
   ); // Track selection positions
@@ -31,6 +32,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
 
   
   const [timerIntervalId, setTimerIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+
 
   useEffect(() => {
     if (secondsLeft === 0) {
@@ -53,7 +55,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
   
   const isFocused = useIsFocused();
   useEffect(() => {
-    setOtp(Array(5).fill(""));
+    setOtp(Array(6).fill(""));
     setSecondsLeft(60);
     setTryCount(5);
   }, [isFocused]);
@@ -68,25 +70,38 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
 
 
   const sendVerifyRequest = async (code: string) => {
-    console.log("users code: ", code);
+    console.log("users request: ", {
+          action: "login",
+          phone_number: phone,
+          code: code
+        });
+    if (isLoading) return;
+
+    setIsLoading(true);
+    try {
+      const response = await fetch("https://dev-api.yoshtadbirkorlar.uz/api/user/auth/verify-otp/", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Content-Language": "uz"
+        },
+        body: JSON.stringify({
+          action: "login",
+          phone_number: phone,
+          code: code
+        })
+      });
+      const data = await response.json();
 
 
-    fetch("https://dev-api.yoshtadbirkorlar.uz/api/user/auth/verify-otp/", {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Content-Language": "uz"
-      },
-      body: JSON.stringify({
-        action: "login",
-        phone_number: "+998949593300",
-        code: "545454"
-      })
-    })
-      .then(res => res.json())
-      .then(data => console.log("OTP verification response:", data))
-      .catch(err => console.error("Verification error:", err));
+      console.log("OTP verification response:", data);
+      console.log("Access token: ", data.data.tokens.access);
+      await AsyncStorage.setItem("access_token", data.data.tokens.access);
+    } catch (err) {
+      console.error("Verification error:", err);
+    }
+    setIsLoading(false);
   }
 
   const formatPhone = (raw: string) => {
@@ -112,9 +127,9 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
     newOtp[index] = text;
     setOtp(newOtp);
 
-    if (text && index < 4) {
+    if (text && index < 5) {
       inputRefs.current[index + 1]?.focus();
-    } else if (text && index === 4) {
+    } else if (text && index === 5) {
       console.log(newOtp.join(""));
       sendVerifyRequest(newOtp.join(""));
     }
@@ -200,8 +215,8 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
               key={index}
               ref={(el) => { inputRefs.current[index] = el!; return void 0; }}
               style={{
-                width: 50,
-                height: 50,
+                width: 45,
+                height: 45,
                 borderRadius: 10,
                 borderWidth: digit ? 1.7 : 1.5,
                 borderColor: inputRefs.current[index]?.isFocused()
@@ -262,16 +277,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
             onPressIn={animateIn}
             onPressOut={animateOut}
             onPress={() => {
-              // if (rawPhone.length === 12) {
-                // router.push({
-                //   pathname: "/verify",
-                //   params: {
-                //     phone: rawPhone,
-                //     // rememberMe: rememberMe,
-                //   },
-                // });
-                // sendLoginRequest();
-              // }
+              sendVerifyRequest(otp.join(""));
             }}
           >
             <Animated.View
@@ -293,7 +299,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
                     textAlign: "center",
                   }}
                 >
-                  Jo'natilmoqda...
+                  Tasdiqlanmoqda...
                 </Text>
                 ) : (
                 <Text
