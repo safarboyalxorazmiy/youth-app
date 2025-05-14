@@ -98,6 +98,10 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
       console.log("OTP verification response:", data);
       console.log("Access token: ", data.data.tokens.access);
       await AsyncStorage.setItem("access_token", data.data.tokens.access);
+      router.push({
+        pathname: "/"
+      });
+
     } catch (err) {
       console.error("Verification error:", err);
     }
