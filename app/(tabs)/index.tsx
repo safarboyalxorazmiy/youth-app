@@ -5,13 +5,13 @@ import { Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
-export default function App() {
+export default function Index() {
   const isFocused = useIsFocused();
   const router = useRouter();
 
   useEffect(() => {
     const checkToken = async () => {
-      let userToken = await AsyncStorage.getItem("userToken");
+      let userToken = await AsyncStorage.getItem("access_token");
       if (!userToken) {
         router.push("/login")
       } 

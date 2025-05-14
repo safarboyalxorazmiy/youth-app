@@ -37,9 +37,9 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#232325' }}>
           <BottomSheetModalProvider>
-            <Stack screenOptions={{gestureEnabled: true}}>
+            <Stack screenOptions={{gestureEnabled: true}} initialRouteName="(tabs)">
               <Stack.Screen
-                name="index"
+                name="(tabs)"
                 options={{
                   headerShown: false,
                   animation: 'flip'

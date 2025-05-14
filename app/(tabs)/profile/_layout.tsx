@@ -4,7 +4,7 @@ export default function IndexLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="index"
+        name="profile"
         options={{ headerShown: false }}
       />
     </Stack>
