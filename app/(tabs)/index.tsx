@@ -1,9 +1,12 @@
 import { useIsFocused } from "@react-navigation/native";
 import { use } from "i18next";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import FilterIcon from "@/assets/images/filter-icon.svg";
+import AddIcon from "@/assets/images/add-icon.svg";
+import UserCard from "@/components/UserCard";
 
 export default function Index() {
   const isFocused = useIsFocused();
@@ -22,7 +25,7 @@ export default function Index() {
 
     try {
       const nextPage = page;
-      const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/dashboard/users/?page=${nextPage}&page_size=20&is_myid_verified=false&is_verified=false`, {
+      const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/dashboard/users/?page=${nextPage}&page_size=10&is_myid_verified=false&is_verified=false`, {
         headers: {
           Accept: "application/json",
           "Content-Language": "uz",
@@ -69,57 +72,69 @@ export default function Index() {
 
   return (
     <View style={{  }}>
-      <Text>Hello, world!</Text>
+      
+      
+
       <FlatList
-        style={{ marginTop: 16, width: "100%", paddingHorizontal: 16   }}
+        ListHeaderComponent={
+          <View style={{ paddingBottom: 16, backgroundColor: "#F5F5F5"}}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
+              <View style={{width: 119, height: 42, borderRadius: 48, overflow: "hidden", display: "flex", flexDirection: "row", }}>
+                <Pressable
+                  android_ripple={{ color: "#1A99FF1A" }} 
+                  style={{ 
+                    width: "100%", 
+                    height: "100%", 
+                    backgroundColor: "#1A99FF1A", 
+                    display: "flex",
+                    flexDirection: "row", 
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    columnGap: 8
+                }}>
+                  <FilterIcon />
+                  <Text style={{ fontFamily: "Gilroy-Medium", color: "#1A99FF", fontSize: 16, paddingHorizontal: 16, }}>Filter</Text>
+                </Pressable>
+              </View>
+
+              <View style={{ width: 198, height: 42, borderRadius: 48, overflow: "hidden", display: "flex", flexDirection: "row", }}>
+                <Pressable 
+                  android_ripple={{ color: "#1A99FF1A" }} 
+                  style={{ 
+                    width: "100%", 
+                    height: "100%", 
+                    backgroundColor: "#1A99FF", 
+                    display: "flex",
+                    flexDirection: "row", 
+                    alignItems: "center", 
+                    justifyContent: "center", 
+                    columnGap: 8,
+                    paddingHorizontal: 8, 
+                    paddingVertical: 12,
+                }}>
+                  <AddIcon />
+                  <Text style={{ fontFamily: "Gilroy-Medium", color: "#FFF", fontSize: 14, }}>Foydalanuvchi qo’shish</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        }
+        stickyHeaderIndices={[0]} 
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ width: "100%", paddingHorizontal: 16   }}
         data={users}
         keyExtractor={(item) => item?.id?.toString() || ""}
         onEndReached={() => {
           fetchUsers();
         }}
 
-        initialNumToRender={5}
-
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
         onEndReachedThreshold={5}
-        renderItem={({ item }) => (
-          <View style={{ borderRadius: 16, backgroundColor: "#FFF", padding: 12, marginBottom: 8 }}>
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-              <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#1A99FF", fontSize: 14}}>{item.first_name.toUpperCase() + " " + item.last_name.toUpperCase()}</Text>
-
-              <Text style={{ fontFamily: "Gilroy-Medium", color: "#44D015", fontSize: 12}}>{item.roles[0]?.name || "-" }</Text>
-            </View>
-
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 16, gap: 36 }}>
-              <View style={{width: 141, }}>
-                <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 12, fontWeight: 400, color: "#8C8D8D" }}>Telefon raqami</Text>
-                <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#474848", fontSize: 12, marginTop: 2}}>{item.phone_number || "-"}</Text>
-              </View>
-              <View style={{width: 141, }}>
-                <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 12, fontWeight: 400, color: "#8C8D8D" }}>Tug'ilgan sana</Text>
-                <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#474848", fontSize: 12, marginTop: 2}}>{item.birth_date || "-"}</Text>
-              </View>
-            </View>
-
-
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 12, gap: 36 }}>
-              <View style={{width: 141, }}>
-                <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 12, fontWeight: 400, color: "#8C8D8D" }}>Kraudfanding arizalari</Text>
-                <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#474848", fontSize: 12, marginTop: 2}}>{item.crowdfundings_count || "-"}</Text>
-              </View>
-              <View style={{width: 141, }}>
-                <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 12, fontWeight: 400, color: "#8C8D8D" }}>Startup arizalari</Text>
-                <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#474848", fontSize: 12, marginTop: 2}}>{item.startup_applications_count || "-"}</Text>
-              </View>
-            </View>
-
-            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 12, gap: 36 }}>
-              <View style={{width: 141, }}>
-                <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 12, fontWeight: 400, color: "#8C8D8D" }}>Yaratilgan vaqt</Text>
-                <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#474848", fontSize: 12, marginTop: 2}}>{item.created_time}</Text>
-              </View>
-            </View>
-          </View>
-        )}
+        renderItem={({ item }) => <UserCard item={item} />}
+        removeClippedSubviews={true}
         ListFooterComponent={loading ? <Text style={{ textAlign: "center", padding: 16 }}>Loading... {page}</Text> : null}
       />
     </View>
