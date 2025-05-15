@@ -18,6 +18,7 @@ import UsersIconActive from "@/assets/images/navbar/users-icon-active.svg";
 import PollIcon from "@/assets/images/navbar/poll-icon.svg";
 import PollIconActive from "@/assets/images/navbar/poll-icon-active.svg";
 import ProfileIcon from "@/assets/images/navbar/profile-icon.svg";
+import ProfileIconActive from "@/assets/images/navbar/profile-icon-active.svg";
 
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -207,10 +208,18 @@ export default function TabLayout() {
                       width: "100%",
                       height: "100%",
                     }}
-                    onPress={() => router.push("./profile")}
+                    onPress={() => router.push("/profile")}
                   >
-                    <ProfileIcon />
-                    <Text style={{ fontSize: 12, fontFamily: "Gilroy-Medium", fontWeight: 500, color: "#D2D2D2"}}>Profil</Text>
+                    {routeInfo.pathname === "/profile" ? (
+                      <View>
+                        <ProfileIconActive />
+                      </View>
+                    ) : (
+                      <View>
+                        <ProfileIcon />
+                      </View>
+                    )}
+                    <Text style={[{ fontSize: 12, fontFamily: "Gilroy-Medium", fontWeight: 500}, routeInfo.pathname === "/profile" ? { color: "#1A99FF", fontFamily: "Gilroy-SemiBold"} : { color: "#D2D2D2"}]}>Profil</Text>
                   </Pressable>
                 </View>
               </View>

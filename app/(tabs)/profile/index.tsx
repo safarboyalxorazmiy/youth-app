@@ -140,7 +140,7 @@ export default function Profile() {
               <PassportIcon />
               <View>
                 <Text style={{color: "#C6C6C6", fontSize: 14, fontFamily: "Gilroy-Regular"}}>Pasport </Text>
-                <Text style={{color: "#111111", fontSize: 14, fontFamily: "Gilroy-Medium"}}>{profileData.passport_series || "-"}{profileData.passport_number || "-"}</Text>
+                <Text style={{color: "#111111", fontSize: 14, fontFamily: "Gilroy-Medium"}}>{profileData?.passport_series || "-"}{profileData?.passport_number || "-"}</Text>
               </View>
             </View>
 
