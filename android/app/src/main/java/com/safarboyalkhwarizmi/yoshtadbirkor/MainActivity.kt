@@ -1,4 +1,4 @@
-package com.safarboyalxorazmiy.Youth
+package com.safarboyalkhwarizmi.yoshtadbirkor
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

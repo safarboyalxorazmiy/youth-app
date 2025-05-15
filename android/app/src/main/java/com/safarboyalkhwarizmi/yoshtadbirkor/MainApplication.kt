@@ -1,4 +1,4 @@
-package com.safarboyalxorazmiy.Youth
+package com.safarboyalkhwarizmi.yoshtadbirkor
 
 import android.app.Application
 import android.content.res.Configuration

@@ -2,17 +2,25 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'react-native';
-import { useEffect } from 'react';
+import { StatusBar, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import RotatingIcon from '@/components/RotatingIcon';
+import LogoText from "@/assets/images/logo-text.svg";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    SplashScreen.hideAsync();
+  }, []);
+
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     "Gilroy-Light": require("@/assets/fonts/gilroy/Gilroy-Light.ttf"),
@@ -25,12 +33,19 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      setIsAppReady(true);
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
+  if (!isAppReady) {
+    return (
+      <View style={{backgroundColor: "#1A99FF", height: "100%"}}>
+        <View style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", height: "100%", columnGap: 10}}>
+          <RotatingIcon />
+          <LogoText height={200} width={250} style={{marginTop: 15}} />
+        </View>
+      </View>
+    );
   }
 
   return (

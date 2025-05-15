@@ -1,20 +1,26 @@
 {
   "expo": {
-    "name": "Youth",
-    "slug": "youth",
+    "name": "Yosh Tadbirkor",
+    "slug": "yosh-tadbirkor",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "yosh-tadbirkor",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#1A99FF"
+    },
+
     "plugins": [
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#FFF"
+          "resizeMode": "cover",
+          "backgroundColor": "#1A99FF"
         }
       ]
     ],
@@ -31,7 +37,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.safarboyalxorazmiy.Youth"
+      "package": "com.safarboyalkhwarizmi.yoshtadbirkor"
     },
     "web": {
       "bundler": "metro",
@@ -46,9 +52,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "113ddc9a-9f91-4acb-ae3c-5997fde3ec4d"
+        "projectId": "f79b62a0-0381-4fbd-b608-83c22b2d8e3e"
       }
     },
-    "owner": "safarboyalxorazmiy"
+    "owner": "safarboyalkhwarizmi"
   }
 }
