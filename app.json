@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Youth",
-    "slug": "Youth",
+    "slug": "youth",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -31,7 +31,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.safarboyalxorazmiy.Roadie"
+      "package": "com.safarboyalxorazmiy.Youth"
     },
     "web": {
       "bundler": "metro",
@@ -46,8 +46,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "a8bc23ab-000a-4aa6-a4ad-d9d627cba674"
+        "projectId": "113ddc9a-9f91-4acb-ae3c-5997fde3ec4d"
       }
-    }
+    },
+    "owner": "safarboyalxorazmiy"
   }
 }

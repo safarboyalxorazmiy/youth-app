@@ -9,10 +9,11 @@ import YouthLogo from "@/assets/images/youth-logo.svg";
 export default function Login() {
   const isFocused = useIsFocused();
   const router = useRouter();
-  const [rawPhone, setRawPhone] = useState("998");
+  const [rawPhone, setRawPhone] = useState("+998");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
 
   const formatPhone = (raw: string) => {
     const phone = raw.replace(/\D/g, "").replace(/^998/, "");
@@ -104,14 +105,15 @@ export default function Login() {
 
         <Text style={{marginTop: 40, fontSize: 16, fontFamily: "Gilroy-Regular", color: "#292929"}}>Telefon raqam</Text>
 
-        <View style={{ width: "100%", marginTop: 8, backgroundColor: "#FFFFFF", borderWidth: 1, borderRadius: 8, borderColor: "#EFEFEF", flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingVertical: 16, height: 54, columnGap: 8 }}>
+        <View style={{ borderColor: isError ? "#FF0000" : inputFocused ? "#1A99FF" : "#EFEFEF", borderWidth: 1.27, width: "100%", marginTop: 8, backgroundColor: "#FFFFFF", borderRadius: 8,  flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingVertical: 16, height: 54, columnGap: 8 }}>
           <Image
             source={require("@/assets/images/flaguz.png")}
             style={{ width: 24, height: 24 }}
             resizeMode="contain"
           />
           <TextInput
-            style={{ width: "100%", height: 54, fontSize: 16, fontFamily: "Gilroy-Regular", color: "#111111" }}
+            onFocus={() => setInputFocused(true)}
+            style={{ width: "100%", height: 54, fontSize: 16, fontFamily: "Gilroy-Regular", color: "#111111"}}
             keyboardType="phone-pad"
             placeholder="+998"
             placeholderTextColor="#111111"
@@ -119,6 +121,11 @@ export default function Login() {
             onChangeText={handleChange}
           />
         </View>
+
+        {
+          isError && 
+            <Text style={{ marginTop: 8, fontSize: 14, height: 23, fontFamily: "Gilroy-Medium", color: "#FF0000" }}>Raqam formati: +998XXXXXXXXX</Text>
+        }
 
         <View style={{ flexDirection: "row", alignItems: "center",columnGap: 8, marginTop: 8 }}>
           <ToggleSwitch
@@ -151,6 +158,8 @@ export default function Login() {
               //   },
               // });
               sendLoginRequest();
+            } else {
+              setIsError(true);
             }
           }}
         >
@@ -207,7 +216,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 32,
     marginLeft: "auto",
     marginRight: "auto",
-    height: 315,
+    // height: 315,
     padding: 16,
     borderRadius: 16,
     overflow: "hidden",

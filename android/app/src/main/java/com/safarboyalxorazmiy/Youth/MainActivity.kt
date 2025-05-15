@@ -1,4 +1,4 @@
-package com.safarboyalxorazmiy.Roadie
+package com.safarboyalxorazmiy.Youth
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

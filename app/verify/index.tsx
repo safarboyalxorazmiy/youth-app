@@ -103,7 +103,8 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
       });
 
     } catch (err) {
-      console.error("Verification error:", err);
+      // console.error("Verification error:", err);
+      setCodeError(true);
     }
     setIsLoading(false);
   }
