@@ -37,7 +37,7 @@ export default function Poll() {
       if (!response.ok) throw new Error(`Server error ${response.status}`);
 
       const data = await response.json();
-      console.log("data", data.data.data);
+      // console.log("data", data.data.data);
       const newUsers = data.data.data;
 
       if (newUsers.length > 0) {
