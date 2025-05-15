@@ -11,6 +11,7 @@ import PinflIcon from "@/assets/images/pinfl-icon.svg";
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExitIcon from "@/assets/images/exit-icon.svg"
+import { useRouter } from 'expo-router';
 
 export default function Profile() {
   const [collapsed, setCollapsed] = useState(true);
@@ -53,6 +54,8 @@ export default function Profile() {
       throw error;
     }
   };
+
+  const router = useRouter();
 
 
   function formatPhoneNumber(phoneNumber: string) {
@@ -177,10 +180,15 @@ export default function Profile() {
         <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 16, color: "#8C8D8D", marginTop: 8}}>{profileData?.id}</Text>
       </View>
 
-      <Pressable style={{backgroundColor: "#e7000b1a", flexDirection: "row", alignItems: "center", justifyContent: "center", borderRadius: 8, padding: 16, marginTop: 16, columnGap: 8, marginBottom: 100}}>
-        <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Chiqish</Text>
-        <ExitIcon style={{color: "#fb2c36"}}/>
-      </Pressable>
+      <View style={{ marginTop: 16, width: "100%", marginBottom: 100, borderRadius: 8, overflow: "hidden", }}>
+        <Pressable onPress={() => {
+          AsyncStorage.clear();
+          router.push("/login")
+        }} android_ripple={{color: "#e7000b1a"}} style={{backgroundColor: "#e7000b1a", width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 16,  columnGap: 8, }}>
+          <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Chiqish</Text>
+          <ExitIcon style={{color: "#fb2c36"}}/>
+        </Pressable>
+      </View>
 
     </ScrollView>
   );
