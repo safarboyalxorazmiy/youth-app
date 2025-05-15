@@ -45,15 +45,17 @@ export default function TabLayout() {
             // paddingLeft: 65,
             // paddingRight: 39,
             // backgroundColor: "white",
-            elevation: 0, // Optional: Adds shadow effect for better UI
+            elevation: 10, // Optional: Adds shadow effect for better UI
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
             backgroundColor: "white",
 
-            borderTopColor: "#D1D1D1",
-            borderTopWidth: 0.5,
+            
+            borderWidth: 0,
+            borderTopRightRadius: 16,
+            borderTopLeftRadius: 16,
             paddingHorizontal: 12
           },      
           headerStyle: {
