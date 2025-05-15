@@ -1,13 +1,15 @@
 import { useIsFocused } from "@react-navigation/native";
 import { use } from "i18next";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable, RefreshControl, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import FilterIcon from "@/assets/images/filter-icon.svg";
 import AddIcon from "@/assets/images/add-icon.svg";
 import UserCard from "@/components/UserCard";
 import UserSkeleton from "@/components/UserSkeleton";
+import RotatingIcon from "@/components/RotatingIcon";
+import RotatingIconDark from "@/components/RotatingIconDark";
 
 export default function Index() {
   const isFocused = useIsFocused();
@@ -73,9 +75,6 @@ export default function Index() {
 
   return (
     <View style={{  }}>
-      
-      
-
       <FlatList
         ListHeaderComponent={
           <View style={{ paddingBottom: 16, backgroundColor: "#F5F5F5"}}>
@@ -145,6 +144,22 @@ export default function Index() {
         ListFooterComponent={loading ? (
           <UserSkeleton />
         ) : null}
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => {
+              setPage(1);
+              setUsers([]);
+              setLoading(true);
+              fetchUsers();
+            }}
+            tintColor="#1A99FF" // iOS spinner color
+            colors={['#1A99FF']} // Android spinner color
+            title="Yangilanmoqda..."
+            titleColor="#1A99FF"
+          />
+        }
+
       />
     </View>
   );

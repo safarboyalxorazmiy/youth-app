@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, View, Image, StyleSheet, Easing } from 'react-native';
 
-export default function RotatingIcon() {
+export default function RotatingIconDark({ size = 50 }: { size?: number }) {
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.loop(
       Animated.timing(rotateAnim, {
         toValue: 1,
-        duration: 2000, // 2 seconds for a full rotation
+        duration: 2000,
         useNativeDriver: true,
         easing: Easing.linear,
       })
@@ -21,19 +21,22 @@ export default function RotatingIcon() {
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       <Animated.Image
-        source={require('@/assets/images/spinner.png')} // use your own image
-        style={[styles.image, { transform: [{ rotate: spin }] }]}
+        source={require('@/assets/images/spinner-dark.png')}
+        style={{
+          width: size,
+          height: size,
+          transform: [{ rotate: spin }],
+        }}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  
-  image: {
-    width: 50,
-    height: 50,
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
