@@ -17,7 +17,7 @@ export default function Poll() {
   const [users, setUsers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchUsers = useCallback(async () => {
     if (loading) return;
@@ -28,6 +28,40 @@ export default function Poll() {
     try {
       const nextPage = page;
       const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/dashboard/youth-survey/?desire_work_uzbekistan=&has_stable_job=&needs_vocational_training=&page=${page}&page_size=10&region=&abroad_country=&search=&created_by=&bank_branch=&status=&start_created_time=&purpose=`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Language": "uz",
+          Authorization: `Bearer ${userToken}`,
+        }
+      });
+
+      if (!response.ok) throw new Error(`Server error ${response.status}`);
+
+      const data = await response.json();
+      // console.log("data", data.data.data);
+      const newUsers = data.data.data;
+
+      if (newUsers.length > 0) {
+        setUsers(prevUsers => {
+          const existingIds = new Set(prevUsers.map(user => user.id));
+          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          return [...prevUsers, ...filtered];
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  }, [loading, page]);
+
+  const fetchUsersBySearchQuery = useCallback(async (searchQuery: string) => {
+    if (loading) return;
+
+    setLoading(true);
+    let userToken = await AsyncStorage.getItem("access_token");
+
+    try {
+      const nextPage = page;
+      const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/dashboard/youth-survey/?desire_work_uzbekistan=&has_stable_job=&needs_vocational_training=&page=1&page_size=${nextPage}&region=&abroad_country=&search=${searchQuery}&created_by=&bank_branch=&status=&start_created_time=&purpose=`, {
         headers: {
           Accept: "application/json",
           "Content-Language": "uz",
@@ -84,6 +118,14 @@ export default function Poll() {
             <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
               <View style={{backgroundColor: "#F9F9F9", flexDirection: "row", alignItems: "center", justifyContent: "space-between",  borderWidth: 1, borderColor: "#E8E6ED", borderRadius: 12, height: 44, width: 265}}>
                 <TextInput 
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setPage(1);
+                    setLoading(false);
+                    setSearchQuery(e.nativeEvent.text);
+                    setUsers([]);
+                    fetchUsersBySearchQuery(e.nativeEvent.text);
+                  }}
                   placeholder="Ism, Pasport yoki PINFL qidirish" 
                   placeholderTextColor="#8D8D8D"
                   style={{ 
@@ -133,7 +175,11 @@ export default function Poll() {
         data={users}
         keyExtractor={(item) => item?.id?.toString() || ""}
         onEndReached={() => {
-          fetchUsers();
+          if (searchQuery !== "") {
+            fetchUsersBySearchQuery(searchQuery);
+          } else {
+            fetchUsers();
+          }
         }}
 
         initialNumToRender={10}
