@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import FilterIcon from "@/assets/images/filter-icon.svg";
 import AddIcon from "@/assets/images/add-icon.svg";
 import UserCard from "@/components/UserCard";
+import UserSkeleton from "@/components/UserSkeleton";
 
 export default function Index() {
   const isFocused = useIsFocused();
@@ -133,9 +134,17 @@ export default function Index() {
         maxToRenderPerBatch={10}
         windowSize={5}
         onEndReachedThreshold={5}
-        renderItem={({ item }) => <UserCard item={item} />}
+        renderItem={({ item }) =>
+          loading && page === 1 ? (
+            <UserSkeleton />
+          ) : (
+            <UserCard item={item} />
+          )
+        }        
         removeClippedSubviews={true}
-        ListFooterComponent={loading ? <Text style={{ textAlign: "center", padding: 16 }}>Loading... {page}</Text> : null}
+        ListFooterComponent={loading ? (
+          <UserSkeleton />
+        ) : null}
       />
     </View>
   );

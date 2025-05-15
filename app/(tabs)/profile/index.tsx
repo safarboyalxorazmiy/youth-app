@@ -177,7 +177,7 @@ export default function Profile() {
         <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 16, color: "#8C8D8D", marginTop: 8}}>{profileData?.id}</Text>
       </View>
 
-      <Pressable  style={{backgroundColor: "#e7000b1a", flexDirection: "row", alignItems: "center", justifyContent: "center", borderRadius: 8, padding: 16, marginTop: 16, columnGap: 8, marginBottom: 100}}>
+      <Pressable style={{backgroundColor: "#e7000b1a", flexDirection: "row", alignItems: "center", justifyContent: "center", borderRadius: 8, padding: 16, marginTop: 16, columnGap: 8, marginBottom: 100}}>
         <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Chiqish</Text>
         <ExitIcon style={{color: "#fb2c36"}}/>
       </Pressable>
