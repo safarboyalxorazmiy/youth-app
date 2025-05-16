@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { use } from "i18next";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, Pressable, Text, TextInput, View } from "react-native";
+import { FlatList, Pressable, RefreshControl, Text, TextInput, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import FilterIcon from "@/assets/images/filter-icon.svg";
@@ -192,9 +192,28 @@ export default function Poll() {
           <PollCard item={item} />
         )}
         removeClippedSubviews={true}
-  ListFooterComponent={loading ? (
+        ListFooterComponent={loading ? (
           <UserSkeleton />
-        ) : null}      />
+        ) : null}      
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => {
+              setPage(1);
+              setUsers([]);
+              setLoading(true);
+              if (searchQuery !== "") {
+                fetchUsersBySearchQuery(searchQuery);
+              }  else {
+                fetchUsers();
+              }
+            }}
+            tintColor="#1A99FF" // iOS spinner color
+            colors={['#1A99FF']} // Android spinner color
+            title="Yangilanmoqda..."
+            titleColor="#1A99FF"
+          />
+        }/>
     </View>
   );
 }
