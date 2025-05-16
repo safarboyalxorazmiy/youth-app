@@ -216,7 +216,8 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
         <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 30, columnGap: 10 }}>
           {otp.map((digit, index) => (
             <TextInput
-            
+              textContentType="oneTimeCode"
+              autoComplete="sms-otp"
               key={index}
               ref={(el) => { inputRefs.current[index] = el!; return void 0; }}
               style={{
