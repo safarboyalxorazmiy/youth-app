@@ -6,7 +6,7 @@ export default function VerifyLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="verify"
-        options={{ headerShown: false, presentation: 'modal' }}
+        options={{ headerShown: false }}
       />
     </Stack>
   );

@@ -59,11 +59,12 @@ export default function RootLayout() {
                 name="(tabs)"
                 options={{
                   headerShown: false,
-                  animation: 'flip'
+                  animation: 'fade',
+                  presentation: 'fullScreenModal'
                 }}
               />
-              <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
-              <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right' }} />
+              <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
+              <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
 
               <Stack.Screen
                 name="modal"

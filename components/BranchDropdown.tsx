@@ -15,19 +15,19 @@ import Animated, {
 import DropdownIcon from '@/assets/images/dropdown-icon.svg';
 import { TouchableRipple } from 'react-native-paper';
 
-interface Region {
+interface Branch {
   id: string;
   name: string;
 }
 
-export function RegionDropdown({
-  selectedRegion,
-  setSelectedRegion,
+export function BankBranchDropdown({
+  selectedBranch,
+  setSelectedBranch,
 }: {
-  selectedRegion: string;
-  setSelectedRegion: (value: string) => void;
+  selectedBranch: string;
+  setSelectedBranch: (value: string) => void;
 }) {
-  const [items, setItems] = useState<Region[]>([]);
+  const [items, setItems] = useState<Branch[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownHeight = useSharedValue(0);
   const opacity = useSharedValue(0);
@@ -46,57 +46,56 @@ export function RegionDropdown({
     opacity: opacity.value,
   }));
 
-  const handleSelect = (item: Region) => {
-    setSelectedRegion(item.name);
+  const handleSelect = (item: Branch) => {
+    setSelectedBranch(item.name);
     toggleDropdown();
   };
 
   useEffect(() => {
-    const fetchRegions = async () => {
+    const fetchBranches = async () => {
       try {
-        const access_token = await AsyncStorage.getItem('access_token');
-        if (!access_token) {
+        const token = await AsyncStorage.getItem('access_token');
+        if (!token) {
           console.warn('Access token not found');
           return;
         }
 
-        const response = await fetch('https://dev-api.yoshtadbirkorlar.uz/api/user/regions/', {
+        const res = await fetch('https://dev-api.yoshtadbirkorlar.uz/api/dashboard/bank-branches/?page_size=1000', {
           headers: {
-            Accept: 'application/json, text/plain, */*',
-            'Accept-Language': 'uz',
-            Authorization: 'Bearer ' + access_token,
-            Origin: 'https://dev-admin.yoshtadbirkorlar.uz',
-            Referer: 'https://dev-admin.yoshtadbirkorlar.uz/all-users',
+            Authorization: `Bearer ${token}`
           },
         });
 
-        const json = await response.json();
+        const json = await res.json();
 
-        if (json.success && Array.isArray(json.data)) {
-          setItems(json.data);
+        const branches = json?.data?.data;
+        if (Array.isArray(branches)) {
+          setItems(branches);
         } else {
-          console.warn('Failed to load regions:', json.message);
+          console.warn('API format unexpected:', json);
         }
-      } catch (err) {
-        console.error('Error fetching regions:', err);
+      } catch (error) {
+        console.error('Failed to fetch bank branches:', error);
       }
     };
 
-    fetchRegions();
+    fetchBranches();
   }, []);
 
   return (
     <>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
-          {selectedRegion || 'Viloyat'}
+          {selectedBranch || 'Filialni tanlang'}
         </Text>
         <DropdownIcon width={14} height={14} style={{ marginLeft: 8 }} />
       </TouchableOpacity>
 
       <Animated.View style={[styles.dropdownList, animatedStyle]}>
         <FlatList
-          style={{ width: '100%' }}
+          style={{
+            width: '100%', 
+           }}
           data={items}
           keyExtractor={(item) => item.id}
           scrollEnabled={false}
@@ -136,13 +135,14 @@ const styles = StyleSheet.create({
   },
   dropdownList: {
     overflow: 'hidden',
-    backgroundColor: '#FBFBFB',
+    backgroundColor: 'red',
     borderRadius: 12,
     marginTop: 4,
     borderWidth: 1,
     borderColor: '#e0e0e0',
     width: '100%',
-    marginBottom: 16
+    paddingBottom: 0,
+    height: 0,
   },
   item: {
     width: '100%',
@@ -150,8 +150,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FBFBFB',
     height: 44,
+
     paddingHorizontal: 12,
-    paddingVertical: 12,
+    // paddingVertical: 12,
   },
   itemText: {
     fontSize: 14,

@@ -5,7 +5,7 @@ export default function LoginLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="login"
-        options={{ headerShown: false, presentation: 'modal' }}
+        options={{ headerShown: false }}
       />
     </Stack>
   );

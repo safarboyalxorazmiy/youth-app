@@ -1,5 +1,5 @@
-import { Link } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import { Linking, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
@@ -9,19 +9,27 @@ import DropdownIcon from "@/assets/images/dropdown-icon.svg";
 import CloseIcon from "@/assets/images/close-icon.svg";
 import DropDownPicker from 'react-native-dropdown-picker';
 import { RegionDropdown } from '@/components/RegionDropdown';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 
+import Constants from 'expo-constants';
+import { BankBranchDropdown } from '@/components/BranchDropdown';
+import { TouchableRipple } from 'react-native-paper';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Modal() {
   const [selectedRegion, setSelectedRegion] = useState('Viloyat');
   const [selectedBranch, setSelectedBranch] = useState('Filial');
 
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([
-      { label: 'Toshkent', value: 'Toshkent' },
-      { label: 'Samarqand', value: 'Samarqand' },
-      { label: 'Buxoro', value: 'Buxoro' },
-    ]);
+  const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: 'Toshkent', value: 'Toshkent' },
+    { label: 'Samarqand', value: 'Samarqand' },
+    { label: 'Buxoro', value: 'Buxoro' },
+  ]);
 
   return (
     <Animated.View
@@ -31,49 +39,97 @@ export default function Modal() {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00000040',
+        marginTop: Platform.OS === 'ios' ? statusBarHeight : 0,
       }}
     >
       {/* Dismiss modal when pressing outside */}
-      <Link href={'/'} asChild>
-        <Pressable style={StyleSheet.absoluteFill} />
-      </Link>
+      {/* <Link href={'/(tabs)'} asChild> */}
+        <Pressable onPress={() => {
+          console.log("What did you expect mf?");
+          router.push("/(tabs)");
+        }} style={StyleSheet.absoluteFill} />
+      {/* </Link> */}
 
       <Animated.View
         entering={SlideInDown}
         style={{
-          width: '90%',
-          height: '80%',
+          width: SCREEN_WIDTH - 32,
+          maxHeight: '80%',
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'white',
-          borderRadius: 16,
-          padding: 16,
-        }}
-      >
-        <RegionDropdown
-          selectedRegion={selectedRegion}
-          setSelectedRegion={setSelectedRegion}
-        />
-
-        <Text style={styles.label}>Filial</Text>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedBranch}
-            onValueChange={(itemValue) => setSelectedBranch(itemValue)}
-            style={styles.picker}
-            mode="dropdown"
-            
-          >
-            <Picker.Item label="Filial" value="Filial" />
-            <Picker.Item label="Asosiy filial" value="Asosiy filial" />
-            <Picker.Item label="Qo‘shimcha filial" value="Qo‘shimcha filial" />
-          </Picker>
+          borderRadius: 16
+        }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
+            <Text style={{ fontFamily: "Gilroy-SemiBold", fontWeight: 'bold', color: "#303131", fontSize: 20, marginLeft: 16 }}>Filter</Text>
+          
+          <TouchableRipple 
+            onPress={() => {
+              console.log("What did you expect mf?");
+              router.push("/(tabs)");
+            }}
+            rippleColor={'rgba(0, 0, 0, .32)'}
+            underlayColor="rgba(0,0,0,0.1)"
+            borderless={true}
+            style={{width: 34 + 16, height: 34 + 16, right: 0, top: 0, padding: 20, alignItems: 'center', justifyContent: 'center', borderTopRightRadius: "50%", borderTopLeftRadius: "50%", borderBottomLeftRadius: "50%", borderBottomRightRadius: "50%"}}>
+            <CloseIcon style={{ width: 24, height: 24 }} />
+          </TouchableRipple>
         </View>
+        
+        
+        <ScrollView style={{
+          padding: 16,
+          position: 'relative',
+        }}>
+          <RegionDropdown
+            selectedRegion={selectedRegion}
+            setSelectedRegion={setSelectedRegion}
+          />
 
-        <Text style={{ fontWeight: 'bold', marginVertical: 20 }}>Modal Screen</Text>
-        <Link href="/">
-          <Text>← Go back</Text>
-        </Link>
+          <BankBranchDropdown 
+            selectedBranch={selectedBranch}
+            setSelectedBranch={setSelectedBranch}
+          />
+
+          <View style={{
+            flexDirection: "row", 
+            marginTop: 16, 
+            justifyContent: "space-between",
+            marginBottom: 16
+          }}>
+            <TouchableRipple 
+              underlayColor="rgba(0,0,0,0.1)"
+              borderless={true}
+              rippleColor={'rgba(0,0,0,0.1)'}
+              style={{ width: (SCREEN_WIDTH / 2) - 32 - 8, height: 45, alignItems: "center", justifyContent: "center", backgroundColor: "#e7000b1a", borderRadius: 12, paddingVertical: 8}}
+              onPress={() => {
+                console.log("What did you expect mf?");
+                router.push("/(tabs)");
+              }}
+            >
+              <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tozalash</Text>
+            </TouchableRipple>
+
+            <TouchableRipple 
+              underlayColor="rgba(0,0,0,0.1)"
+              borderless={true}
+              rippleColor={'rgba(0,0,0,0.1)'}
+
+              style={{ width: (SCREEN_WIDTH / 2) - 32 - 8, height: 45, alignItems: "center", justifyContent: "center", backgroundColor: "#3F9CFB", borderRadius: 12, paddingVertical: 8}}
+              onPress={() => {
+                console.log("What did you expect mf?");
+                router.push("/(tabs)");
+              }}
+            >
+              <Text style={{color: "#FFF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Qidirish</Text>
+            </TouchableRipple>
+          </View>
+
+          {/* <Text style={{ fontWeight: 'bold', marginVertical: 20 }}>Modal Screen</Text>
+          <Link href="/">
+            <Text>← Go back</Text>
+          </Link> */}
+        </ScrollView>
       </Animated.View>
     </Animated.View>
   );
