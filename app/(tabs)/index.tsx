@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { use } from "i18next";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, Pressable, RefreshControl, Text, View } from "react-native";
+import { FlatList, Pressable, RefreshControl, Text, View, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import FilterIcon from "@/assets/images/filter-icon.svg";
@@ -10,6 +10,7 @@ import UserCard from "@/components/UserCard";
 import UserSkeleton from "@/components/UserSkeleton";
 import RotatingIcon from "@/components/RotatingIcon";
 import RotatingIconDark from "@/components/RotatingIconDark";
+import SearchIcon from "@/assets/images/search-icon.svg";
 
 export default function Index() {
   const isFocused = useIsFocused();
@@ -18,7 +19,8 @@ export default function Index() {
   const [users, setUsers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInputFocused, setSearchInputFocused] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     if (loading) return;
@@ -53,6 +55,46 @@ export default function Index() {
     }
   }, [loading, page]);
 
+  const fetchUsersBySearchQuery = useCallback(async (searchQuery: string) => {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      const userToken = await AsyncStorage.getItem("access_token");
+      if (!userToken) return;
+
+      const response = await fetch(
+        `https://dev-api.yoshtadbirkorlar.uz/api/dashboard/users/?search=${encodeURIComponent(searchQuery)}&page=${page}&page_size=10&is_myid_verified=false&is_verified=false`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Language": "uz",
+            Authorization: `Bearer ${userToken}`,
+          }
+        }
+      );
+
+      if (!response.ok) throw new Error(`Server error ${response.status}`);
+
+      const data = await response.json();
+      const newUsers = data.data.data;
+
+      if (newUsers.length > 0) {
+        setUsers(prevUsers => {
+          const existingIds = new Set(prevUsers.map(user => user.id));
+          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          return [...prevUsers, ...filtered];
+        });
+      }
+
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, page]);
+
+
   useEffect(() => {
     setPage(prev => prev + 1);
     setLoading(false);
@@ -78,7 +120,8 @@ export default function Index() {
       <FlatList
         ListHeaderComponent={
           <View style={{ paddingBottom: 16, backgroundColor: "#F5F5F5"}}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
+            <View style={{backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
               <View style={{width: 119, height: 42, borderRadius: 48, overflow: "hidden", display: "flex", flexDirection: "row", }}>
                 <Pressable
                   android_ripple={{ color: "#1A99FF1A" }} 
@@ -117,6 +160,46 @@ export default function Index() {
                 </Pressable>
               </View>
             </View>
+
+
+            <View style={{marginTop: 12, backgroundColor: searchInputFocused ? "#FFF" : "#F9F9F9", flexDirection: "row", alignItems: "center", justifyContent: "space-between",  borderWidth: searchInputFocused ? 1.3 : 1, borderColor: searchInputFocused ? "#1A99FF" :"#E8E6ED", borderRadius: 12, height: 44, width: "100%"}}>
+                <TextInput 
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setPage(1);
+                    setLoading(false);
+                    setSearchQuery(e.nativeEvent.text);
+                    setUsers([]);
+                    fetchUsersBySearchQuery(e.nativeEvent.text);
+                  }}
+                  onFocus={() => {
+                    setSearchInputFocused(true);
+                  }}
+                  onBlur={() => {
+                    setSearchInputFocused(false);
+                  }}
+                  placeholder="Qidiruv..." 
+                  placeholderTextColor="#8D8D8D"
+                  style={{ 
+                    fontFamily: "Gilroy-Regular", 
+                    fontSize: 14, 
+                    color: "#000", 
+                    width: 197 + 16 + 10 + 10,
+                    // backgroundColor: "red",
+                    paddingHorizontal: 16, 
+                    paddingVertical: 12,
+                    // backgroundColor: "red",
+                    height: "100%" 
+                  }}
+                  cursorColor={"#1A99FF"}
+                  editable={true}
+                  // caretHidden={false}
+
+                />
+
+                <SearchIcon style={{marginRight: 16,}} />
+              </View>
+              </View>
           </View>
         }
         stickyHeaderIndices={[0]} 
@@ -126,7 +209,11 @@ export default function Index() {
         data={users}
         keyExtractor={(item) => item?.id?.toString() || ""}
         onEndReached={() => {
-          fetchUsers();
+          if (searchQuery !== "") {
+            fetchUsersBySearchQuery(searchQuery);
+          } else {
+            fetchUsers();
+          }
         }}
 
         initialNumToRender={10}
