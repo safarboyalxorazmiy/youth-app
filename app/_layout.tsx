@@ -11,6 +11,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import RotatingIcon from '@/components/RotatingIcon';
 import LogoText from "@/assets/images/logo-text.svg";
+import { PaperProvider } from 'react-native-paper';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -49,7 +50,8 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <PaperProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#232325' }}>
           <BottomSheetModalProvider>
             <Stack screenOptions={{gestureEnabled: true}} initialRouteName="(tabs)">
@@ -63,7 +65,17 @@ export default function RootLayout() {
               <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right' }} />
               <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right' }} />
 
+              <Stack.Screen
+                name="modal"
+                options={{
+                  presentation: 'transparentModal',
+                  animation: 'fade',
+                  headerShown: false,
+                }}
+              />
+
               <Stack.Screen name="+not-found" />
+              
             </Stack>
 
             <StatusBar
@@ -75,6 +87,7 @@ export default function RootLayout() {
             />
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
-    </ThemeProvider>
+      </ThemeProvider>
+    </PaperProvider>
   );
 }

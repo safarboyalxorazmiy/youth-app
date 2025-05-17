@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { use } from "i18next";
-import { useCallback, useEffect, useState } from "react";
-import { FlatList, Pressable, RefreshControl, Text, View, TextInput } from "react-native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FlatList, Pressable, RefreshControl, Text, View, TextInput, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import FilterIcon from "@/assets/images/filter-icon.svg";
@@ -11,6 +11,10 @@ import UserSkeleton from "@/components/UserSkeleton";
 import RotatingIcon from "@/components/RotatingIcon";
 import RotatingIconDark from "@/components/RotatingIconDark";
 import SearchIcon from "@/assets/images/search-icon.svg";
+import Constants from 'expo-constants';
+
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Index() {
   const isFocused = useIsFocused();
@@ -21,6 +25,8 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchInputFocused, setSearchInputFocused] = useState(false);
+
+  const searchInputRef = useRef<TextInput>(null);
 
   const fetchUsers = useCallback(async () => {
     if (loading) return;
@@ -116,14 +122,15 @@ export default function Index() {
   }, [isFocused]);
 
   return (
-    <View style={{  }}>
+    <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0,  }}>
       <FlatList
         ListHeaderComponent={
-          <View style={{ paddingBottom: 16, backgroundColor: "#F5F5F5"}}>
+          <View style={{ paddingBottom: 16, backgroundColor: "transparent"}}>
             <View style={{backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
               <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
               <View style={{width: 119, height: 42, borderRadius: 48, overflow: "hidden", display: "flex", flexDirection: "row", }}>
                 <Pressable
+                  onPress={() => router.push("/modal")}
                   android_ripple={{ color: "#1A99FF1A" }} 
                   style={{ 
                     width: "100%", 
@@ -162,8 +169,13 @@ export default function Index() {
             </View>
 
 
-            <View style={{marginTop: 12, backgroundColor: searchInputFocused ? "#FFF" : "#F9F9F9", flexDirection: "row", alignItems: "center", justifyContent: "space-between",  borderWidth: searchInputFocused ? 1.3 : 1, borderColor: searchInputFocused ? "#1A99FF" :"#E8E6ED", borderRadius: 12, height: 44, width: "100%"}}>
+            <Pressable 
+              onPress={() => {
+                searchInputRef.current?.focus();
+              }}
+              style={{marginTop: 12, backgroundColor: searchInputFocused ? "#FFF" : "#F9F9F9", flexDirection: "row", alignItems: "center", justifyContent: "space-between",  borderWidth: searchInputFocused ? 1.8 : 1, borderColor: searchInputFocused ? "#1A99FF" :"#E8E6ED", borderRadius: 12, height: 44, width: "100%"}}>
                 <TextInput 
+                  ref={searchInputRef}
                   value={searchQuery}
                   onChange={(e) => {
                     setPage(1);
@@ -198,8 +210,8 @@ export default function Index() {
                 />
 
                 <SearchIcon style={{marginRight: 16,}} />
-              </View>
-              </View>
+              </Pressable>
+            </View>
           </View>
         }
         stickyHeaderIndices={[0]} 
