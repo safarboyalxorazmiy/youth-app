@@ -6,6 +6,7 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -21,6 +22,7 @@ import ProfileIcon from "@/assets/images/navbar/profile-icon.svg";
 import ProfileIconActive from "@/assets/images/navbar/profile-icon-active.svg";
 
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SCREEN_HEIGHT } from "@gorhom/bottom-sheet";
 
 export default function TabLayout() {
   const navigation = useNavigation();
@@ -30,7 +32,7 @@ export default function TabLayout() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ height: "100%", paddingBottom: insets.bottom}}>
+    <View style={{ height: "100%", paddingBottom: insets.bottom }}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
 
       <Tabs
@@ -45,23 +47,27 @@ export default function TabLayout() {
             // paddingLeft: 65,
             // paddingRight: 39,
             // backgroundColor: "white",
-            elevation: 10, // Optional: Adds shadow effect for better UI
+            // elevation: 10, // Optional: Adds shadow effect for better UI
+
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             width: "100%",
             backgroundColor: "white",
-
+            // marginBottom: 0,
             
             borderWidth: 0,
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
-            paddingHorizontal: 12
+            paddingHorizontal: 12,
+            shadowOpacity: 0,
+            shadowColor: "transparent"
           },      
           headerStyle: {
             borderWidth: 0,
             elevation: 0,
-            shadowOpacity: 0
+            shadowOpacity: 0,
+            shadowColor: "transparent"
           },
           headerLeft: () => (
             <View>

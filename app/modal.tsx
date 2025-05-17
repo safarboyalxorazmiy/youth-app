@@ -1,7 +1,7 @@
 import { Link, useRouter } from 'expo-router';
 import { Linking, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -14,12 +14,61 @@ import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import Constants from 'expo-constants';
 import { BankBranchDropdown } from '@/components/BranchDropdown';
 import { TouchableRipple } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const statusBarHeight = Constants.statusBarHeight;
 
 export default function Modal() {
-  const [selectedRegion, setSelectedRegion] = useState('Viloyat');
-  const [selectedBranch, setSelectedBranch] = useState('Filial');
+  const [selectedRegion, setSelectedRegion] = useState<any>({} as const);
+  const [selectedBranch, setSelectedBranch] = useState<any>({} as const);
+
+  useEffect(() => {
+    const fetchSelectedRegion = async () => {
+      try {
+        const region = await AsyncStorage.getItem('region');
+        if (region) {
+          setSelectedRegion(JSON.parse(region));
+        }
+      } catch (error) {
+        console.error('Failed to fetch selected region:', error);
+      }
+    };
+
+    const fetchSelectedBranch = async () => {
+      try {
+        const branch = await AsyncStorage.getItem('bank_branch');
+        if (branch) {
+          setSelectedBranch(JSON.parse(branch));
+        }
+      } catch (error) {
+        console.error('Failed to fetch selected branch:', error);
+      }
+    };
+
+    fetchSelectedRegion();
+    fetchSelectedBranch();
+  }, []);
+
+  useEffect(() => {
+    const storeSelectedRegion = async () => {
+      try {
+        await AsyncStorage.setItem('region', JSON.stringify(selectedRegion));
+      } catch (error) {
+        console.error('Failed to store selected region:', error);
+      }
+    };
+
+    const storeSelectedBranch = async () => {
+      try {
+        await AsyncStorage.setItem('bank_branch', JSON.stringify(selectedBranch));
+      } catch (error) {
+        console.error('Failed to store selected branch:', error);
+      }
+    };
+
+    storeSelectedRegion();
+    storeSelectedBranch();
+  }, [selectedRegion, selectedBranch]);
 
   const router = useRouter();
 
@@ -30,6 +79,33 @@ export default function Modal() {
     { label: 'Samarqand', value: 'Samarqand' },
     { label: 'Buxoro', value: 'Buxoro' },
   ]);
+
+  const search = async () => {
+    if (selectedRegion.id != null) {
+      console.log("regionId", selectedRegion.id);
+      await AsyncStorage.setItem("regionId", selectedRegion.id);
+    } else {
+      await AsyncStorage.removeItem("regionId");
+    }
+
+    if (selectedBranch.id != null) {
+      console.log("branchId", selectedBranch.id);
+      await AsyncStorage.setItem("branchId", selectedBranch.id);
+    } else {
+      await AsyncStorage.removeItem("branchId");
+    }
+
+    router.push("/(tabs)");
+  }
+
+  const clear = async () => {
+    await AsyncStorage.removeItem("region");
+    await AsyncStorage.removeItem("regionId");
+    await AsyncStorage.removeItem("bank_branch");
+    await AsyncStorage.removeItem("branchId");
+
+    router.push("/(tabs)");
+  }
 
   return (
     <Animated.View
@@ -103,8 +179,7 @@ export default function Modal() {
               rippleColor={'rgba(0,0,0,0.1)'}
               style={{ width: (SCREEN_WIDTH / 2) - 32 - 8, height: 45, alignItems: "center", justifyContent: "center", backgroundColor: "#e7000b1a", borderRadius: 12, paddingVertical: 8}}
               onPress={() => {
-                console.log("What did you expect mf?");
-                router.push("/(tabs)");
+                clear();
               }}
             >
               <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tozalash</Text>
@@ -118,7 +193,8 @@ export default function Modal() {
               style={{ width: (SCREEN_WIDTH / 2) - 32 - 8, height: 45, alignItems: "center", justifyContent: "center", backgroundColor: "#3F9CFB", borderRadius: 12, paddingVertical: 8}}
               onPress={() => {
                 console.log("What did you expect mf?");
-                router.push("/(tabs)");
+                search();
+                // router.push("/(tabs)");
               }}
             >
               <Text style={{color: "#FFF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Qidirish</Text>

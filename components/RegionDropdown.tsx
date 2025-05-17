@@ -15,19 +15,15 @@ import Animated, {
 import DropdownIcon from '@/assets/images/dropdown-icon.svg';
 import { TouchableRipple } from 'react-native-paper';
 
-interface Region {
-  id: string;
-  name: string;
-}
 
 export function RegionDropdown({
   selectedRegion,
   setSelectedRegion,
 }: {
-  selectedRegion: string;
-  setSelectedRegion: (value: string) => void;
+  selectedRegion: object;
+  setSelectedRegion: (value: object) => void;
 }) {
-  const [items, setItems] = useState<Region[]>([]);
+  const [items, setItems] = useState<Object[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownHeight = useSharedValue(0);
   const opacity = useSharedValue(0);
@@ -46,8 +42,8 @@ export function RegionDropdown({
     opacity: opacity.value,
   }));
 
-  const handleSelect = (item: Region) => {
-    setSelectedRegion(item.name);
+  const handleSelect = (item: Object) => {
+    setSelectedRegion(item);
     toggleDropdown();
   };
 
@@ -89,7 +85,7 @@ export function RegionDropdown({
     <>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
-          {selectedRegion || 'Viloyat'}
+          {selectedRegion.name || 'Viloyat'}
         </Text>
         <DropdownIcon width={14} height={14} style={{ marginLeft: 8 }} />
       </TouchableOpacity>

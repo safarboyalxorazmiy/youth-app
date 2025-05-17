@@ -23,8 +23,14 @@ export default function Index() {
   const [users, setUsers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  const [fullyLoaded, setFullyLoaded] = useState(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchInputFocused, setSearchInputFocused] = useState(false);
+  
+  const [regionId, setRegionId] = useState<string | null>(null);
+  const [branchId, setBranchId] = useState<string | null>(null);
 
   const searchInputRef = useRef<TextInput>(null);
 
@@ -57,7 +63,8 @@ export default function Index() {
         });
       }
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.log("Error fetching users:", error);
+      setFullyLoaded(true);
     }
   }, [loading, page]);
 
@@ -94,12 +101,124 @@ export default function Index() {
       }
 
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.log("Error fetching users:", error);
+      setFullyLoaded(true);
     } finally {
       setLoading(false);
     }
   }, [loading, page]);
 
+  const fetchUsersByFilterParams = useCallback(async ({
+    regionId,
+    bankBranchId,
+  }: {
+    regionId: string | null;
+    bankBranchId: string | null;
+  }) => {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      const userToken = await AsyncStorage.getItem('access_token');
+      if (!userToken) return;
+
+      const url = new URL('https://dev-api.yoshtadbirkorlar.uz/api/dashboard/users/');
+      url.searchParams.append('page', String(page));
+      url.searchParams.append('page_size', '10');
+      url.searchParams.append('user_role', 'ordinary_user');
+      if (regionId) url.searchParams.append('region', regionId);
+      if (bankBranchId) url.searchParams.append('bank_branch', bankBranchId);
+      url.searchParams.append('source', 'from_excel');
+      url.searchParams.append('is_myid_verified', 'false');
+      url.searchParams.append('is_verified', 'false');
+
+      const response = await fetch(url.toString(), {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) throw new Error(`Server error ${response.status}`);
+
+      const json = await response.json();
+      const newUsers = json?.data?.data || [];
+
+      if (newUsers.length > 0) {
+        setUsers(prevUsers => {
+          const existingIds = new Set(prevUsers.map(user => user.id));
+          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          return [...prevUsers, ...filtered];
+        });
+      }
+    } catch (err) {
+      console.log('Error fetching filtered users:', err);
+      setFullyLoaded(true);
+      setUsers([])
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, page]);
+
+  const fetchUsersByFilterParamsAndSearchQuery = useCallback(async ({
+    regionId,
+    bankBranchId,
+    searchQuery,
+    page
+  }: {
+    regionId: string | null;
+    bankBranchId: string | null;
+    searchQuery: string,
+    page: number
+  }) => {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      const userToken = await AsyncStorage.getItem('access_token');
+      if (!userToken) return;
+
+      const url = new URL('https://dev-api.yoshtadbirkorlar.uz/api/dashboard/users/');
+      url.searchParams.append('search', searchQuery);
+      console.log(page)
+      url.searchParams.append('page', String(page));
+      url.searchParams.append('page_size', '10');
+      if (regionId) url.searchParams.append('region', regionId);
+      console.log(regionId)
+
+      if (bankBranchId) url.searchParams.append('bank_branch', bankBranchId);
+      url.searchParams.append('is_myid_verified', 'false');
+      url.searchParams.append('is_verified', 'false');
+
+      const response = await fetch(url.toString(), {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) throw new Error(`Server error ${response.status}`);
+
+      const json = await response.json();
+      const newUsers = json?.data?.data || [];
+
+      if (newUsers.length > 0) {
+        setUsers(prevUsers => {
+          const existingIds = new Set(prevUsers.map(user => user.id));
+          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          return [...prevUsers, ...filtered];
+        });
+      }
+    } catch (err) {
+      console.log('Error fetching filtered users:', err);
+      setFullyLoaded(true);
+      setUsers([])
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, page]);
 
   useEffect(() => {
     setPage(prev => prev + 1);
@@ -112,8 +231,6 @@ export default function Index() {
       if (!userToken) {
         router.push("/login");
       }
-      
-      fetchUsers();
     };
 
     if (isFocused) {
@@ -122,7 +239,7 @@ export default function Index() {
   }, [isFocused]);
 
   return (
-    <View style={{ marginTop: Platform.OS === "ios" ? statusBarHeight : 0,  }}>
+    <View style={{ marginTop: statusBarHeight  }}>
       <FlatList
         ListHeaderComponent={
           <View style={{ paddingBottom: 16, backgroundColor: "transparent"}}>
@@ -180,8 +297,15 @@ export default function Index() {
                   onChange={(e) => {
                     setPage(1);
                     setLoading(false);
+                    setFullyLoaded(false);
                     setSearchQuery(e.nativeEvent.text);
                     setUsers([]);
+
+                    if (regionId || branchId) {
+                      fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, searchQuery: e.nativeEvent.text, page: 1 });
+                      return;
+                    }
+
                     fetchUsersBySearchQuery(e.nativeEvent.text);
                   }}
                   onFocus={() => {
@@ -220,11 +344,53 @@ export default function Index() {
         style={{ width: "100%", paddingHorizontal: 16   }}
         data={users}
         keyExtractor={(item) => item?.id?.toString() || ""}
-        onEndReached={() => {
-          if (searchQuery !== "") {
-            fetchUsersBySearchQuery(searchQuery);
+        onEndReached={async () => {
+          if (fullyLoaded) return;
+          
+
+          if (!branchId && !regionId) {
+            try {
+              const region = await AsyncStorage.getItem("regionId");
+              const bankBranch = await AsyncStorage.getItem("branchId");
+
+              if (region || bankBranch) {
+                setBranchId(bankBranch);
+                setRegionId(region);
+                setPage(1);
+                setSearchQuery("");
+                setUsers([]);
+                setLoading(false);
+                setFullyLoaded(false);
+
+                if (searchQuery !== "") {
+                  await fetchUsersByFilterParamsAndSearchQuery({ regionId: region, bankBranchId: bankBranch, searchQuery: searchQuery, page: 1 });
+                  return;
+                }
+
+                await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch });
+                } else {
+                if (searchQuery !== "") {
+                  await fetchUsersBySearchQuery(searchQuery);
+                  return;
+                }
+
+                await fetchUsers();
+              }
+            } catch (error) {
+              console.log("Error fetching region or branch ID from storage:", error);
+            }
           } else {
-            fetchUsers();
+            if (!fullyLoaded) {
+              if (searchQuery !== "") {
+                await fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, searchQuery: searchQuery, page });
+                return;
+              }
+
+              await fetchUsersByFilterParams({
+                regionId,
+                bankBranchId: branchId
+              });
+            }
           }
         }}
 
@@ -247,10 +413,18 @@ export default function Index() {
           <RefreshControl
             refreshing={false}
             onRefresh={() => {
-              setPage(1);
-              setUsers([]);
-              setLoading(true);
-              fetchUsers();
+              if (branchId || regionId) {
+                if (fullyLoaded == false) {
+                  fetchUsersByFilterParams({
+                    regionId: regionId,
+                    bankBranchId: branchId
+                  });
+                }
+              } else if (searchQuery !== "") {
+                fetchUsersBySearchQuery(searchQuery);
+              } else {
+                fetchUsers();
+              }
             }}
             tintColor="#1A99FF" // iOS spinner color
             colors={['#1A99FF']} // Android spinner color

@@ -9,6 +9,9 @@ import SearchIcon from "@/assets/images/search-icon.svg";
 import UserCard from "@/components/UserCard";
 import PollCard from "@/components/PollCard";
 import UserSkeleton from "@/components/UserSkeleton";
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Poll() {
   const isFocused = useIsFocused();
@@ -108,7 +111,7 @@ export default function Poll() {
   }, [isFocused]);
 
   return (
-    <View style={{  }}>
+    <View style={{ marginTop: statusBarHeight }}>
       
       
 

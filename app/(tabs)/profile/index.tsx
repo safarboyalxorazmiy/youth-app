@@ -12,6 +12,9 @@ import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExitIcon from "@/assets/images/exit-icon.svg"
 import { useRouter } from 'expo-router';
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Profile() {
   const [collapsed, setCollapsed] = useState(true);
@@ -88,7 +91,7 @@ export default function Profile() {
 
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} nestedScrollEnabled={true} style={{ padding: 20 }}>
+    <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} nestedScrollEnabled={true} style={{ padding: 20, marginTop: statusBarHeight }}>
       <View style={{borderRadius: 8, overflow: 'hidden',}}>
         <Pressable style={{
         backgroundColor: "#FFF", 
