@@ -5,6 +5,8 @@ import { ImageBackground, StyleSheet, View, Text, Dimensions, Image, TextInput, 
 import { BlurView } from 'expo-blur';
 import ToggleSwitch from "toggle-switch-react-native";
 import YouthLogo from "@/assets/images/youth-logo.svg";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import * as Haptics from "expo-haptics";
 
 export default function Login() {
   const isFocused = useIsFocused();
@@ -13,7 +15,13 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isResponseError, setIsResponseError] = useState(false);
+  const [responseErrorText, setResponseErrorText] = useState("");
+
+  
   const [inputFocused, setInputFocused] = useState(false);
+
+  const limitActionRef = useRef<ActionSheetRef>(null);
 
   const formatPhone = (raw: string) => {
     const phone = raw.replace(/\D/g, "").replace(/^998/, "");
@@ -74,18 +82,26 @@ export default function Login() {
       })
     })
       .then(response => response.json())
-      .then(data => console.log("OTP sent response:", data))
+      .then(data => {
+        console.log("OTP sent response:", data);
+        if (data.code != 200) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+          setIsResponseError(true);
+          setResponseErrorText(data.message);
+          setIsLoading(false);
+          limitActionRef.current?.show();
+          return;
+        } else {
+          setIsLoading(false);
+          router.push({
+            pathname: "/verify",
+            params: {
+              phone: "+" + rawPhone,
+            },
+          });
+        }
+      })
       .catch(error => console.error("Error sending OTP:", error));
-    
-    setIsLoading(false);
-
-    router.push({
-      pathname: "/verify",
-      params: {
-        phone: "+" + rawPhone,
-      },
-    });
-
   }
 
   useEffect(() => {
@@ -200,6 +216,42 @@ export default function Login() {
         </Pressable>
 
       </BlurView>
+
+
+      
+      <View>
+        {/* <TouchableOpacity onPress={() => {
+        
+        }}>
+          <Text>open limitActionRef</Text>
+        </TouchableOpacity> */}
+        <ActionSheet
+          ref={limitActionRef}
+          gestureEnabled={true}
+          containerStyle={{
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+            height: "auto",
+            // paddingTop: 24,
+            paddingBottom: 60
+          }}
+          indicatorStyle={{
+            width: 100,
+            // backgroundColor: "white"
+          }}
+          onClose={() => {
+            // phoneNumberInputRef.current?.focus();
+          }}
+        >
+          <View style={{paddingHorizontal: 30}}>
+            <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 18, marginTop: 40, textAlign: "left"}}>{responseErrorText}</Text>
+
+            <Pressable onPress={() => limitActionRef.current?.hide()} style={{backgroundColor: "#F2F2F2", height: 50, borderRadius: 12, alignItems: "center", justifyContent: "center", marginTop: 20}}>
+              <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 18, textAlign: "left", color: "black"}}>Yopish</Text>
+            </Pressable>
+          </View>
+        </ActionSheet>
+      </View>
     </ImageBackground>
   );
 }

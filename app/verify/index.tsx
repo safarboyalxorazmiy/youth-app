@@ -219,7 +219,9 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
               textContentType="oneTimeCode"
               autoComplete="sms-otp"
               key={index}
-              ref={(el) => { inputRefs.current[index] = el!; return void 0; }}
+              ref={(ref) => {
+                if (ref) inputRefs.current[index] = ref;
+              }}
               style={{
                 width: 45,
                 height: 45,
