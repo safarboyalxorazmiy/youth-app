@@ -10,6 +10,7 @@ import UserCard from "@/components/UserCard";
 import PollCard from "@/components/PollCard";
 import UserSkeleton from "@/components/UserSkeleton";
 import Constants from 'expo-constants';
+import { TouchableRipple } from "react-native-paper";
 
 const statusBarHeight = Constants.statusBarHeight;
 
@@ -117,58 +118,69 @@ export default function Poll() {
 
       <FlatList
         ListHeaderComponent={
-          <View style={{ paddingBottom: 16, backgroundColor: "#F5F5F5"}}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
-              <View style={{backgroundColor: "#F9F9F9", flexDirection: "row", alignItems: "center", justifyContent: "space-between",  borderWidth: 1, borderColor: "#E8E6ED", borderRadius: 12, height: 44, width: 265}}>
-                <TextInput 
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setPage(1);
-                    setLoading(false);
-                    setSearchQuery(e.nativeEvent.text);
-                    setUsers([]);
-                    fetchUsersBySearchQuery(e.nativeEvent.text);
-                  }}
-                  placeholder="Ism, Pasport yoki PINFL qidirish" 
-                  placeholderTextColor="#8D8D8D"
-                  style={{ 
-                    fontFamily: "Gilroy-Regular", 
-                    fontSize: 14, 
-                    color: "#8D8D8D", 
-                    width: 197 + 16 + 10 + 10,
-                    // backgroundColor: "red",
-                    paddingHorizontal: 16, 
-                    paddingVertical: 12,
-                    // backgroundColor: "red",
-                    height: "100%" 
-                  }}
-                  cursorColor={"#1A99FF"}
-                  editable={true}
-                  // caretHidden={false}
+          <View style={{ paddingBottom: 16, backgroundColor: "transparent"}}>
+            <View style={{ backgroundColor: "#FFF", padding: 12, borderRadius: 12, marginTop: 16}}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between",  }}>
+                <View style={{ backgroundColor: "#F9F9F9", flexDirection: "row", alignItems: "center", justifyContent: "space-between",  borderWidth: 1, borderColor: "#E8E6ED", borderRadius: 12, height: 44, width: "80%" }}>
+                  <TextInput 
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setPage(1);
+                      setLoading(false);
+                      setSearchQuery(e.nativeEvent.text);
+                      setUsers([]);
+                      fetchUsersBySearchQuery(e.nativeEvent.text);
+                    }}
+                    placeholder="Ism, Pasport yoki PINFL qidirish" 
+                    placeholderTextColor="#8D8D8D"
+                    style={{ 
+                      fontFamily: "Gilroy-Regular", 
+                      fontSize: 14, 
+                      color: "#000", 
+                      width: 197 + 16 + 10 + 10,
+                      // backgroundColor: "red",
+                      paddingHorizontal: 16, 
+                      paddingVertical: 12,
+                      // backgroundColor: "red",
+                      height: "100%" 
+                    }}
+                    cursorColor={"#1A99FF"}
+                    editable={true}
+                    // caretHidden={false}
 
-                />
+                  />
 
-                <SearchIcon style={{marginRight: 16,}} />
+                  <SearchIcon style={{marginRight: 16,}} />
+                </View>
+                
+                <View style={{width: 42, height: 42, borderRadius: 12, borderColor: "#E8E6ED", borderWidth: 1, overflow: "hidden", display: "flex", flexDirection: "row", }}>
+                  <Pressable
+                    android_ripple={{ color: "#1A99FF1A" }} 
+                    style={{ 
+                      width: "100%", 
+                      height: "100%", 
+                      backgroundColor: "#F9F9F9", 
+                      display: "flex",
+                      flexDirection: "row", 
+                      alignItems: "center", 
+                      justifyContent: "center", 
+                      columnGap: 8
+                  }}>
+                    <FilterIcon />
+                  </Pressable>
+                </View>
               </View>
-              
-              <View style={{width: 42, height: 42, borderRadius: 12, borderColor: "#E8E6ED", borderWidth: 1, overflow: "hidden", display: "flex", flexDirection: "row", }}>
-                <Pressable
-                  android_ripple={{ color: "#1A99FF1A" }} 
-                  style={{ 
-                    width: "100%", 
-                    height: "100%", 
-                    backgroundColor: "#F9F9F9", 
-                    display: "flex",
-                    flexDirection: "row", 
-                    alignItems: "center", 
-                    justifyContent: "center", 
-                    columnGap: 8
-                }}>
-                  <FilterIcon />
-                </Pressable>
-              </View>
 
+              <TouchableRipple 
+                rippleColor={"#046D3833"} 
+                underlayColor={"#046D3833"}
+                borderless={true} 
+                style={{backgroundColor: "#046D3833", width: "100%", height: 44, borderRadius: 12, marginTop: 12}}>
+                <Text style={{fontFamily: "Gilroy-Medium", fontSize: 16, color: "#046D38", textAlign: "center", lineHeight: 44}}>Excel ga eksport qilish</Text>
+              </TouchableRipple>
             </View>
+
+            
           </View>
         }
         stickyHeaderIndices={[0]} 
