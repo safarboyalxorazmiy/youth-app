@@ -67,7 +67,16 @@ export default function RootLayout() {
               <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
 
               <Stack.Screen
-                name="modal"
+                name="UsersFilterModal"
+                options={{
+                  presentation: 'transparentModal',
+                  animation: 'fade',
+                  headerShown: false,
+                }}
+              />
+              
+              <Stack.Screen
+                name="PollFilterModal"
                 options={{
                   presentation: 'transparentModal',
                   animation: 'fade',

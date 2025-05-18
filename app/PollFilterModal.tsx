@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const statusBarHeight = Constants.statusBarHeight;
 
-export default function Modal() {
+export default function PollFilterModal() {
   const [selectedRegion, setSelectedRegion] = useState<any>({} as const);
   const [selectedBranch, setSelectedBranch] = useState<any>({} as const);
 
@@ -95,7 +95,7 @@ export default function Modal() {
       await AsyncStorage.removeItem("branchId");
     }
 
-    router.push("/(tabs)");
+    router.push("/(tabs)/poll");
   }
 
   const clear = async () => {
@@ -104,7 +104,7 @@ export default function Modal() {
     await AsyncStorage.removeItem("bank_branch");
     await AsyncStorage.removeItem("branchId");
 
-    router.push("/(tabs)");
+    router.push("/(tabs)/poll");
   }
 
   return (
@@ -122,7 +122,7 @@ export default function Modal() {
       {/* <Link href={'/(tabs)'} asChild> */}
         <Pressable onPress={() => {
           console.log("What did you expect mf?");
-          router.push("/(tabs)");
+          router.push("/(tabs)/poll");
         }} style={StyleSheet.absoluteFill} />
       {/* </Link> */}
 
@@ -142,7 +142,7 @@ export default function Modal() {
           <TouchableRipple 
             onPress={() => {
               console.log("What did you expect mf?");
-              router.push("/(tabs)");
+              router.push("/(tabs)/poll");
             }}
             rippleColor={'rgba(0, 0, 0, .32)'}
             underlayColor="rgba(0,0,0,0.1)"

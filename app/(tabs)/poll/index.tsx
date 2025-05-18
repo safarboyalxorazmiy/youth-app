@@ -154,8 +154,14 @@ export default function Poll() {
                 </View>
                 
                 <View style={{width: 42, height: 42, borderRadius: 12, borderColor: "#E8E6ED", borderWidth: 1, overflow: "hidden", display: "flex", flexDirection: "row", }}>
-                  <Pressable
+                  <TouchableRipple
+                    rippleColor={'rgba(0, 0, 0, .32)'}
+                    underlayColor="rgba(0,0,0,0.1)"
+                    borderless={true}
                     android_ripple={{ color: "#1A99FF1A" }} 
+                    onPress={() => {
+                      router.push("/PollFilterModal")
+                    }}
                     style={{ 
                       width: "100%", 
                       height: "100%", 
@@ -167,7 +173,7 @@ export default function Poll() {
                       columnGap: 8
                   }}>
                     <FilterIcon />
-                  </Pressable>
+                  </TouchableRipple>
                 </View>
               </View>
 

@@ -247,7 +247,7 @@ export default function Index() {
               <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
               <View style={{width: 119, height: 42, borderRadius: 48, overflow: "hidden", display: "flex", flexDirection: "row", }}>
                 <Pressable
-                  onPress={() => router.push("/modal")}
+                  onPress={() => router.push("/UsersFilterModal")}
                   android_ripple={{ color: "#1A99FF1A" }} 
                   style={{ 
                     width: "100%", 
