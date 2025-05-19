@@ -84,6 +84,15 @@ export default function RootLayout() {
                 }}
               />
 
+              <Stack.Screen
+                name="(tabs)/poll/pollitem"
+                options={{
+                  presentation: 'transparentModal',
+                  animation: 'fade',
+                  headerShown: false,
+                }}
+              />
+
               <Stack.Screen name="+not-found" />
               
             </Stack>

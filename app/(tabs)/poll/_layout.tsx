@@ -7,6 +7,10 @@ export default function IndexLayout() {
         name="poll"
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="poll/pollitem"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

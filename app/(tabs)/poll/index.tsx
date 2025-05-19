@@ -210,7 +210,17 @@ export default function Poll() {
         renderItem={({ item }) => loading && page === 1 ? (
           <UserSkeleton />
         ) : (
-          <PollCard item={item} />
+          <TouchableRipple 
+            borderless={true} 
+            style={{marginBottom: 8, borderRadius: 16}} 
+            onPress={() => {
+              router.push({
+                pathname: "/poll/PollItem",
+                params: { item: JSON.stringify(item) },
+              });
+            }}>
+            <View><PollCard item={item} /></View>
+          </TouchableRipple>
         )}
         removeClippedSubviews={true}
         ListFooterComponent={loading ? (

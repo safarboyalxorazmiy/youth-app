@@ -1,6 +1,8 @@
 // components/UserCard.tsx
+import { router } from "expo-router";
 import React from "react";
 import { View, Text } from "react-native";
+import { TouchableRipple } from "react-native-paper";
 
 interface Props {
   item: any; // 👈 item is any
@@ -15,9 +17,10 @@ const formatToUzbekDate = (isoDate: string): string => {
   return `${day}.${month}.${year}`;
 };
 
-const UserCard = ({ item }: Props) => {
+const PollCard = ({ item }: Props) => {
   return (
-    <View style={{ borderRadius: 16, backgroundColor: "#FFF", padding: 12, marginBottom: 8 }}>
+    <View       
+      style={{ borderRadius: 16, backgroundColor: "#FFF", padding: 12 }}>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 36 }}>
         <View style={{ width: 141 }}>
           <Text style={{ fontFamily: "Gilroy-Regular", fontSize: 12, color: "#8C8D8D" }}>To’liq ismi</Text>
@@ -67,4 +70,4 @@ const UserCard = ({ item }: Props) => {
   );
 };
 
-export default React.memo(UserCard);
+export default React.memo(PollCard);
