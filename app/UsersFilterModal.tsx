@@ -8,11 +8,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import DropdownIcon from "@/assets/images/dropdown-icon.svg";
 import CloseIcon from "@/assets/images/close-icon.svg";
 import DropDownPicker from 'react-native-dropdown-picker';
-import { RegionDropdown } from '@/components/RegionDropdown';
+import { RegionDropdown } from '@/components/dropdown/RegionDropdown';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 
 import Constants from 'expo-constants';
-import { BankBranchDropdown } from '@/components/BranchDropdown';
+import { BankBranchDropdown } from '@/components/dropdown/BranchDropdown';
 import { TouchableRipple } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

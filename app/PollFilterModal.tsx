@@ -8,67 +8,82 @@ import { MaterialIcons } from '@expo/vector-icons';
 import DropdownIcon from "@/assets/images/dropdown-icon.svg";
 import CloseIcon from "@/assets/images/close-icon.svg";
 import DropDownPicker from 'react-native-dropdown-picker';
-import { RegionDropdown } from '@/components/RegionDropdown';
+import { RegionDropdown } from '@/components/dropdown/RegionDropdown';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 
 import Constants from 'expo-constants';
-import { BankBranchDropdown } from '@/components/BranchDropdown';
+import { BankBranchDropdown } from '@/components/dropdown/BranchDropdown';
 import { TouchableRipple } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CreatorDropdown } from '@/components/dropdown/poll/CreatorDropdown';
+import { MultiSelectBranchDropdown } from '@/components/dropdown/poll/MultiSelectBranchDropdown';
+import { EmployStatusDropdown } from '@/components/dropdown/poll/EmployStatusDropdown';
+import { StudyingInUzbekistanDropdown } from '@/components/dropdown/poll/StudyingInUzbekistanDropdown';
 
 const statusBarHeight = Constants.statusBarHeight;
 
 export default function PollFilterModal() {
   const [selectedRegion, setSelectedRegion] = useState<any>({} as const);
   const [selectedBranch, setSelectedBranch] = useState<any>({} as const);
+  const [selectedOwners, setSelectedOwners] = useState<any[]>([] as const);
+  const [selectedBranches, setSelectedBranches] = useState<any[]>([]);
+  const [selectedEmployStatus, setSelectedEmployStatus] = useState({
+    title: '',
+    value: '',
+  });
+  const [selectedStudyingStatus, setSelectedStudyingStatus] = useState({
+    title: '',
+    value: '',
+  });
+
 
   useEffect(() => {
-    const fetchSelectedRegion = async () => {
+    const fetchSelectedOwners = async () => {
       try {
-        const region = await AsyncStorage.getItem('region');
-        if (region) {
-          setSelectedRegion(JSON.parse(region));
+        const owners = await AsyncStorage.getItem('owners');
+        if (owners) {
+          setSelectedOwners(JSON.parse(owners));
         }
       } catch (error) {
-        console.error('Failed to fetch selected region:', error);
+        console.error('Failed to fetch selected owner:', error);
       }
     };
 
-    const fetchSelectedBranch = async () => {
+    const fetchSelectedBranches = async () => {
       try {
-        const branch = await AsyncStorage.getItem('bank_branch');
-        if (branch) {
-          setSelectedBranch(JSON.parse(branch));
+        const branches = await AsyncStorage.getItem('bank_branches');
+        if (branches) {
+          setSelectedBranches(JSON.parse(branches));
         }
       } catch (error) {
         console.error('Failed to fetch selected branch:', error);
       }
     };
 
-    fetchSelectedRegion();
-    fetchSelectedBranch();
+    fetchSelectedOwners();
+    fetchSelectedBranches();
   }, []);
 
   useEffect(() => {
     const storeSelectedRegion = async () => {
       try {
-        await AsyncStorage.setItem('region', JSON.stringify(selectedRegion));
+        await AsyncStorage.setItem('owners', JSON.stringify(selectedOwners));
       } catch (error) {
         console.error('Failed to store selected region:', error);
       }
     };
 
-    const storeSelectedBranch = async () => {
+    const storeSelectedBranches = async () => {
       try {
-        await AsyncStorage.setItem('bank_branch', JSON.stringify(selectedBranch));
+        await AsyncStorage.setItem('bank_branches', JSON.stringify(selectedBranches));
       } catch (error) {
         console.error('Failed to store selected branch:', error);
       }
     };
 
     storeSelectedRegion();
-    storeSelectedBranch();
-  }, [selectedRegion, selectedBranch]);
+    storeSelectedBranches();
+  }, [selectedOwners, selectedBranches]);
 
   const router = useRouter();
 
@@ -101,7 +116,7 @@ export default function PollFilterModal() {
   const clear = async () => {
     await AsyncStorage.removeItem("region");
     await AsyncStorage.removeItem("regionId");
-    await AsyncStorage.removeItem("bank_branch");
+    await AsyncStorage.removeItem("bank_branches");
     await AsyncStorage.removeItem("branchId");
 
     router.push("/(tabs)/poll");
@@ -116,6 +131,7 @@ export default function PollFilterModal() {
         alignItems: 'center',
         backgroundColor: '#00000040',
         marginTop: Platform.OS === 'ios' ? statusBarHeight : 0,
+        height: '100%',
       }}
     >
       {/* Dismiss modal when pressing outside */}
@@ -131,14 +147,15 @@ export default function PollFilterModal() {
         style={{
           width: SCREEN_WIDTH - 32,
           maxHeight: '80%',
+
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'white',
           borderRadius: 16
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
-            <Text style={{ fontFamily: "Gilroy-SemiBold", fontWeight: 'bold', color: "#303131", fontSize: 20, marginLeft: 16 }}>Filter</Text>
-          
+          <Text style={{ fontFamily: "Gilroy-SemiBold", fontWeight: 'bold', color: "#303131", fontSize: 20, marginLeft: 16 }}>Filter</Text>
+        
           <TouchableRipple 
             onPress={() => {
               console.log("What did you expect mf?");
@@ -157,15 +174,29 @@ export default function PollFilterModal() {
           padding: 16,
           position: 'relative',
         }}>
-          <RegionDropdown
-            selectedRegion={selectedRegion}
-            setSelectedRegion={setSelectedRegion}
+          <CreatorDropdown
+            selectedOwners={selectedOwners}
+            setSelectedOwners={setSelectedOwners}
           />
 
-          <BankBranchDropdown 
-            selectedBranch={selectedBranch}
-            setSelectedBranch={setSelectedBranch}
+
+          <MultiSelectBranchDropdown
+            selectedBranches={selectedBranches}
+            setSelectedBranches={setSelectedBranches}
           />
+
+          
+          <EmployStatusDropdown
+            selectedEmployStatus={selectedEmployStatus}
+            setSelectedEmployStatus={setSelectedEmployStatus}
+          />
+          
+          <StudyingInUzbekistanDropdown
+            selectedStatus={selectedStudyingStatus}
+            setSelectedStatus={setSelectedStudyingStatus}
+          />
+
+        
 
           <View style={{
             flexDirection: "row", 
