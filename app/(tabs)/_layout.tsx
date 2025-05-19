@@ -118,7 +118,7 @@ export default function TabLayout() {
                   onPress={() => {
                     router.push("/")
                   }}>
-                  {routeInfo.pathname === "/" ? (
+                  {routeInfo.pathname === "/" || routeInfo.pathname === "/index" ? (
                     <View>
                       <UsersIconActive />
                     </View>
@@ -127,7 +127,7 @@ export default function TabLayout() {
                       <UsersIcon />
                     </View>
                   )}
-                  <Text style={[{ fontSize: 12, fontFamily: "Gilroy-Medium", fontWeight: 500}, routeInfo.pathname === "/" ? { color: "#1A99FF", fontFamily: "Gilroy-SemiBold"} : { color: "#D2D2D2"}]}>Foydalanuvchilar</Text>
+                  <Text style={[{ fontSize: 12, fontFamily: "Gilroy-Medium", fontWeight: 500}, routeInfo.pathname === "/" || routeInfo.pathname === "/index" ? { color: "#1A99FF", fontFamily: "Gilroy-SemiBold"} : { color: "#D2D2D2"}]}>Foydalanuvchilar</Text>
                 </Pressable>
               ),
               animation: "shift"

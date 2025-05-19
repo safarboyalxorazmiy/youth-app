@@ -12,6 +12,7 @@ import RotatingIcon from "@/components/RotatingIcon";
 import RotatingIconDark from "@/components/RotatingIconDark";
 import SearchIcon from "@/assets/images/search-icon.svg";
 import Constants from 'expo-constants';
+import { TouchableRipple } from "react-native-paper";
 
 
 const statusBarHeight = Constants.statusBarHeight;
@@ -402,7 +403,9 @@ export default function Index() {
           loading && page === 1 ? (
             <UserSkeleton />
           ) : (
-            <UserCard item={item} />
+            <TouchableRipple onPress={() => router.push(`/userItem`, { params: { item: JSON.stringify(item) } })} >
+              <UserCard item={item} />
+            </TouchableRipple>
           )
         }        
         removeClippedSubviews={true}
