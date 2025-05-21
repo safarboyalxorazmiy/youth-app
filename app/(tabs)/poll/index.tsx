@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import FilterIcon from "@/assets/images/filter-icon.svg";
 import SearchIcon from "@/assets/images/search-icon.svg";
-import UserCard from "@/components/UserCard";
 import PollCard from "@/components/PollCard";
 import UserSkeleton from "@/components/UserSkeleton";
 import Constants from 'expo-constants';

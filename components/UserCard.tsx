@@ -8,7 +8,7 @@ interface Props {
 
 const UserCard = ({ item }: Props) => {
   return (
-    <View style={{ borderRadius: 16, backgroundColor: "#FFF", padding: 12, marginBottom: 8 }}>
+    <View style={{ borderRadius: 16, backgroundColor: "#FFF", padding: 12, }}>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomColor: "#F7F7F7", borderBottomWidth: 1, paddingBottom: 8 }}>
         <Text style={{ fontFamily: "Gilroy-SemiBold", color: "#1A99FF", fontSize: 14 }}>
           {item.first_name.toUpperCase() + " " + item.last_name.toUpperCase()}

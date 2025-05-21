@@ -403,7 +403,18 @@ export default function Index() {
           loading && page === 1 ? (
             <UserSkeleton />
           ) : (
-            <TouchableRipple onPress={() => router.push(`/userItem`, { params: { item: JSON.stringify(item) } })} >
+            <TouchableRipple 
+                rippleColor={'rgba(0, 0, 0, .32)'}
+                underlayColor="rgba(0,0,0,0.1)"
+                borderless={true} 
+                style={{marginBottom: 8, borderRadius: 16, }} 
+                onPress={() => {
+                  router.push({
+                    pathname: "/userItem",
+                    params: { item: JSON.stringify(item) },
+                  });
+
+                }}>
               <UserCard item={item} />
             </TouchableRipple>
           )
