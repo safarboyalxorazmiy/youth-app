@@ -165,15 +165,19 @@ const UserItem = () => {
 
   const handleDocumentPick = async () => {
     const result = await DocumentPicker.getDocumentAsync({});
-    if (result.type === 'success') {
+
+    if (!result.canceled && result.assets?.length > 0) {
+      const file = result.assets[0];
+      console.log(file);
+
       const fileToUpload = {
-        uri: result.uri,
-        name: result.name,
-        type: result.mimeType || 'application/octet-stream',
+        uri: file.uri,
+        name: file.name,
+        type: file.mimeType || 'application/octet-stream',
       };
 
       const formData = new FormData();
-      formData.append('file', fileToUpload); // 🔑 'file' should match your backend key
+      formData.append('file', fileToUpload); // 'file' must match your backend's expected field
 
       try {
         const response = await fetch('https://your-backend.com/upload', {
@@ -189,10 +193,13 @@ const UserItem = () => {
         Alert.alert('Success', 'File uploaded!');
       } catch (error) {
         console.error('Upload error:', error);
-        Alert.alert('Error', 'File upload failed');
+        Alert.alert('Error ichana girya', 'File upload failed');
       }
+    } else {
+      console.log('Document pick canceled or no file selected.');
     }
   };
+
 
 
   return (
@@ -317,7 +324,7 @@ const UserItem = () => {
 
       </View>
 
-      <View style={{ backgroundColor: "#FFF", borderRadius: 8, padding: 16, marginTop: 16, paddingBottom: 200 }}>
+      <View style={{ backgroundColor: "#FFF", borderRadius: 8, padding: 16, marginTop: 16, marginBottom: 200 }}>
         <Text style={{ fontFamily: "Gilroy-SemiBold", fontSize: 18, color: "#303131" }}>So’rovnoma</Text>
 
         <Text style={{ fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 14, color: "#474848", marginTop: 16 }}>Telefon raqam</Text>
