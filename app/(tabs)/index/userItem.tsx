@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar, Pressable, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, StatusBar, Pressable, Image, TextInput, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import ArrowLeftIcon from "@/assets/images/ArrowLeftIcon.svg";
 import { TouchableRipple } from "react-native-paper";
 import Collapser from "@/assets/images/collapser-icon.svg"
@@ -19,11 +19,280 @@ import { SpecialityDropdown } from "@/components/dropdown/userItem/SpecialityDro
 import { EmployStatus2Dropdown } from "@/components/dropdown/userItem/EmployStatus2Dropdown";
 import { YesNoDropdown } from "@/components/dropdown/userItem/YesNoDropdown";
 import { CauseDropdown } from "@/components/dropdown/userItem/CauseDropdown";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 
 import * as DocumentPicker from 'expo-document-picker';
 
 const statusBarHeight = Constants.statusBarHeight;
 const UserItem = () => {
+
+
+  // const sendApplication = async () => {
+  //   const result = documentResult;
+
+  //   if (!result.canceled && result.assets?.length > 0) {
+  //     const file = result.assets[0];
+  //     console.log(file);
+
+  //     const fileToUpload = {
+  //       uri: file.uri,
+  //       name: file.name,
+  //       type: file.mimeType || 'application/octet-stream',
+  //     };
+
+  //     const formData = new FormData();
+  //     formData.append('file', fileToUpload); // 'file' must match your backend's expected field
+
+  //     try {
+  //       const response = await fetch('https://your-backend.com/upload', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //         body: formData,
+  //       });
+
+  //       const data = await response.json();
+  //       console.log('Upload success:', data);
+  //       Alert.alert('Success', 'File uploaded!');
+  //     } catch (error) {
+  //       console.error('Upload error:', error);
+  //       Alert.alert('Error ichana girya', 'File upload failed');
+  //     }
+  //   } else {
+  //     console.log('Document pick canceled or no file selected.');
+  //   }
+  // }
+
+  const sendApplication = async () => {
+    const result = documentResult;
+
+    if (!result.canceled && result.assets?.length > 0) {
+      const file = result.assets[0];
+
+      const fileToUpload = {
+        uri: file.uri,
+        name: file.name,
+        type: file.mimeType || 'application/pdf',
+      };
+
+      const formData = new FormData();
+      formData.append('has_stable_job', 'official_employee');
+      formData.append('company_name', 'MyCompany');
+      formData.append('position', 'Developer');
+      formData.append('abroad_country', 'Germany');
+      formData.append('abroad_profession', 'Engineer');
+      formData.append('abroad_salary', '3000');
+      formData.append('desire_work_uzbekistan', 'true');
+      formData.append('study_field', 'Computer Science');
+      formData.append('study_country_type', 'national');
+      formData.append('study_country', 'Uzbekistan');
+      formData.append('needs_vocational_training', 'false');
+      formData.append('vocational_course', '');
+      formData.append('reasons_not_credit', '');
+      formData.append('other', '');
+      formData.append('dalolatnoma_file', fileToUpload); // 👈 actual file
+      formData.append('purpose', 'startup');
+      formData.append('phone_number', '+998991234567');
+
+      try {
+        const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/user/${parsedItem?.id}/youth-survey/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
+        });
+
+        const data = await response.json();
+        console.log('Upload success:', data);
+        Alert.alert('Success', 'Form and file uploaded!');
+      } catch (error) {
+        console.error('Upload error:', error);
+        Alert.alert('Error', 'Upload failed');
+      }
+    } else {
+      console.log('No document selected.');
+    }
+  };
+
+  const [activeTab, setActiveTab] = useState(0);
+  const [tabsLayoutMeasured, setTabsLayoutMeasured] = useState(false);
+
+  const indicatorTranslateX = useSharedValue(0);
+  const indicatorWidth = useSharedValue(0);
+
+  const tabs = [
+    { label: "Foydalanuvchi ma'lumotlari", component: UserInfoContent, flex: 2 }, // Increased flex for more width
+    { label: "So'rovnomalar", component: SurveysContent, flex: 1 }, // Default flex
+  ];
+
+  const measuredTabWidths = useRef(Array(tabs.length).fill(0));
+
+  const onTabItemMeasure = (event, index) => {
+    const { width } = event.nativeEvent.layout;
+    measuredTabWidths.current[index] = width;
+
+    if (measuredTabWidths.current.every(w => w > 0) && !tabsLayoutMeasured) {
+      setTabsLayoutMeasured(true);
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (tabsLayoutMeasured) {
+      const initialWidth = measuredTabWidths.current[activeTab];
+      const initialTranslateX = measuredTabWidths.current.slice(0, activeTab).reduce((acc, val) => acc + val, 0);
+
+      indicatorWidth.value = withSpring(initialWidth, { damping: 15, stiffness: 100 });
+      indicatorTranslateX.value = withSpring(initialTranslateX, { damping: 15, stiffness: 100 });
+    }
+  }, [tabsLayoutMeasured, activeTab]);
+
+  const handleTabPress = (index) => {
+    if (index === activeTab) return;
+
+    setActiveTab(index);
+
+    const targetWidth = measuredTabWidths.current[index];
+    const targetTranslateX = measuredTabWidths.current.slice(0, index).reduce((acc, val) => acc + val, 0);
+
+    indicatorWidth.value = withSpring(targetWidth, { damping: 15, stiffness: 100 });
+    indicatorTranslateX.value = withSpring(targetTranslateX, { damping: 15, stiffness: 100 });
+  };
+
+  const animatedIndicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: indicatorTranslateX.value }],
+      width: indicatorWidth.value,
+    };
+  });
+
+  const ActiveComponent = tabs[activeTab].component;
+
+  return (
+    <View style={styles.container}>
+      {/* Custom Tab Bar */}
+      <View style={styles.tabBar}>
+        {tabsLayoutMeasured && <Animated.View style={[styles.tabIndicator, animatedIndicatorStyle]} />}
+        {tabs.map((tab, index) => (
+          <TouchableOpacity
+            key={index}
+            // Apply dynamic flex from tab data
+            style={[styles.tabItem, { flex: tab.flex || 1 }]}
+            onLayout={(event) => onTabItemMeasure(event, index)}
+            onPress={() => handleTabPress(index)}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                { color: activeTab === index ? 'white' : 'black' },
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Tab Content */}
+      <View style={styles.contentContainer}>
+        <ActiveComponent />
+      </View>
+    </View>
+  );
+};
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f2f5',
+    paddingTop: 50,
+  },
+  tabBar: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    backgroundColor: 'white',
+    marginHorizontal: 15,
+    marginTop: 20,
+    borderRadius: 12,
+    height: 50,
+    alignItems: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    overflow: 'hidden',
+  },
+  tabItem: {
+    // flex will be overridden dynamically
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    zIndex: 1,
+  },
+  tabText: {
+    fontWeight: '600',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  tabIndicator: {
+    position: 'absolute',
+    height: '100%',
+    backgroundColor: '#3F9CFB',
+    borderRadius: 12,
+    zIndex: 0,
+  },
+  contentContainer: {
+    flex: 1,
+    marginTop: 20,
+  },
+  screenContent: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginHorizontal: 15,
+  },
+  screenText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  infoSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    width: '100%',
+    paddingLeft: 5,
+  },
+  infoLabel: {
+    fontWeight: 'bold',
+    marginRight: 10,
+    fontSize: 16,
+    color: '#333',
+    minWidth: 120,
+  },
+  infoValue: {
+    fontSize: 16,
+    color: '#555',
+    flexShrink: 1,
+  },
+});
+
+
+
+const UserInfoContent = () => {
   const { item } = useLocalSearchParams();
   const parsedItem = item ? JSON.parse(item as string) : null;
   const router = useRouter();
@@ -170,96 +439,6 @@ const UserItem = () => {
 
     setDocumentResult(result);
   };
-
-  // const sendApplication = async () => {
-  //   const result = documentResult;
-
-  //   if (!result.canceled && result.assets?.length > 0) {
-  //     const file = result.assets[0];
-  //     console.log(file);
-
-  //     const fileToUpload = {
-  //       uri: file.uri,
-  //       name: file.name,
-  //       type: file.mimeType || 'application/octet-stream',
-  //     };
-
-  //     const formData = new FormData();
-  //     formData.append('file', fileToUpload); // 'file' must match your backend's expected field
-
-  //     try {
-  //       const response = await fetch('https://your-backend.com/upload', {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //         body: formData,
-  //       });
-
-  //       const data = await response.json();
-  //       console.log('Upload success:', data);
-  //       Alert.alert('Success', 'File uploaded!');
-  //     } catch (error) {
-  //       console.error('Upload error:', error);
-  //       Alert.alert('Error ichana girya', 'File upload failed');
-  //     }
-  //   } else {
-  //     console.log('Document pick canceled or no file selected.');
-  //   }
-  // }
-
-  const sendApplication = async () => {
-    const result = documentResult;
-
-    if (!result.canceled && result.assets?.length > 0) {
-      const file = result.assets[0];
-
-      const fileToUpload = {
-        uri: file.uri,
-        name: file.name,
-        type: file.mimeType || 'application/pdf',
-      };
-
-      const formData = new FormData();
-      formData.append('has_stable_job', 'official_employee');
-      formData.append('company_name', 'MyCompany');
-      formData.append('position', 'Developer');
-      formData.append('abroad_country', 'Germany');
-      formData.append('abroad_profession', 'Engineer');
-      formData.append('abroad_salary', '3000');
-      formData.append('desire_work_uzbekistan', 'true');
-      formData.append('study_field', 'Computer Science');
-      formData.append('study_country_type', 'national');
-      formData.append('study_country', 'Uzbekistan');
-      formData.append('needs_vocational_training', 'false');
-      formData.append('vocational_course', '');
-      formData.append('reasons_not_credit', '');
-      formData.append('other', '');
-      formData.append('dalolatnoma_file', fileToUpload); // 👈 actual file
-      formData.append('purpose', 'startup');
-      formData.append('phone_number', '+998991234567');
-
-      try {
-        const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/user/${parsedItem?.id}/youth-survey/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formData,
-        });
-
-        const data = await response.json();
-        console.log('Upload success:', data);
-        Alert.alert('Success', 'Form and file uploaded!');
-      } catch (error) {
-        console.error('Upload error:', error);
-        Alert.alert('Error', 'Upload failed');
-      }
-    } else {
-      console.log('No document selected.');
-    }
-  };
-
 
 
   return (
@@ -551,25 +730,16 @@ const UserItem = () => {
     </View>
   </ScrollView>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: 'red',
-    borderRadius: 8,
-    marginBottom: 8,
-    height: "100%",
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-  },
-});
+const SurveysContent = () => {
+  return (
+    <View style={{backgroundColor: "red"}}>
+      
+    </View>
+  )
+}
+
 
 export default UserItem;
+
