@@ -59,7 +59,7 @@ export default function Index() {
       if (newUsers.length > 0) {
         setUsers(prevUsers => {
           const existingIds = new Set(prevUsers.map(user => user.id));
-          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
       }
@@ -96,7 +96,7 @@ export default function Index() {
       if (newUsers.length > 0) {
         setUsers(prevUsers => {
           const existingIds = new Set(prevUsers.map(user => user.id));
-          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
       }
@@ -148,7 +148,7 @@ export default function Index() {
       if (newUsers.length > 0) {
         setUsers(prevUsers => {
           const existingIds = new Set(prevUsers.map(user => user.id));
-          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
       }
@@ -207,7 +207,7 @@ export default function Index() {
       if (newUsers.length > 0) {
         setUsers(prevUsers => {
           const existingIds = new Set(prevUsers.map(user => user.id));
-          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
       }
@@ -410,7 +410,7 @@ export default function Index() {
                 style={{marginBottom: 8, borderRadius: 16, }} 
                 onPress={() => {
                   router.push({
-                    pathname: "/userItem",
+                    pathname: "/userItem" as any,
                     params: { item: JSON.stringify(item) },
                   });
 
