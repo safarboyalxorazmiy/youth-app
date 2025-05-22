@@ -116,7 +116,7 @@ export default function TabLayout() {
         
                   }}
                   onPress={() => {
-                    router.push("/")
+                    router.push("/" as any)
                   }}>
                   {routeInfo.pathname === "/" || routeInfo.pathname === "/index" ? (
                     <View>

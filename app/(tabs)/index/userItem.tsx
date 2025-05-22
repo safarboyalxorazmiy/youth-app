@@ -31,7 +31,64 @@ import * as DocumentPicker from 'expo-document-picker';
 
 const statusBarHeight = Constants.statusBarHeight;
 const UserItem = () => {
+  const { item } = useLocalSearchParams();
 
+  const parsedItem = item ? JSON.parse(item as string) : null;
+  const router = useRouter();
+
+  const [shortUserInfo, setShortUserInfo] = useState<any>(null);
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [rawPhone, setRawPhone] = useState("");
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userToken = await AsyncStorage.getItem("access_token");
+        if (!userToken) {
+          return;
+        }
+
+        const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/dashboard/user/${parsedItem?.id}/`, {
+          headers: {
+            "Authorization": `Bearer ${userToken}`,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Content-Language": "uz"
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server xatosi: ${response.status}`);
+        }
+
+        const json = await response.json();
+        setUserInfo(json.data);
+        console.log("userInfo::", json.data)
+        // console.log("item topildi:", json.data)
+      } catch (err: any) {
+        // setError(err.message || "Noma'lum xatolik");
+      } finally {
+        // setLoading(false);
+      }
+    };
+
+
+    // setShortUserInfo(item);
+    console.log(item)
+    const obj = JSON.parse(item as any);
+    // console.log();
+    setShortUserInfo(obj)
+    // let item = JSON.parse(item);
+    // console.log(item.roles)
+
+    if (parsedItem?.id) {
+      fetchUserInfo();
+    } else {
+      // setLoading(false);
+      // setError("Item topilmadi");
+      console.log("Item topilmadi::", item)
+    }
+  }, [parsedItem?.id]);
 
   // const sendApplication = async () => {
   //   const result = documentResult;
@@ -70,63 +127,14 @@ const UserItem = () => {
   //   }
   // }
 
-  const sendApplication = async () => {
-    const result = documentResult;
-
-    if (!result.canceled && result.assets?.length > 0) {
-      const file = result.assets[0];
-
-      const fileToUpload = {
-        uri: file.uri,
-        name: file.name,
-        type: file.mimeType || 'application/pdf',
-      };
-
-      const formData = new FormData();
-      formData.append('has_stable_job', 'official_employee');
-      formData.append('company_name', 'MyCompany');
-      formData.append('position', 'Developer');
-      formData.append('abroad_country', 'Germany');
-      formData.append('abroad_profession', 'Engineer');
-      formData.append('abroad_salary', '3000');
-      formData.append('desire_work_uzbekistan', 'true');
-      formData.append('study_field', 'Computer Science');
-      formData.append('study_country_type', 'national');
-      formData.append('study_country', 'Uzbekistan');
-      formData.append('needs_vocational_training', 'false');
-      formData.append('vocational_course', '');
-      formData.append('reasons_not_credit', '');
-      formData.append('other', '');
-      formData.append('dalolatnoma_file', fileToUpload); // 👈 actual file
-      formData.append('purpose', 'startup');
-      formData.append('phone_number', '+998991234567');
-
-      try {
-        const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/user/${parsedItem?.id}/youth-survey/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          body: formData,
-        });
-
-        const data = await response.json();
-        console.log('Upload success:', data);
-        Alert.alert('Success', 'Form and file uploaded!');
-      } catch (error) {
-        console.error('Upload error:', error);
-        Alert.alert('Error', 'Upload failed');
-      }
-    } else {
-      console.log('No document selected.');
-    }
-  };
 
   const [activeTab, setActiveTab] = useState(0);
   const [tabsLayoutMeasured, setTabsLayoutMeasured] = useState(false);
 
   const indicatorTranslateX = useSharedValue(0);
   const indicatorWidth = useSharedValue(0);
+
+
 
   const tabs = [
     { label: "Foydalanuvchi ma'lumotlari", component: UserInfoContent, flex: 2 }, // Increased flex for more width
@@ -135,7 +143,7 @@ const UserItem = () => {
 
   const measuredTabWidths = useRef(Array(tabs.length).fill(0));
 
-  const onTabItemMeasure = (event, index) => {
+  const onTabItemMeasure = (event: any, index: any) => {
     const { width } = event.nativeEvent.layout;
     measuredTabWidths.current[index] = width;
 
@@ -154,7 +162,7 @@ const UserItem = () => {
     }
   }, [tabsLayoutMeasured, activeTab]);
 
-  const handleTabPress = (index) => {
+  const handleTabPress = (index: any) => {
     if (index === activeTab) return;
 
     setActiveTab(index);
@@ -177,6 +185,33 @@ const UserItem = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableRipple onPress={() => {
+        router.push("../");
+      }} borderless={true} style={{ 
+        marginBottom: 16, 
+        backgroundColor: "#FFF", 
+        borderRadius: 8, 
+        marginHorizontal: 15, 
+      }}>
+        <View style={{ flexDirection: "row", alignItems: "center", padding: 12, height: 46, borderRadius: 8, columnGap: 8 }}>
+          <ArrowLeftIcon />
+
+          <Text style={{ fontSize: 18, fontFamily: "Gilroy-SemiBold" }}>{userInfo?.first_name.toUpperCase()} {userInfo?.last_name.toUpperCase()}</Text>
+
+          {
+            userInfo?.is_verified ? (
+              <View style={{backgroundColor: "#1A99FF0F", width: 57, height: 22, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
+                <Text style={{color: "#1A99FF", fontSize: 12, fontFamily: "Gilroy-Medium"}}>verified</Text>
+              </View>
+            ) : (
+              <View style={{backgroundColor: "#e7000b1a", width: 77, height: 22, display: "flex", alignItems: "center", justifyContent: "center", borderColor: "#fb2c36", borderWidth: 1, borderRadius: 100}}>
+                <Text style={{color: "#fb2c36", fontSize: 12, fontFamily: "Gilroy-Medium"}}>not verified</Text>
+              </View>
+            )
+          }
+        </View>
+      </TouchableRipple>
+
       {/* Custom Tab Bar */}
       <View style={styles.tabBar}>
         {tabsLayoutMeasured && <Animated.View style={[styles.tabIndicator, animatedIndicatorStyle]} />}
@@ -211,16 +246,18 @@ const UserItem = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: statusBarHeight + 16,
     flex: 1,
     backgroundColor: '#f0f2f5',
-    paddingTop: 50,
+    paddingBottom: 50,
   },
   tabBar: {
     flexDirection: 'row',
     justifyContent: "space-between",
     backgroundColor: 'white',
     marginHorizontal: 15,
-    marginTop: 20,
+    // padding: 15,
+    // marginTop: 20,
     borderRadius: 12,
     height: 50,
     alignItems: 'center',
@@ -230,6 +267,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
     overflow: 'hidden',
+    // backgroundColor: '#f0f2f5',
+    marginBottom: 10,
   },
   tabItem: {
     // flex will be overridden dynamically
@@ -247,13 +286,15 @@ const styles = StyleSheet.create({
   tabIndicator: {
     position: 'absolute',
     height: '100%',
+    // width: '40%',
+    // paddingHorizontal: -50,
     backgroundColor: '#3F9CFB',
     borderRadius: 12,
     zIndex: 0,
   },
   contentContainer: {
     flex: 1,
-    marginTop: 20,
+    // marginTop: 20,
   },
   screenContent: {
     flex: 1,
@@ -335,6 +376,7 @@ const UserInfoContent = () => {
   const [causeInputFocused, setCauseInputFocused] = useState(false);
   const [causeInput, setCauseInput] = useState("");
 
+  
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -370,7 +412,7 @@ const UserInfoContent = () => {
 
     // setShortUserInfo(item);
     console.log(item)
-    const obj = JSON.parse(item);
+    const obj = JSON.parse(item as any);
     // console.log();
     setShortUserInfo(obj)
     // let item = JSON.parse(item);
@@ -440,31 +482,61 @@ const UserInfoContent = () => {
     setDocumentResult(result);
   };
 
+  const sendApplication = async () => {
+    const result = documentResult || {};
+
+    if (!result.canceled && result.assets?.length > 0) {
+      const file = result.assets[0];
+
+      const fileToUpload = {
+        uri: file.uri,
+        name: file.name,
+        type: file.mimeType || 'application/pdf',
+      };
+
+      const formData = new FormData();
+      formData.append('has_stable_job', 'official_employee');
+      formData.append('company_name', 'MyCompany');
+      formData.append('position', 'Developer');
+      formData.append('abroad_country', 'Germany');
+      formData.append('abroad_profession', 'Engineer');
+      formData.append('abroad_salary', '3000');
+      formData.append('desire_work_uzbekistan', 'true');
+      formData.append('study_field', 'Computer Science');
+      formData.append('study_country_type', 'national');
+      formData.append('study_country', 'Uzbekistan');
+      formData.append('needs_vocational_training', 'false');
+      formData.append('vocational_course', '');
+      formData.append('reasons_not_credit', '');
+      formData.append('other', '');
+      formData.append('dalolatnoma_file', fileToUpload as any); // 👈 actual file
+      formData.append('purpose', 'startup');
+      formData.append('phone_number', '+998991234567');
+
+      try {
+        const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/user/${parsedItem?.id}/youth-survey/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
+        });
+
+        const data = await response.json();
+        console.log('Upload success:', data);
+        Alert.alert('Success', 'Form and file uploaded!');
+      } catch (error) {
+        console.error('Upload error:', error);
+        Alert.alert('Error', 'Upload failed');
+      }
+    } else {
+      console.log('No document selected.');
+    }
+  };
+
 
   return (
-    <ScrollView style={{ marginTop: statusBarHeight, height: "100%", padding: 16,  }}>
-      <TouchableRipple onPress={() => {
-        router.push("../");
-      }} borderless={true} style={{ backgroundColor: "#FFF",  borderRadius: 8, marginBottom: 16, }}>
-        <View style={{ flexDirection: "row", alignItems: "center", padding: 12, height: 46, borderRadius: 8, columnGap: 8 }}>
-          <ArrowLeftIcon />
-
-          <Text style={{ fontSize: 18, fontFamily: "Gilroy-SemiBold" }}>{userInfo?.first_name.toUpperCase()} {userInfo?.last_name.toUpperCase()}</Text>
-
-          {
-            userInfo?.is_verified ? (
-              <View style={{backgroundColor: "#1A99FF0F", width: 57, height: 22, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
-                <Text style={{color: "#1A99FF", fontSize: 12, fontFamily: "Gilroy-Medium"}}>verified</Text>
-              </View>
-            ) : (
-              <View style={{backgroundColor: "#e7000b1a", width: 77, height: 22, display: "flex", alignItems: "center", justifyContent: "center", borderColor: "#fb2c36", borderWidth: 1, borderRadius: 100}}>
-                <Text style={{color: "#fb2c36", fontSize: 12, fontFamily: "Gilroy-Medium"}}>not verified</Text>
-              </View>
-            )
-          }
-        </View>
-      </TouchableRipple>
-
+    <ScrollView style={{ height: "100%", padding: 16,  }}>
       <View style={{ borderRadius: 8, overflow: 'hidden', }}>
         <Pressable style={{
         backgroundColor: "#FFF", 
