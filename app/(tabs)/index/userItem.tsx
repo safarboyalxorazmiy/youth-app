@@ -36,6 +36,7 @@ const UserItem = () => {
   const [inputFocused, setInputFocused] = useState(false);
 
   const [isError, setIsError] = useState(false);
+  const [documentResult, setDocumentResult] = useState<any>(null);
 
   const [selectedSpeciality, setSelectedSpeciality] = useState<{
     title: string;
@@ -166,21 +167,79 @@ const UserItem = () => {
   const handleDocumentPick = async () => {
     const result = await DocumentPicker.getDocumentAsync({});
 
+    setDocumentResult(result);
+  };
+
+  // const sendApplication = async () => {
+  //   const result = documentResult;
+
+  //   if (!result.canceled && result.assets?.length > 0) {
+  //     const file = result.assets[0];
+  //     console.log(file);
+
+  //     const fileToUpload = {
+  //       uri: file.uri,
+  //       name: file.name,
+  //       type: file.mimeType || 'application/octet-stream',
+  //     };
+
+  //     const formData = new FormData();
+  //     formData.append('file', fileToUpload); // 'file' must match your backend's expected field
+
+  //     try {
+  //       const response = await fetch('https://your-backend.com/upload', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //         body: formData,
+  //       });
+
+  //       const data = await response.json();
+  //       console.log('Upload success:', data);
+  //       Alert.alert('Success', 'File uploaded!');
+  //     } catch (error) {
+  //       console.error('Upload error:', error);
+  //       Alert.alert('Error ichana girya', 'File upload failed');
+  //     }
+  //   } else {
+  //     console.log('Document pick canceled or no file selected.');
+  //   }
+  // }
+
+  const sendApplication = async () => {
+    const result = documentResult;
+
     if (!result.canceled && result.assets?.length > 0) {
       const file = result.assets[0];
-      console.log(file);
 
       const fileToUpload = {
         uri: file.uri,
         name: file.name,
-        type: file.mimeType || 'application/octet-stream',
+        type: file.mimeType || 'application/pdf',
       };
 
       const formData = new FormData();
-      formData.append('file', fileToUpload); // 'file' must match your backend's expected field
+      formData.append('has_stable_job', 'official_employee');
+      formData.append('company_name', 'MyCompany');
+      formData.append('position', 'Developer');
+      formData.append('abroad_country', 'Germany');
+      formData.append('abroad_profession', 'Engineer');
+      formData.append('abroad_salary', '3000');
+      formData.append('desire_work_uzbekistan', 'true');
+      formData.append('study_field', 'Computer Science');
+      formData.append('study_country_type', 'national');
+      formData.append('study_country', 'Uzbekistan');
+      formData.append('needs_vocational_training', 'false');
+      formData.append('vocational_course', '');
+      formData.append('reasons_not_credit', '');
+      formData.append('other', '');
+      formData.append('dalolatnoma_file', fileToUpload); // 👈 actual file
+      formData.append('purpose', 'startup');
+      formData.append('phone_number', '+998991234567');
 
       try {
-        const response = await fetch('https://your-backend.com/upload', {
+        const response = await fetch(`https://dev-api.yoshtadbirkorlar.uz/api/user/${parsedItem?.id}/youth-survey/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -190,13 +249,13 @@ const UserItem = () => {
 
         const data = await response.json();
         console.log('Upload success:', data);
-        Alert.alert('Success', 'File uploaded!');
+        Alert.alert('Success', 'Form and file uploaded!');
       } catch (error) {
         console.error('Upload error:', error);
-        Alert.alert('Error ichana girya', 'File upload failed');
+        Alert.alert('Error', 'Upload failed');
       }
     } else {
-      console.log('Document pick canceled or no file selected.');
+      console.log('No document selected.');
     }
   };
 
