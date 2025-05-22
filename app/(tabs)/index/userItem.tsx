@@ -89,6 +89,7 @@ const UserItem = () => {
 
         const json = await response.json();
         setUserInfo(json.data);
+        console.log("userInfo::", json.data)
         // console.log("item topildi:", json.data)
       } catch (err: any) {
         // setError(err.message || "Noma'lum xatolik");
@@ -269,7 +270,19 @@ const UserItem = () => {
         <View style={{ flexDirection: "row", alignItems: "center", padding: 12, height: 46, borderRadius: 8, columnGap: 8 }}>
           <ArrowLeftIcon />
 
-          <Text style={{ fontSize: 18, fontFamily: "Gilroy-SemiBold" }}>Batafsil</Text>
+          <Text style={{ fontSize: 18, fontFamily: "Gilroy-SemiBold" }}>{userInfo?.first_name.toUpperCase()} {userInfo?.last_name.toUpperCase()}</Text>
+
+          {
+            userInfo?.is_verified ? (
+              <View style={{backgroundColor: "#1A99FF0F", width: 57, height: 22, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
+                <Text style={{color: "#1A99FF", fontSize: 12, fontFamily: "Gilroy-Medium"}}>verified</Text>
+              </View>
+            ) : (
+              <View style={{backgroundColor: "#e7000b1a", width: 77, height: 22, display: "flex", alignItems: "center", justifyContent: "center", borderColor: "#fb2c36", borderWidth: 1, borderRadius: 100}}>
+                <Text style={{color: "#fb2c36", fontSize: 12, fontFamily: "Gilroy-Medium"}}>not verified</Text>
+              </View>
+            )
+          }
         </View>
       </TouchableRipple>
 
@@ -340,14 +353,30 @@ const UserItem = () => {
             </View>
 
             <Text style={{fontFamily: "Gilroy-Medium", fontSize: 16, color: "#474848", marginTop: 20, marginBottom: 8}}>ONE ID Verifikatsiya</Text>
-            <View style={{backgroundColor: "#1A99FF0F", width: 232, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
-              <Text style={{color: "#1A99FF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlangan foydalanuvchi</Text>
-            </View>
+            {
+              userInfo?.is_verified ? (
+                <View style={{backgroundColor: "#1A99FF0F", width: 232, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
+                  <Text style={{color: "#1A99FF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlangan foydalanuvchi</Text>
+                </View>
+              ) : (
+                <View style={{backgroundColor: "#e7000b1a", width: 252, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#fb2c36", borderWidth: 1, borderRadius: 100}}>
+                  <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlanmagan foydalanuvchi</Text>
+                </View>
+              )
+            }
 
             <Text style={{fontFamily: "Gilroy-Medium", fontSize: 16, color: "#474848", marginTop: 20, marginBottom: 8}}>MyID Verifikatsiya</Text>
-            <View style={{backgroundColor: "#1A99FF0F", width: 232, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
-              <Text style={{color: "#1A99FF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlangan foydalanuvchi</Text>
-            </View>
+            {
+              userInfo?.is_verified ? (
+                <View style={{backgroundColor: "#1A99FF0F", width: 232, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
+                  <Text style={{color: "#1A99FF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlangan foydalanuvchi</Text>
+                </View>
+              ) : (
+                <View style={{backgroundColor: "#e7000b1a", width: 252, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#fb2c36", borderWidth: 1, borderRadius: 100}}>
+                  <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlanmagan foydalanuvchi</Text>
+                </View>
+              )
+            }
             
 
           </View>
@@ -368,7 +397,7 @@ const UserItem = () => {
 
         <Text style={{fontFamily: "Gilroy-Medium", fontSize: 16, color: "#474848", marginTop: 20, marginBottom: 8}}>ONE ID Verifikatsiya</Text>
         {
-          userInfo?.isVerified ? (
+          userInfo?.is_verified ? (
             <View style={{backgroundColor: "#1A99FF0F", width: 232, height: 36, alignItems: "center", justifyContent: "center", borderColor: "#1A99FF", borderWidth: 1, borderRadius: 100}}>
               <Text style={{color: "#1A99FF", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Tasdiqlangan foydalanuvchi</Text>
             </View>
