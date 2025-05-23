@@ -123,7 +123,9 @@ export function MultiSelectBranchDropdown({
   }, []);
 
   return (
-    <>
+    <View style={{
+      marginBottom: 16,
+    }}>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>{getSelectedText()}</Text>
         <DropdownIcon width={14} height={14} style={{ marginLeft: 8 }} />
@@ -153,7 +155,7 @@ export function MultiSelectBranchDropdown({
         : <></>
       }
       
-    </>
+    </View>
   );
 }
 
@@ -185,7 +187,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     width: '100%',
-    marginBottom: 16,
   },
   item: {
     flexDirection: 'row',

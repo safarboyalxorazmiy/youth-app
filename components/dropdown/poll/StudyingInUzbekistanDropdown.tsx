@@ -53,7 +53,9 @@ export function StudyingInUzbekistanDropdown({
   };
 
   return (
-    <>
+    <View style={{
+      marginBottom: 16,
+    }}>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
           {selectedStatus?.title || "O’zbekistonda Ishlash"}
@@ -86,7 +88,7 @@ export function StudyingInUzbekistanDropdown({
           )}
         />
       </Animated.View>
-    </>
+    </View>
   );
 }
 
@@ -117,7 +119,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     width: '100%',
-    marginBottom: 16,
   },
   item: {
     width: '100%',

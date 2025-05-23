@@ -109,13 +109,14 @@ export default function TabLayout() {
                     rowGap: 4,
                     columnGap: 13,
                     // backgroundColor: "red",
-                      justifyContent: "center",
+                    justifyContent: "center",
                     alignItems: "center",
-                        // width: "100%",
-                        // height: "100%",
-        
+                    // width: "100%",
+                    // height: "100%"
                   }}
                   onPress={() => {
+                    if (routeInfo.pathname === "/" || routeInfo.pathname === "/index") return;
+
                     router.push("/" as any)
                   }}>
                   {routeInfo.pathname === "/" || routeInfo.pathname === "/index" ? (
@@ -167,7 +168,11 @@ export default function TabLayout() {
                         width: "100%",
                         height: "100%",
                       }}
-                      onPress={() => router.push("/poll")}>
+                      onPress={() => {
+                        if (routeInfo.pathname === "/poll") return;
+
+                        router.push("/poll");
+                      }}>
                       { 
                         routeInfo.pathname === "/poll" ? (
                           <PollIconActive />
@@ -217,8 +222,11 @@ export default function TabLayout() {
                         width: "100%",
                         height: "100%",
                       }}
-                      onPress={() => router.push("/profile")}
-                    >
+                      onPress={() => {
+                        if (routeInfo.pathname === "/profile") return;
+
+                        router.push("/profile")
+                      }}>
                       {routeInfo.pathname === "/profile" ? (
                         <View>
                           <ProfileIconActive />

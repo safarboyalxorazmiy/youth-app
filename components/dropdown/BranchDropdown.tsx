@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, {
@@ -83,7 +84,9 @@ export function BankBranchDropdown({
   }, []);
 
   return (
-    <>
+    <View style={{
+      marginTop: 4,
+    }}>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
           {selectedBranch?.name  || 'Filialni tanlang'}
@@ -110,7 +113,7 @@ export function BankBranchDropdown({
           )}
         />
       </Animated.View>
-    </>
+    </View>
   );
 }
 
@@ -137,7 +140,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: 'red',
     borderRadius: 12,
-    marginTop: 4,
     borderWidth: 1,
     borderColor: '#e0e0e0',
     width: '100%',

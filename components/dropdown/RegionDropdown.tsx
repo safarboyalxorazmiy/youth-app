@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  View,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, {
@@ -20,8 +21,8 @@ export function RegionDropdown({
   selectedRegion,
   setSelectedRegion,
 }: {
-  selectedRegion: object;
-  setSelectedRegion: (value: object) => void;
+  selectedRegion: any;
+  setSelectedRegion: (value: any) => void;
 }) {
   const [items, setItems] = useState<Object[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +83,9 @@ export function RegionDropdown({
   }, []);
 
   return (
-    <>
+    <View style={{
+      marginBottom: 16
+    }}>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
           {selectedRegion.name || 'Viloyat'}
@@ -107,7 +110,7 @@ export function RegionDropdown({
           )}
         />
       </Animated.View>
-    </>
+    </View>
   );
 }
 
@@ -138,7 +141,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     width: '100%',
-    marginBottom: 16
   },
   item: {
     width: '100%',
