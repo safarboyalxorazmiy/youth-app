@@ -56,7 +56,7 @@ export function CauseDropdown({
   }));
 
   const handleSelect = (item: { title: string; value: string | boolean }) => {
-    setSelectedStatus(item);
+    setSelectedStatus(item as any);
     toggleDropdown();
   };
 

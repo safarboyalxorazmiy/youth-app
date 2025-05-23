@@ -24,8 +24,8 @@ export function BankBranchDropdown({
   selectedBranch,
   setSelectedBranch,
 }: {
-  selectedBranch: object;
-  setSelectedBranch: (value: object) => void;
+  selectedBranch: Branch;
+  setSelectedBranch: (value: Branch) => void;
 }) {
   const [items, setItems] = useState<Branch[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -86,7 +86,7 @@ export function BankBranchDropdown({
     <>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
-          {selectedBranch.name || 'Filialni tanlang'}
+          {selectedBranch?.name  || 'Filialni tanlang'}
         </Text>
         <DropdownIcon width={14} height={14} style={{ marginLeft: 8 }} />
       </TouchableOpacity>

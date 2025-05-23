@@ -184,7 +184,7 @@ const UserItem = () => {
   const ActiveComponent = tabs[activeTab].component;
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <TouchableRipple onPress={() => {
         router.push("../");
       }} borderless={true} style={{ 
@@ -239,7 +239,7 @@ const UserItem = () => {
       <View style={styles.contentContainer}>
         <ActiveComponent />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -804,8 +804,8 @@ const UserInfoContent = () => {
 
 const SurveysContent = () => {
   return (
-    <View style={{backgroundColor: "red"}}>
-      
+    <View style={{marginHorizontal: 25, marginTop: 20}}>
+      <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 16, color: "#474848"}}>Arizalar topilmadi</Text>
     </View>
   )
 }
