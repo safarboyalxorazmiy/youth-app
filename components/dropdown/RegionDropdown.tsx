@@ -97,7 +97,7 @@ export function RegionDropdown({
         <FlatList
           style={{ width: '100%' }}
           data={items}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item: any) => item.id}
           scrollEnabled={false}
           renderItem={({ item }) => (
             <TouchableRipple

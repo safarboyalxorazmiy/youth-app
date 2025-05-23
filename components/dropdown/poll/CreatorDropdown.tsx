@@ -22,8 +22,8 @@ export function CreatorDropdown({
   selectedOwners,
   setSelectedOwners,
 }: {
-  selectedOwners: any[];
-  setSelectedOwners: (value: any[]) => void;
+  selectedOwners: any;
+  setSelectedOwners: (value: any) => void;
 }) {
   const [items, setItems] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +46,7 @@ export function CreatorDropdown({
   }));
 
   const isSelected = (item: any) =>
-    selectedOwners.some((owner) => owner.id === item.id);
+    selectedOwners.some((owner: any) => owner.id === item.id);
 
   const handleSelect = (item: any) => {
     if (item.id === 'all') {
@@ -59,11 +59,11 @@ export function CreatorDropdown({
     } else {
       const alreadySelected = isSelected(item);
       if (alreadySelected) {
-        setSelectedOwners((prev) =>
-          prev.filter((owner) => owner.id !== item.id)
+        setSelectedOwners((prev: any) =>
+          prev.filter((owner: any) => owner.id !== item.id)
         );
       } else {
-        setSelectedOwners((prev) => [...prev, item]);
+        setSelectedOwners((prev: any) => [...prev, item]);
       }
     }
   };
@@ -71,7 +71,7 @@ export function CreatorDropdown({
   const getSelectedNames = () => {
     if (selectedOwners.length === 0) return 'Yaratuvchilar';
     if (selectedOwners.length === items.length - 1) return 'Barcha';
-    return selectedOwners.map((s) => s.first_name).join(', ');
+    return selectedOwners.map((s: any) => s.first_name).join(', ');
   };
 
   useEffect(() => {

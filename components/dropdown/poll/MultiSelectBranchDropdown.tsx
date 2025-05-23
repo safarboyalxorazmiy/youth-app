@@ -27,8 +27,8 @@ export function MultiSelectBranchDropdown({
   selectedBranches,
   setSelectedBranches,
 }: {
-  selectedBranches: Branch[];
-  setSelectedBranches: (value: Branch[]) => void;
+  selectedBranches: any;
+  setSelectedBranches: (value: any) => void;
 }) {
   const [items, setItems] = useState<Branch[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +52,7 @@ export function MultiSelectBranchDropdown({
   }));
 
   const isSelected = (item: Branch) =>
-    selectedBranches.some((branch) => branch.id === item.id);
+    selectedBranches.some((branch: any) => branch.id === item.id);
 
   const handleSelect = (item: Branch) => {
     if (item.id === 'all') {
@@ -63,11 +63,11 @@ export function MultiSelectBranchDropdown({
       }
     } else {
       if (isSelected(item)) {
-        setSelectedBranches((prev) =>
-          prev.filter((branch) => branch.id !== item.id)
+        setSelectedBranches((prev: any) =>
+          prev.filter((branch: any) => branch.id !== item.id)
         );
       } else {
-        setSelectedBranches((prev) => [...prev, item]);
+        setSelectedBranches((prev: any) => [...prev, item]);
       }
     }
   };
@@ -75,7 +75,7 @@ export function MultiSelectBranchDropdown({
   const getSelectedText = () => {
     if (selectedBranches.length === 0) return 'Filialni tanlang';
     if (selectedBranches.length === items.length - 1) return 'Barcha';
-    return selectedBranches.map((b) => b.name).join(', ');
+    return selectedBranches.map((b: any) => b.name).join(', ');
   };
 
   useEffect(() => {
