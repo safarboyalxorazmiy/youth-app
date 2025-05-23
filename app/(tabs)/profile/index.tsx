@@ -18,7 +18,7 @@ const statusBarHeight = Constants.statusBarHeight;
 
 export default function Profile() {
   const [collapsed, setCollapsed] = useState(true);
-  const [profileData, setProfileData] = useState(null);
+  const [profileData, setProfileData] = useState<any>(null);
 
   useEffect(() => {
     fetchUserProfile();
@@ -189,7 +189,7 @@ export default function Profile() {
           router.push("/login")
         }} android_ripple={{color: "#e7000b1a"}} style={{backgroundColor: "#e7000b1a", width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 16,  columnGap: 8, }}>
           <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Chiqish</Text>
-          <ExitIcon style={{color: "#fb2c36"}}/>
+          <ExitIcon style={{color: "#fb2c36"} as any} />
         </Pressable>
       </View>
 

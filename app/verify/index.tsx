@@ -100,7 +100,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
       console.log("Access token: ", data.data.tokens.access);
       await AsyncStorage.setItem("access_token", data.data.tokens.access);
       router.push({
-        pathname: "/"
+        pathname: "/" as any
       });
 
     } catch (err) {
@@ -210,9 +210,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
         <BlurView intensity={80} tint="light" style={styles.content}>
           <Text style={styles.text}>SMS kodni kiriting</Text>
           
-          <Text style={{marginTop: 8, fontSize: 16, fontFamily: "Gilroy-Regular", color: "#292929"}}>{formatPhone(phone)} raqamiga yuborilgan SMS kodini kiriting.</Text>
-
-
+          <Text style={{marginTop: 8, fontSize: 16, fontFamily: "Gilroy-Regular", color: "#292929"}}>{formatPhone(phone as any)} raqamiga yuborilgan SMS kodini kiriting.</Text>
         {/* OTP Input Fields */}
         <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 30, columnGap: 10 }}>
           {otp.map((digit, index) => (

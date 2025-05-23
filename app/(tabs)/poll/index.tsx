@@ -47,7 +47,7 @@ export default function Poll() {
       if (newUsers.length > 0) {
         setUsers(prevUsers => {
           const existingIds = new Set(prevUsers.map(user => user.id));
-          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
       }
@@ -81,7 +81,7 @@ export default function Poll() {
       if (newUsers.length > 0) {
         setUsers(prevUsers => {
           const existingIds = new Set(prevUsers.map(user => user.id));
-          const filtered = newUsers.filter(user => !existingIds.has(user.id));
+          const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
       }

@@ -95,7 +95,7 @@ export default function UsersFilterModal() {
       await AsyncStorage.removeItem("branchId");
     }
 
-    router.push("/(tabs)");
+    router.push("/(tabs)" as any);
   }
 
   const clear = async () => {
@@ -104,7 +104,7 @@ export default function UsersFilterModal() {
     await AsyncStorage.removeItem("bank_branch");
     await AsyncStorage.removeItem("branchId");
 
-    router.push("/(tabs)");
+    router.push("/(tabs)" as any);
   }
 
   return (
@@ -122,7 +122,7 @@ export default function UsersFilterModal() {
       {/* <Link href={'/(tabs)'} asChild> */}
         <Pressable onPress={() => {
           console.log("What did you expect mf?");
-          router.push("/(tabs)");
+          router.push("/(tabs)" as any);
         }} style={StyleSheet.absoluteFill} />
       {/* </Link> */}
 
@@ -142,7 +142,7 @@ export default function UsersFilterModal() {
           <TouchableRipple 
             onPress={() => {
               console.log("What did you expect mf?");
-              router.push("/(tabs)");
+              router.push("/(tabs)" as any);
             }}
             rippleColor={'rgba(0, 0, 0, .32)'}
             underlayColor="rgba(0,0,0,0.1)"
