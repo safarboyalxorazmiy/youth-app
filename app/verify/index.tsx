@@ -37,6 +37,7 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
   useEffect(() => {
     if (secondsLeft === 0) {
       setTimerIntervalId(null);
+      router.push("../");
       return;
     }
 
@@ -71,10 +72,10 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
 
   const sendVerifyRequest = async (code: string) => {
     console.log("users request: ", {
-          action: "login",
-          phone_number: phone,
-          code: code
-        });
+      action: "login",
+      phone_number: phone,
+      code: code
+    });
     if (isLoading) return;
 
     setIsLoading(true);
@@ -325,13 +326,11 @@ function Verify({ route }: { route: { params: { phone: string; } } }) {
         </Pressable>
 
         <Pressable
-            onPressIn={animateIn2}
-            onPressOut={animateOut2}
-            onPress={() => {
-              
-              router.back();
-            }}
-          >
+          onPressIn={animateIn2}
+          onPressOut={animateOut2}
+          onPress={() => {
+            router.back();
+          }}>
             <Animated.View
               style={{
                 transform: [{ scale: scale2 }], 

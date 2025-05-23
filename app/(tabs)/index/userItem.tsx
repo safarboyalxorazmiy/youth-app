@@ -758,48 +758,46 @@ const UserInfoContent = () => {
           />
         </View>
 
-
-      <View style={{marginTop: 20}}>
-        <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Medium', fontWeight: '500', color: '#474848', marginBottom: 6 }}>
-          Hujjatlarni kiriting
-        </Text>
-        <TouchableOpacity
-          style={{
-            borderWidth: 2,
-            borderColor: '#1A99FF',
-            borderStyle: 'dashed',
-            borderRadius: 12,
-            height: 140,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#FFFFFF',
-          }}
-          onPress={handleDocumentPick}
-        >
-          <Text style={{ fontFamily: "Gilroy-Medium", color: '#1A99FF', fontSize: 14, textDecorationLine: 'underline', fontWeight: '500' }}>
-            Hujjatlarni yuklash
+        <View style={{marginTop: 20}}>
+          <Text style={{ fontSize: 14, fontFamily: 'Gilroy-Medium', fontWeight: '500', color: '#474848', marginBottom: 6 }}>
+            Hujjatlarni kiriting
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderWidth: 2,
+              borderColor: '#1A99FF',
+              borderStyle: 'dashed',
+              borderRadius: 12,
+              height: 140,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#FFFFFF',
+            }}
+            onPress={handleDocumentPick}
+          >
+            <Text style={{ fontFamily: "Gilroy-Medium", color: '#1A99FF', fontSize: 14, textDecorationLine: 'underline', fontWeight: '500' }}>
+              Hujjatlarni yuklash
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableRipple 
+          rippleColor={"#111111B2"} 
+          style={{
+            backgroundColor: "#1A99FF", 
+            height: 48, 
+            borderRadius: 14, 
+            alignItems: "center", 
+            justifyContent: "center", 
+            marginTop: 32
+          }}>
+          <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 16, color: "#FFFFFF"}}>Arizani topshirish</Text>
+        </TouchableRipple>
+
+        <TouchableRipple style={{backgroundColor: "#1A99FF1F", height: 48, borderRadius: 14, alignItems: "center", justifyContent: "center", marginTop: 12}}>
+          <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 16, color: "#1A99FF"}}>MyID dan o’tish</Text>
+        </TouchableRipple>
       </View>
-
-
-      <TouchableRipple 
-        rippleColor={"#111111B2"} 
-        style={{
-          backgroundColor: "#1A99FF", 
-          height: 48, 
-          borderRadius: 14, 
-          alignItems: "center", 
-          justifyContent: "center", 
-          marginTop: 32
-        }}>
-        <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 16, color: "#FFFFFF"}}>Arizani topshirish</Text>
-      </TouchableRipple>
-
-      <TouchableRipple style={{backgroundColor: "#1A99FF1F", height: 48, borderRadius: 14, alignItems: "center", justifyContent: "center", marginTop: 12}}>
-        <Text style={{fontFamily: "Gilroy-Medium", fontWeight: "500", fontSize: 16, color: "#1A99FF"}}>MyID dan o’tish</Text>
-      </TouchableRipple>
-    </View>
   </ScrollView>
   );
 }
