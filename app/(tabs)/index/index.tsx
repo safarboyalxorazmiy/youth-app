@@ -426,18 +426,58 @@ export default function Index() {
         refreshControl={
           <RefreshControl
             refreshing={false}
-            onRefresh={() => {
-              if (branchId || regionId) {
-                if (fullyLoaded == false) {
-                  fetchUsersByFilterParams({
-                    regionId: regionId,
+            onRefresh={async () => {
+              setPage(1);
+              setLoading(false);
+              setFullyLoaded(false);
+              setUsers([]);
+
+              if (fullyLoaded) return;
+          
+
+              if (!branchId && !regionId) {
+                try {
+                  const region = await AsyncStorage.getItem("regionId");
+                  const bankBranch = await AsyncStorage.getItem("branchId");
+
+                  if (region || bankBranch) {
+                    setBranchId(bankBranch);
+                    setRegionId(region);
+                    setPage(1);
+                    setSearchQuery("");
+                    setUsers([]);
+                    setLoading(false);
+                    setFullyLoaded(false);
+
+                    if (searchQuery !== "") {
+                      await fetchUsersByFilterParamsAndSearchQuery({ regionId: region, bankBranchId: bankBranch, searchQuery: searchQuery, page: 1 });
+                      return;
+                    }
+
+                    await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch });
+                    } else {
+                    if (searchQuery !== "") {
+                      await fetchUsersBySearchQuery(searchQuery);
+                      return;
+                    }
+
+                    await fetchUsers();
+                  }
+                } catch (error) {
+                  console.log("Error fetching region or branch ID from storage:", error);
+                }
+              } else {
+                if (!fullyLoaded) {
+                  if (searchQuery !== "") {
+                    await fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, searchQuery: searchQuery, page });
+                    return;
+                  }
+
+                  await fetchUsersByFilterParams({
+                    regionId,
                     bankBranchId: branchId
                   });
                 }
-              } else if (searchQuery !== "") {
-                fetchUsersBySearchQuery(searchQuery);
-              } else {
-                fetchUsers();
               }
             }}
             tintColor="#1A99FF" // iOS spinner color
