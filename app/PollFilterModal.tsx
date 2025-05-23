@@ -202,7 +202,7 @@ export default function PollFilterModal() {
             flexDirection: "row", 
             marginTop: 16, 
             justifyContent: "space-between",
-            marginBottom: 16
+            paddingBottom: 36
           }}>
             <TouchableRipple 
               underlayColor="rgba(0,0,0,0.1)"

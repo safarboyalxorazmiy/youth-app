@@ -134,7 +134,7 @@ export default function UsersFilterModal() {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'white',
-          borderRadius: 16
+          borderRadius: 16,
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%'}}>
             <Text style={{ fontFamily: "Gilroy-SemiBold", fontWeight: 'bold', color: "#303131", fontSize: 20, marginLeft: 16 }}>Filter</Text>
@@ -171,7 +171,7 @@ export default function UsersFilterModal() {
             flexDirection: "row", 
             marginTop: 16, 
             justifyContent: "space-between",
-            marginBottom: 16
+            paddingBottom: 36
           }}>
             <TouchableRipple 
               underlayColor="rgba(0,0,0,0.1)"

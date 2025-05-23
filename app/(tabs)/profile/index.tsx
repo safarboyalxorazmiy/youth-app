@@ -1,5 +1,5 @@
 import Collapsible from 'react-native-collapsible';
-import { View, Text, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, ScrollView, Modal, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import Collapser from "@/assets/images/collapser-icon.svg"
 import EmailIcon from "@/assets/images/email-icon.svg";
@@ -13,12 +13,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ExitIcon from "@/assets/images/exit-icon.svg"
 import { useRouter } from 'expo-router';
 import Constants from 'expo-constants';
+import { TouchableRipple } from 'react-native-paper';
 
 const statusBarHeight = Constants.statusBarHeight;
 
 export default function Profile() {
   const [collapsed, setCollapsed] = useState(true);
   const [profileData, setProfileData] = useState<any>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     fetchUserProfile();
@@ -185,14 +187,107 @@ export default function Profile() {
 
       <View style={{ marginTop: 16, width: "100%", marginBottom: 100, borderRadius: 8, overflow: "hidden", }}>
         <Pressable onPress={() => {
-          AsyncStorage.clear();
-          router.push("/login")
+          setModalVisible(true);
+          
+          // AsyncStorage.clear();
+          // router.push("/login")
         }} android_ripple={{color: "#e7000b1a"}} style={{backgroundColor: "#e7000b1a", width: "100%", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 16,  columnGap: 8, }}>
           <Text style={{color: "#fb2c36", fontSize: 16, fontFamily: "Gilroy-Medium"}}>Chiqish</Text>
           <ExitIcon style={{color: "#fb2c36"} as any} />
         </Pressable>
       </View>
 
+
+      <Modal
+        animationType="fade" // or "fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)} // for Android back button
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={{ fontFamily: "Gilroy-SemiBold", fontSize: 18}}>Haqiqatdan ham hisobdan chiqmoqchimisiz?</Text>
+
+            <View style={{ flexDirection: "column", width: "100%", columnGap: 8, marginTop: 20}}>
+              <TouchableRipple
+                borderless={true}
+                onPress={() => {
+                  setModalVisible(false);
+                  AsyncStorage.clear();
+                  router.push("/login");
+                }}
+                style={{ 
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  // backgroundColor: '#2196F3',
+                  borderRadius: 5,
+                  backgroundColor: "#e7000b1a",
+                  // borderColor: "",
+                  // borderWidth: 1.2,
+                  // borderColor: "#fb2c36",
+                  // borderWidth: 1.5,
+                  marginTop: 8,
+
+                  alignItems: "center",
+                  width: "100%"
+                }}>
+                <Text style={{ fontFamily: "Gilroy-SemiBold", fontSize: 16, color: "#fb2c36" }}>O'chirish va chiqish</Text>
+              </TouchableRipple>
+
+              <TouchableRipple
+                borderless={true}
+                onPress={() => setModalVisible(false)}
+                style={{ 
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  // backgroundColor: '#2196F3',
+                  borderRadius: 5,
+                  backgroundColor: "#FFF", 
+                  borderColor: "#111",
+                  borderWidth: 0.4,
+                  marginTop: 8,
+                  alignItems: "center",
+                  width: "100%"
+                }}>
+                <Text style={{ fontFamily: "Gilroy-Medium", fontSize: 16, color: "#333" }}>Bekor qilish</Text>
+              </TouchableRipple>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: "90%",
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  closeButton: {
+    
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});

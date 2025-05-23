@@ -34,7 +34,9 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      setIsAppReady(true);
+      setTimeout(() => {
+        setIsAppReady(true);
+      }, 500);
     }
   }, [loaded]);
 
