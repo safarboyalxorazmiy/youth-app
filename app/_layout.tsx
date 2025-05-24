@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider } from '@ui-kitten/components';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import RotatingIcon from '@/components/RotatingIcon';
@@ -52,54 +54,58 @@ export default function RootLayout() {
   }
 
   return (
-    <PaperProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#232325' }}>
-          <BottomSheetModalProvider>
-            <Stack screenOptions={{gestureEnabled: true}} initialRouteName="(tabs)">
-              <Stack.Screen
-                name="(tabs)"
-                options={{
-                  headerShown: false,
-                  animation: 'fade',
-                  presentation: 'fullScreenModal'
-                }}
-              />
-              <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
-              <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
+    <ApplicationProvider {...eva} theme={eva.light}>
 
-              <Stack.Screen
-                name="UsersFilterModal"
-                options={{
-                  presentation: 'transparentModal',
-                  animation: 'fade',
-                  headerShown: false,
-                }}
-              />
-              
-              <Stack.Screen
-                name="PollFilterModal"
-                options={{
-                  presentation: 'transparentModal',
-                  animation: 'fade',
-                  headerShown: false,
-                }}
-              />
+      <PaperProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#232325' }}>
+            <BottomSheetModalProvider>
+              <Stack screenOptions={{gestureEnabled: true}} initialRouteName="(tabs)">
+                <Stack.Screen
+                  name="(tabs)"
+                  options={{
+                    headerShown: false,
+                    animation: 'fade',
+                    presentation: 'fullScreenModal'
+                  }}
+                />
+                <Stack.Screen name="login" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
+                <Stack.Screen name="verify" options={{ headerShown: false, animation: 'slide_from_right', presentation: 'fullScreenModal' }} />
 
-              <Stack.Screen name="+not-found" />
-              
-            </Stack>
+                <Stack.Screen
+                  name="UsersFilterModal"
+                  options={{
+                    presentation: 'transparentModal',
+                    animation: 'fade',
+                    headerShown: false,
+                  }}
+                />
+                
+                <Stack.Screen
+                  name="PollFilterModal"
+                  options={{
+                    presentation: 'transparentModal',
+                    animation: 'fade',
+                    headerShown: false,
+                  }}
+                />
 
-            <StatusBar
-              animated={true}
-              backgroundColor="#232325"
-              barStyle={'default'}
-              showHideTransition={'slide'}
-              hidden={false}
-            />
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </ThemeProvider>
-    </PaperProvider>
+                <Stack.Screen name="+not-found" />
+                
+              </Stack>
+
+              <StatusBar
+                animated={true}
+                backgroundColor="#232325"
+                barStyle={'default'}
+                showHideTransition={'slide'}
+                hidden={false}
+              />
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </PaperProvider>
+    </ApplicationProvider>
+
   );
 }

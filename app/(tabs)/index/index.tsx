@@ -22,7 +22,7 @@ export default function Index() {
   const router = useRouter();
 
   const [users, setUsers] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const [fullyLoaded, setFullyLoaded] = useState(false);
@@ -32,6 +32,9 @@ export default function Index() {
   
   const [regionId, setRegionId] = useState<string | null>(null);
   const [branchId, setBranchId] = useState<string | null>(null);
+
+  const [start_birth_date, setStartBirthDate] = useState<string | null>(null);
+  const [end_birth_date, setEndBirthDate] = useState<string | null>(null);
 
   const searchInputRef = useRef<TextInput>(null);
 
@@ -112,9 +115,13 @@ export default function Index() {
   const fetchUsersByFilterParams = useCallback(async ({
     regionId,
     bankBranchId,
+    start_birth_date,
+    end_birth_date
   }: {
     regionId: string | null;
     bankBranchId: string | null;
+    start_birth_date: string | null;
+    end_birth_date: string | null;
   }) => {
     if (loading) return;
 
@@ -126,12 +133,16 @@ export default function Index() {
       const url = new URL('https://dev-api.yoshtadbirkorlar.uz/api/dashboard/users/');
       url.searchParams.append('page', String(page));
       url.searchParams.append('page_size', '10');
+      if (start_birth_date) url.searchParams.append('start_birth_date', start_birth_date);
+      if (end_birth_date) url.searchParams.append('end_birth_date', end_birth_date);
       url.searchParams.append('user_role', 'ordinary_user');
       if (regionId) url.searchParams.append('region', regionId);
       if (bankBranchId) url.searchParams.append('bank_branch', bankBranchId);
-      url.searchParams.append('source', 'from_excel');
+      // url.searchParams.append('source', 'from_excel');
       url.searchParams.append('is_myid_verified', 'false');
       url.searchParams.append('is_verified', 'false');
+
+      console.log(url.toString())
 
       const response = await fetch(url.toString(), {
         headers: {
@@ -166,10 +177,14 @@ export default function Index() {
     regionId,
     bankBranchId,
     searchQuery,
+    start_birth_date,
+    end_birth_date,
     page
   }: {
     regionId: string | null;
     bankBranchId: string | null;
+    start_birth_date: string | null;
+    end_birth_date: string | null;
     searchQuery: string,
     page: number
   }) => {
@@ -186,7 +201,12 @@ export default function Index() {
       url.searchParams.append('page', String(page));
       url.searchParams.append('page_size', '10');
       if (regionId) url.searchParams.append('region', regionId);
-      console.log(regionId)
+
+      if (start_birth_date) url.searchParams.append('start_birth_date', start_birth_date);
+      if (end_birth_date) url.searchParams.append('end_birth_date', end_birth_date);
+      console.log(start_birth_date, end_birth_date)
+
+
 
       if (bankBranchId) url.searchParams.append('bank_branch', bankBranchId);
       url.searchParams.append('is_myid_verified', 'false');
@@ -295,17 +315,20 @@ export default function Index() {
                 <TextInput 
                   ref={searchInputRef}
                   value={searchQuery}
-                  onChange={(e) => {
+                  onChange={async (e) => {
+                    // let start_birth_date = await AsyncStorage.getItem("start_birth_date");
+                    // let end_birth_date = await AsyncStorage.getItem("end_birth_date");
+
                     setPage(1);
                     setLoading(false);
                     setFullyLoaded(false);
                     setSearchQuery(e.nativeEvent.text);
                     setUsers([]);
 
-                    if (regionId || branchId) {
-                      fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, searchQuery: e.nativeEvent.text, page: 1 });
-                      return;
-                    }
+                    // if (regionId || branchId) {
+                    //   fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, start_birth_date: start_birth_date, end_birth_date: end_birth_date,  searchQuery: e.nativeEvent.text, page: 1 });
+                    //   return;
+                    // }
 
                     fetchUsersBySearchQuery(e.nativeEvent.text);
                   }}
@@ -348,48 +371,54 @@ export default function Index() {
         onEndReached={async () => {
           if (fullyLoaded) return;
           
-
-          if (!branchId && !regionId) {
+          if (!branchId || !regionId || !start_birth_date || !end_birth_date) {
+            // console.log("DATE CAMEEEEE!!!!", start_birth_date, end_birth_date);
             try {
               const region = await AsyncStorage.getItem("regionId");
               const bankBranch = await AsyncStorage.getItem("branchId");
+              const start_birth_date = await AsyncStorage.getItem("start_birth_date");
+              const end_birth_date = await AsyncStorage.getItem("end_birth_date");
 
-              if (region || bankBranch) {
+              if (region || bankBranch || start_birth_date || end_birth_date) {
                 setBranchId(bankBranch);
                 setRegionId(region);
-                setPage(1);
+                setStartBirthDate(start_birth_date);
+                setEndBirthDate(end_birth_date);
+                setPage(0);
                 setSearchQuery("");
                 setUsers([]);
                 setLoading(false);
                 setFullyLoaded(false);
 
                 if (searchQuery !== "") {
-                  await fetchUsersByFilterParamsAndSearchQuery({ regionId: region, bankBranchId: bankBranch, searchQuery: searchQuery, page: 1 });
+                  await fetchUsersByFilterParamsAndSearchQuery({ regionId: region, bankBranchId: bankBranch, start_birth_date: start_birth_date, end_birth_date: end_birth_date, searchQuery: searchQuery, page: 1 });
                   return;
                 }
 
-                await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch });
+                await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch, start_birth_date: start_birth_date, end_birth_date: end_birth_date });
                 } else {
-                if (searchQuery !== "") {
-                  await fetchUsersBySearchQuery(searchQuery);
-                  return;
-                }
+                  if (searchQuery !== "") {
+                    await fetchUsersBySearchQuery(searchQuery);
+                    return;
+                  }
 
-                await fetchUsers();
-              }
+                  await fetchUsers();
+                }
             } catch (error) {
               console.log("Error fetching region or branch ID from storage:", error);
             }
           } else {
             if (!fullyLoaded) {
               if (searchQuery !== "") {
-                await fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, searchQuery: searchQuery, page });
+                await fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, start_birth_date: start_birth_date, end_birth_date: end_birth_date, searchQuery: searchQuery, page });
                 return;
               }
 
               await fetchUsersByFilterParams({
                 regionId,
-                bankBranchId: branchId
+                bankBranchId: branchId,
+                start_birth_date: start_birth_date, 
+                end_birth_date: end_birth_date, 
               });
             }
           }
@@ -427,55 +456,61 @@ export default function Index() {
           <RefreshControl
             refreshing={false}
             onRefresh={async () => {
-              setPage(1);
+              setPage(0);
               setLoading(false);
               setFullyLoaded(false);
               setUsers([]);
 
               if (fullyLoaded) return;
           
-
-              if (!branchId && !regionId) {
+              if (!branchId || !regionId || !start_birth_date || !end_birth_date) {
+                // console.log("DATE CAMEEEEE!!!!", start_birth_date, end_birth_date);
                 try {
                   const region = await AsyncStorage.getItem("regionId");
                   const bankBranch = await AsyncStorage.getItem("branchId");
+                  const start_birth_date = await AsyncStorage.getItem("start_birth_date");
+                  const end_birth_date = await AsyncStorage.getItem("end_birth_date");
 
-                  if (region || bankBranch) {
+                  if (region || bankBranch || start_birth_date || end_birth_date) {
                     setBranchId(bankBranch);
                     setRegionId(region);
-                    setPage(1);
+                    setStartBirthDate(start_birth_date);
+                    setEndBirthDate(end_birth_date);
+                    setPage(0);
                     setSearchQuery("");
                     setUsers([]);
                     setLoading(false);
                     setFullyLoaded(false);
 
                     if (searchQuery !== "") {
-                      await fetchUsersByFilterParamsAndSearchQuery({ regionId: region, bankBranchId: bankBranch, searchQuery: searchQuery, page: 1 });
+                      await fetchUsersByFilterParamsAndSearchQuery({ regionId: region, bankBranchId: bankBranch, start_birth_date: start_birth_date, end_birth_date: end_birth_date, searchQuery: searchQuery, page: 1 });
                       return;
                     }
 
-                    await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch });
+                    await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch, start_birth_date: start_birth_date, end_birth_date: end_birth_date });
                     } else {
-                    if (searchQuery !== "") {
-                      await fetchUsersBySearchQuery(searchQuery);
-                      return;
-                    }
+                      if (searchQuery !== "") {
+                        await fetchUsersBySearchQuery(searchQuery);
+                        return;
+                      }
 
-                    await fetchUsers();
-                  }
+                      await fetchUsers();
+                    }
                 } catch (error) {
                   console.log("Error fetching region or branch ID from storage:", error);
                 }
               } else {
                 if (!fullyLoaded) {
                   if (searchQuery !== "") {
-                    await fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, searchQuery: searchQuery, page });
+                    await fetchUsersByFilterParamsAndSearchQuery({ regionId: regionId, bankBranchId: branchId, start_birth_date: start_birth_date, end_birth_date: end_birth_date, searchQuery: searchQuery, page });
                     return;
                   }
 
                   await fetchUsersByFilterParams({
                     regionId,
-                    bankBranchId: branchId
+                    bankBranchId: branchId,
+                    start_birth_date: start_birth_date, 
+                    end_birth_date: end_birth_date, 
                   });
                 }
               }

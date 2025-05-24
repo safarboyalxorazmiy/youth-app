@@ -84,7 +84,7 @@ export function RegionDropdown({
 
   return (
     <View style={{
-      marginBottom: 16
+      marginBottom: 8
     }}>
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
         <Text style={styles.dropdownText}>
