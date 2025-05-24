@@ -167,6 +167,8 @@ export default function UsersFilterModal() {
     await AsyncStorage.removeItem("regionId");
     await AsyncStorage.removeItem("bank_branch");
     await AsyncStorage.removeItem("branchId");
+    await AsyncStorage.removeItem("start_birth_date");
+    await AsyncStorage.removeItem("end_birth_date");
 
     router.push("/(tabs)" as any);
   }

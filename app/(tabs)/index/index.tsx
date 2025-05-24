@@ -166,8 +166,8 @@ export default function Index() {
     } catch (err) {
       console.log('Error fetching filtered users:', err);
       setFullyLoaded(true);
-      setUsers([])
       setLoading(false);
+      // setUsers([])
     } finally {
       setLoading(false);
     }
@@ -234,7 +234,7 @@ export default function Index() {
     } catch (err) {
       console.log('Error fetching filtered users:', err);
       setFullyLoaded(true);
-      setUsers([])
+      // setUsers([])
       setLoading(false);
     } finally {
       setLoading(false);
@@ -371,7 +371,12 @@ export default function Index() {
         onEndReached={async () => {
           if (fullyLoaded) return;
           
-          if (!branchId || !regionId || !start_birth_date || !end_birth_date) {
+          const regionFromStorage = await AsyncStorage.getItem("regionId");
+          const bankBranchFromStorage = await AsyncStorage.getItem("branchId");
+          const start_birth_dateFromStorage = await AsyncStorage.getItem("start_birth_date");
+          const end_birth_dateFromStorage = await AsyncStorage.getItem("end_birth_date");
+
+          if (regionFromStorage != regionId || bankBranchFromStorage != branchId || start_birth_dateFromStorage != start_birth_date || end_birth_dateFromStorage != end_birth_date) {
             // console.log("DATE CAMEEEEE!!!!", start_birth_date, end_birth_date);
             try {
               const region = await AsyncStorage.getItem("regionId");
@@ -461,10 +466,14 @@ export default function Index() {
               setFullyLoaded(false);
               setUsers([]);
 
-              if (fullyLoaded) return;
-          
-              if (!branchId || !regionId || !start_birth_date || !end_birth_date) {
+              const regionFromStorage = await AsyncStorage.getItem("regionId");
+              const bankBranchFromStorage = await AsyncStorage.getItem("branchId");
+              const start_birth_dateFromStorage = await AsyncStorage.getItem("start_birth_date");
+              const end_birth_dateFromStorage = await AsyncStorage.getItem("end_birth_date");
+
+              if (regionFromStorage != regionId || bankBranchFromStorage != branchId || start_birth_dateFromStorage != start_birth_date || end_birth_dateFromStorage != end_birth_date) {
                 // console.log("DATE CAMEEEEE!!!!", start_birth_date, end_birth_date);
+                
                 try {
                   const region = await AsyncStorage.getItem("regionId");
                   const bankBranch = await AsyncStorage.getItem("branchId");
@@ -488,14 +497,14 @@ export default function Index() {
                     }
 
                     await fetchUsersByFilterParams({ regionId: region, bankBranchId: bankBranch, start_birth_date: start_birth_date, end_birth_date: end_birth_date });
-                    } else {
-                      if (searchQuery !== "") {
-                        await fetchUsersBySearchQuery(searchQuery);
-                        return;
-                      }
-
-                      await fetchUsers();
+                  } else {
+                    if (searchQuery !== "") {
+                      await fetchUsersBySearchQuery(searchQuery);
+                      return;
                     }
+
+                    await fetchUsers();
+                  }
                 } catch (error) {
                   console.log("Error fetching region or branch ID from storage:", error);
                 }
