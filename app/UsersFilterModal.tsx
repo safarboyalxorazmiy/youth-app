@@ -18,6 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import { RangeCalendar } from '@ui-kitten/components';
 import CalendarIcon from "@/assets/images/calendar-icon.svg";
+import { useIsFocused } from '@react-navigation/native';
 
 const statusBarHeight = Constants.statusBarHeight;
 const screenHeight = Dimensions.get('window').height;
@@ -42,6 +43,28 @@ export default function UsersFilterModal() {
     startDate: null,
     endDate: null,
   });
+
+  const isFocused = useIsFocused();
+
+
+  useEffect(() => {
+    const fetchRange = async () => {
+      try {
+        const start_birth_date = await AsyncStorage.getItem('start_birth_date');
+        const end_birth_date = await AsyncStorage.getItem('end_birth_date');
+
+        if (range) {
+          setRange({
+            startDate: new Date(start_birth_date as string),
+            endDate: new Date(end_birth_date as string),
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch range:', error);
+      }
+    };
+    fetchRange();
+  }, [isFocused]);
 
   useEffect(() => {
     const fetchSelectedRegion = async () => {
