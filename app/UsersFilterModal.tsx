@@ -53,10 +53,24 @@ export default function UsersFilterModal() {
         const start_birth_date = await AsyncStorage.getItem('start_birth_date');
         const end_birth_date = await AsyncStorage.getItem('end_birth_date');
 
+        let start_birth_dateObj;
+        if (start_birth_date == null || start_birth_date == undefined || start_birth_date == "") {
+          start_birth_dateObj = null;
+        } else {
+          start_birth_dateObj = new Date(start_birth_date as string);
+        }
+
+        let end_birth_dateObj;
+        if (end_birth_date == null || end_birth_date == undefined || end_birth_date == "") {
+          end_birth_dateObj = null;
+        } else {
+          end_birth_dateObj = new Date(end_birth_date as string);
+        }
+
         if (range) {
           setRange({
-            startDate: new Date(start_birth_date as string),
-            endDate: new Date(end_birth_date as string),
+            startDate: start_birth_dateObj,
+            endDate: end_birth_dateObj,
           });
         }
       } catch (error) {

@@ -65,6 +65,8 @@ export default function Index() {
           const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
+      } else {
+        setFullyLoaded(true);
       }
     } catch (error) {
       console.log("Error fetching users:", error);
@@ -102,6 +104,9 @@ export default function Index() {
           const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
+      } else {
+        setFullyLoaded(true);
+
       }
 
     } catch (error) {
@@ -162,6 +167,8 @@ export default function Index() {
           const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
+      } else {
+        setFullyLoaded(true);
       }
     } catch (err) {
       console.log('Error fetching filtered users:', err);
@@ -230,6 +237,8 @@ export default function Index() {
           const filtered = newUsers.filter((user: any) => !existingIds.has(user.id));
           return [...prevUsers, ...filtered];
         });
+      } else {
+        setFullyLoaded(true);
       }
     } catch (err) {
       console.log('Error fetching filtered users:', err);
